@@ -82,11 +82,24 @@ namespace DamageMeter
         private static readonly List<Delegate> ClientOpcode = new List<Delegate>
         {
             {new Action<ParsedMessage>(x => Heuristic.C_CHECK_VERSION.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.C_LOGIN_ARBITER.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.C_SET_VISIBLE_RANGE.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.C_GET_USER_LIST.Instance.Process(x))},
         };
 
         private static readonly List<Delegate> ServerOpcode = new List<Delegate>
         {
             {new Action<ParsedMessage>(x => Heuristic.S_LOGIN.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_LOADING_SCREEN_CONTROL_INFO.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_REMAIN_PLAY_TIME.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_LOGIN_ARBITER.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_LOGIN_ACCOUNT_INFO.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_LOAD_CLIENT_ACCOUNT_SETTING.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_GET_USER_LIST.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_ACCOUNT_PACKAGE_LIST.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_CONFIRM_INVITE_CODE_BUTTON.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_UPDATE_CONTENTS_ON_OFF.Instance.Process(x))},
+
         };
     }
 }

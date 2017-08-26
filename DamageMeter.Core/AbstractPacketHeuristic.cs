@@ -22,11 +22,12 @@ namespace DamageMeter
             if (!opcodeId.HasValue) { return 0; }
             return OpcodeFinder.Instance.TotalOccurrenceOpcode(opcodeId.Value);
         }
-        protected static OpcodeEnum OPCODE;
+        protected OpcodeEnum OPCODE;
         public bool IsKnown => OpcodeFinder.Instance.IsKnown(OPCODE);
         public OpcodeId? KnownOpcode => OpcodeFinder.Instance.GetOpcode(OPCODE);
+        protected TeraMessageReader Reader;
         public void Process(ParsedMessage message){
-
+            Reader = new TeraMessageReader(message);
         }
 
         public bool IsSamePacket(OpcodeId opcode) {
