@@ -86,6 +86,7 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.C_SET_VISIBLE_RANGE.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.C_GET_USER_LIST.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.C_PLAYER_LOCATION.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.C_WHISPER.Instance.Process(x))},
         };
 
         private static readonly List<Delegate> ServerOpcode = new List<Delegate>
