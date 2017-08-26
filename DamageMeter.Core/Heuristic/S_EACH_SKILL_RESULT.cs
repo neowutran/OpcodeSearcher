@@ -42,7 +42,6 @@ namespace DamageMeter.Heuristic
 
             if (unk2 == 0)
             {
-                Console.Beep();
                 OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
             }
 
