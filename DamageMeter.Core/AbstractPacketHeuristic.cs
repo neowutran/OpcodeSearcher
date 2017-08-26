@@ -27,6 +27,7 @@ namespace DamageMeter
         public OpcodeId? KnownOpcode => OpcodeFinder.Instance.GetOpcode(OPCODE);
         protected TeraMessageReader Reader;
         public void Process(ParsedMessage message){
+            // Allow to read the packet structure for check & data extracting
             Reader = new TeraMessageReader(message);
         }
 
