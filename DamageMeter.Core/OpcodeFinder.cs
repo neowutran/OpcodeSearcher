@@ -102,7 +102,7 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.S_UPDATE_CONTENTS_ON_OFF.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_EACH_SKILL_RESULT.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_CHAT.Instance.Process(x))},
-
+            {new Action<ParsedMessage>(x => Heuristic.S_WHISPER.Instance.Process(x))},
 
         };
     }
