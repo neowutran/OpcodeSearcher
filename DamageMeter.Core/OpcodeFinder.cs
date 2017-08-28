@@ -116,6 +116,7 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.S_WHISPER.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_LOGIN.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_SPAWN_ME.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_SPAWN_NPC.Instance.Process(x))},
 
         };
     }
