@@ -4,12 +4,15 @@
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:ui="clr-namespace:DamageMeter.UI"
+                     xmlns:tera="clr-namespace:Tera;assembly=Tera.Core"
+                     xmlns:messages="clr-namespace:Tera.Game.Messages;assembly=Tera.Core"
                      mc:Ignorable="d"
                      Title="Shinra Meter"
                      MinHeight="60" MinWidth="219"
+                     Width="Auto"
+                    SizeToContent="Width"
                      Loaded="MainWindow_OnLoaded"
-                     Closed="MainWindow_OnClosed" >
-
+                     Closed="MainWindow_OnClosed" d:DataContext="{d:DesignInstance ui:MainWindow }">
     <Window.Resources>
         <Style TargetType="{x:Type ToolTip}">
             <Setter Property="Background" Value="#8F000000" />
@@ -65,12 +68,9 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-
         <ControlTemplate x:Key="ComboBoxTextBox" TargetType="{x:Type TextBox}">
             <Border x:Name="PART_ContentHost" Focusable="False" Background="{TemplateBinding Background}" />
         </ControlTemplate>
-
-
         <Style x:Key="ShinraContext" TargetType="{x:Type ContextMenu}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -92,7 +92,45 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
+        <ui:DirectionToColor x:Key="DirectionToColor"></ui:DirectionToColor>
+        <ui:BoolToVisibleHidden x:Key="BoolToVisibleHidden"></ui:BoolToVisibleHidden>
+        <ui:OpcodeNameConv x:Key="OpcodeNameConv"></ui:OpcodeNameConv>
+        <DataTemplate x:Key="opcdt" >
+            <StackPanel Orientation="Horizontal" Margin="1">
+                <Border Background="{Binding Value, Converter={StaticResource DirectionToColor}}" Width="45" CornerRadius="4,0,0,4" Padding="7,1,5,1" HorizontalAlignment="Left">
+                    <TextBlock Text="{Binding Key}" Foreground="White" VerticalAlignment="Center" FontWeight="DemiBold" HorizontalAlignment="Left"/>
+                </Border>
+                <Border Background="{Binding Value, Converter={StaticResource DirectionToColor}}" CornerRadius="0,4,4,0" Padding="5,1" HorizontalAlignment="Left">
+                    <TextBlock Text="{Binding Value}" Foreground="White" VerticalAlignment="Center" />
+                </Border>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="msg" DataType="ui:PacketViewModel">
+            <Grid MouseEnter="SelectPacketByDrag" MouseLeftButtonDown="SelectPacketByClick" Margin="0,0,0,-1"
+                  Height="20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="45"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Border Background="{Binding Message.Direction, Converter={StaticResource DirectionToColor}}" 
+                        Grid.ColumnSpan="3" Opacity=".4"/>
+                <Border  
+                        Background="{Binding Message.Direction, Converter={StaticResource DirectionToColor}}" 
+                        BorderBrush="{Binding Message.Direction, Converter={StaticResource DirectionToColor}}" 
+                        Visibility="{Binding IsSelected, Converter={StaticResource BoolToVisibleHidden}}" 
+                        Grid.ColumnSpan="3" x:Name="SelectionBorder" Opacity=".9"></Border>
+                <TextBlock Text="{Binding Message.OpCode}" Foreground="Black" Margin="4,0" FontWeight="Normal"
+                           FontFamily="/ShinraMeter;component/#Droid Sans Mono" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding Message.OpCodeName, Converter={StaticResource OpcodeNameConv}}" 
+                           Foreground="Black" Margin="4,0"  Grid.Column="1" VerticalAlignment="Center"
+                           FontFamily="/ShinraMeter;component/#Droid Sans Mono"
+                           />
+                <TextBlock Text="{Binding Message.Payload.Count}" Foreground="Black" Grid.Column="2" 
+                           HorizontalAlignment="Right" Margin="4,0" VerticalAlignment="Center"
+                           FontFamily="/ShinraMeter;component/#Droid Sans Mono"/>
+            </Grid>
+        </DataTemplate>
         <Style TargetType="{x:Type ComboBox}">
             <Setter Property="SnapsToDevicePixels" Value="true" />
             <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -176,7 +214,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
         <!-- SimpleStyles: ComboBoxItem -->
         <Style TargetType="{x:Type ComboBoxItem}">
             <Setter Property="SnapsToDevicePixels" Value="true" />
@@ -206,6 +243,131 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <DataTemplate x:Key="HexChunk">
+            <Grid HorizontalAlignment="Left">
+                <TextBlock FontFamily="/ShinraMeter;component/#Droid Sans Mono" Text="{Binding}" Margin="3,0" HorizontalAlignment="Left" 
+                           TextWrapping="NoWrap" Height="Auto"/>
+                <Border BorderBrush="DodgerBlue" BorderThickness="1" CornerRadius="3"
+                        Background="#301e90ff" Margin="0" MouseEnter="ChunkMouseEnter">
+                    <Border.Style>
+                        <Style>
+                            <Setter Property="Border.Opacity" Value="0"></Setter>
+                            <Style.Triggers>
+                                <Trigger Property="Border.IsMouseOver" Value="True">
+                                    <Setter Property="Border.Opacity" Value="1"></Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                </Border>
+
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="HexRow">
+            <ItemsControl ItemsSource="{Binding}"
+                          ItemTemplate="{StaticResource HexChunk}"
+                          HorizontalAlignment="Stretch">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="1"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </DataTemplate>
     </Window.Resources>
-   
+    <Grid Margin="10" UseLayoutRounding="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="350"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="300"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!--Known list-->
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock>Known opcodes</TextBlock>
+            <ScrollViewer Grid.Row="1">
+                <ItemsControl ItemsSource="{Binding Known}" ItemTemplate="{StaticResource opcdt}"  BorderThickness="1" BorderBrush="#2000" >
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+        <!--All list-->
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock >
+                <Run Text="All packets  - "></Run>
+                <Run Text="{Binding All.Count, Mode=OneWay}"></Run>
+            </TextBlock>
+            <ScrollViewer Grid.Row="1" x:Name="AllSw">
+                <ItemsControl ItemsSource="{Binding All}" ItemTemplate="{StaticResource msg}"  
+                              BorderThickness="1" BorderBrush="#2000" 
+                              x:Name="AllItemsControl">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel IsVirtualizing="True" VirtualizationMode="Recycling"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.ColumnSpan="2">Text view</TextBlock>
+            <ScrollViewer Width="Auto" Grid.Row="1" 
+                          ScrollChanged="HexSwChanged" x:Name="HexSw" VerticalScrollBarVisibility="Hidden">
+                <ItemsControl ItemsSource="{Binding PacketDetails.RowsHex}"
+                          ItemTemplate="{StaticResource HexRow}"
+                          
+                          BorderThickness="1" BorderBrush="#ccc">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+            <ScrollViewer Width="Auto" Grid.Row="1" Grid.Column="1" x:Name="TextSw" ScrollChanged="HexSwChanged">
+                <ItemsControl ItemsSource="{Binding PacketDetails.RowsText}"
+                              ItemTemplate="{StaticResource HexRow}"
+                              HorizontalAlignment="Stretch"
+                              Margin="-1,0,0,0"
+                              BorderThickness="1" BorderBrush="#ccc">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+        <StackPanel Grid.Row="2" Margin="0,5" Grid.ColumnSpan="1" HorizontalAlignment="Left" Orientation="Horizontal">
+            <Button Content="Clear all" Width="Auto" HorizontalAlignment="Center" Click="Button_Click"></Button>
+            <Button Content="Dump known to file" Width="Auto" HorizontalAlignment="Center" Click="Button_Click_1"></Button>
+        </StackPanel>
+    </Grid>
+
 </Window>
