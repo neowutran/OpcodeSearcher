@@ -7,13 +7,14 @@ using Tera.Game.Messages;
 
 namespace DamageMeter.Heuristic
 {
-    class S_SPAWN_ME : AbstractPacketHeuristic
+    internal class S_SPAWN_ME : AbstractPacketHeuristic
     {
         public static S_SPAWN_ME Instance => _instance ?? (_instance = new S_SPAWN_ME());
         private static S_SPAWN_ME _instance;
 
-
-        private S_SPAWN_ME() : base(OpcodeEnum.S_SPAWN_ME) { }
+        private S_SPAWN_ME() : base(OpcodeEnum.S_SPAWN_ME)
+        {
+        }
 
         public new void Process(ParsedMessage message)
         {
@@ -27,8 +28,8 @@ namespace DamageMeter.Heuristic
             var alive = Reader.ReadBoolean();
             var unk = Reader.ReadByte();
             if (unk != 0) return;
-            if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue("LoggedCharacter", out Tuple<Type, object> currChar)) { return; }
-            var ch = (LoggedCharacter) currChar.Item2;
+            if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.PlayerLocation, out Tuple<Type, object> currChar)) { return; }
+            var ch = (LoggedCharacter)currChar.Item2;
             if (target != ch.Cid) return;
 
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OpcodeEnum.S_SPAWN_ME);
