@@ -28,7 +28,9 @@ namespace DamageMeter.Heuristic
             var alive = Reader.ReadBoolean();
             var unk = Reader.ReadByte();
             if (unk != 0) return;
-            if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.PlayerLocation, out Tuple<Type, object> currChar)) { return; }
+            if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, out Tuple<Type, object> currChar)) {
+                throw new Exception("Logger character should be know at this point.");
+            }
             var ch = (LoggedCharacter)currChar.Item2;
             if (target != ch.Cid) return;
 
