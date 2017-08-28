@@ -24,6 +24,7 @@ namespace DamageMeter.Heuristic
 
             if (message.Payload.Count != 41) { return; }
             var origin = Reader.ReadVector3f();
+            var w = Reader.ReadUInt16();
             var unknown1 = Reader.ReadUInt16();
             var destination = Reader.ReadVector3f();
             if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode))
