@@ -24,6 +24,8 @@ namespace DamageMeter.Heuristic
             var serverId = Reader.ReadUInt32();
             if (NetworkController.Instance.Server.ServerId != serverId) return;
             var playerId = Reader.ReadUInt32();
+            Reader.Skip(4+1+4+4+4+8+2);
+            var level = Reader.ReadUInt16();
             Reader.BaseStream.Position = nameOffset - 4;
             var name = "";
             try
@@ -44,7 +46,7 @@ namespace DamageMeter.Heuristic
             }
 
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
-            var ch = new LoggedCharacter();
+            var ch = new LoggedCharacter(cid, model, name, playerId, level);
             OpcodeFinder.Instance.KnowledgeDatabase.Add("LoggedCharacter", new Tuple<Type, object>(typeof(LoggedCharacter), ch));
             //TODO
 
