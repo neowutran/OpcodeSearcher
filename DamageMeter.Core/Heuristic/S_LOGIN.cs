@@ -33,7 +33,7 @@ namespace DamageMeter.Heuristic
                 name = Reader.ReadTeraString();
             }
             catch (Exception) { return; }
-            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue("Characters", out Tuple<Type, object> chars))
+            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.Characters, out Tuple<Type, object> chars))
             {
                 var list = chars.Item2 as Dictionary<uint, Character>;
                 if (!list.TryGetValue(playerId, out Character c)) { return; }
@@ -47,7 +47,7 @@ namespace DamageMeter.Heuristic
 
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
             var ch = new LoggedCharacter(cid, model, name, playerId, level);
-            OpcodeFinder.Instance.KnowledgeDatabase.Add("LoggedCharacter", new Tuple<Type, object>(typeof(LoggedCharacter), ch));
+            OpcodeFinder.Instance.KnowledgeDatabase.Add(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, new Tuple<Type, object>(typeof(LoggedCharacter), ch));
             //TODO
 
 
