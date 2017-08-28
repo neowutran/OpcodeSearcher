@@ -42,7 +42,7 @@ namespace DamageMeter.Heuristic
             }
             else
             {
-                return;
+                throw new Exception("At this point, characters must be known");
             }
 
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
