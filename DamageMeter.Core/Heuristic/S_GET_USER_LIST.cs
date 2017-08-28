@@ -7,6 +7,25 @@ using Tera.Game.Messages;
 
 namespace DamageMeter.Heuristic
 {
+    public struct Character
+    {
+        public uint Id;
+        public uint Gender;
+        public uint Race;
+        public uint Class;
+        public uint Level;
+        public string Name;
+
+        public Character(uint id, uint gender, uint race, uint c, uint level, string name)
+        {
+            Id = id;
+            Gender = gender;
+            Race = race;
+            Class = c;
+            Level = level;
+            Name = name;
+        }
+    }
     public class S_GET_USER_LIST : AbstractPacketHeuristic
     {
         public static S_GET_USER_LIST Instance => _instance ?? (_instance = new S_GET_USER_LIST());
@@ -25,7 +44,7 @@ namespace DamageMeter.Heuristic
                 OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
 
                 //create a <PlayerId, Name> dictionary and add to KnowledgeDB
-                var chars = new Dictionary<uint, string>();
+                var chars = new Dictionary<uint, Character>();
                 var count = Reader.ReadUInt16();
                 var offset = Reader.ReadUInt16();
 
@@ -38,11 +57,16 @@ namespace DamageMeter.Heuristic
                     var nameOffset = Reader.ReadUInt16();
                     Reader.Skip(10);
                     var id = Reader.ReadUInt32();
+                    var gender = Reader.ReadUInt32();
+                    var race = Reader.ReadUInt32();
+                    var @class = Reader.ReadUInt32();
+                    var level = Reader.ReadUInt32();
                     Reader.BaseStream.Position = nameOffset - 4;
                     var name = Reader.ReadTeraString();
-                    chars.Add(id, name);
+                    var ch = new Character(id, gender, race, @class, level, name);
+                    chars.Add(id, ch);
                 }
-                OpcodeFinder.Instance.KnowledgeDatabase.Add("Characters", new Tuple<Type, object>(typeof(Dictionary<uint, string>), chars));
+                OpcodeFinder.Instance.KnowledgeDatabase.Add("Characters", new Tuple<Type, object>(typeof(Dictionary<uint, Character>), chars));
             }
 
         }
