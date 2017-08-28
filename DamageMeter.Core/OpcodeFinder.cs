@@ -24,9 +24,9 @@ namespace DamageMeter
 
         public enum KnowledgeDatabaseItem
         {
-            LoggedCharacter,
-            PlayerLocation,
-            Characters
+            LoggedCharacter = 0,
+            PlayerLocation = 1,
+            Characters = 2
         }
 
         // Use that to set value like CID etc ...
