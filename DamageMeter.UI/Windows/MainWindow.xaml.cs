@@ -59,7 +59,11 @@ namespace DamageMeter.UI
             NetworkController.Instance.GuildIconAction += InstanceOnGuildIconAction;
             Title = "Opcode finder V0";
             SystemEvents.SessionEnding += new SessionEndingEventHandler(SystemEvents_SessionEnding);
-            OpcodeFinder.Instance.OpcodeFound += (s, ev) => OnPropertyChanged(nameof(Known));
+            OpcodeFinder.Instance.OpcodeFound += (opc) =>
+            {
+                OnPropertyChanged(nameof(Known));
+                foreach (var packetViewModel in All.Where(x => x.Message.OpCode == opc)) { packetViewModel.RefreshName(); }
+            };
             OpcodeFinder.Instance.NewMessage += (msg) => Dispatcher.Invoke(() => All.Add(new PacketViewModel(msg)));
             All.CollectionChanged += All_CollectionChanged;
             AllSw.ScrollChanged += AllSw_ScrollChanged;
@@ -420,6 +424,11 @@ namespace DamageMeter.UI
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void RefreshName()
+        {
+            OnPropertyChanged(nameof(Message.OpCodeName));
         }
     }
 }

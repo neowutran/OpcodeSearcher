@@ -32,7 +32,7 @@ namespace DamageMeter
             // Add here if you already know some opcode
         };
 
-        public event EventHandler OpcodeFound;
+        public event Action<ushort> OpcodeFound;
         public event Action<ParsedMessage> NewMessage;
         // Once your module found a new opcode
         public void SetOpcode(OpcodeId opcode, OpcodeEnum opcodeName)
@@ -48,7 +48,7 @@ namespace DamageMeter
             }
             KnownOpcode.Add(opcode, opcodeName);
 
-            OpcodeFound?.Invoke(this, EventArgs.Empty);
+            OpcodeFound?.Invoke(opcode);
             Console.WriteLine(Enum.GetName(typeof(OpcodeEnum), opcodeName) + " = " + opcode);
             Debug.WriteLine(Enum.GetName(typeof(OpcodeEnum), opcodeName) + " = " + opcode);
         }
@@ -114,6 +114,7 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.S_EACH_SKILL_RESULT.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_CHAT.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_WHISPER.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_LOGIN.Instance.Process(x))},
 
         };
     }
