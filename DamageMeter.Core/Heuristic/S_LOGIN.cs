@@ -37,7 +37,7 @@ namespace DamageMeter.Heuristic
             {
                 var list = chars.Item2 as Dictionary<uint, Character>;
                 if (!list.TryGetValue(playerId, out Character c)) { return; }
-                if (!CheckModel(model, c)) return;
+                if (model != c.RaceGenderClass.Raw) return;
                 if (c.Name != name) return;
             }
             else
@@ -53,14 +53,6 @@ namespace DamageMeter.Heuristic
 
         }
 
-        private bool CheckModel(uint model, Character c)
-        {
-            var race = (model - 100) / 200 % 50;
-            var gender = model / 100 % 2;
-            var cl = model % 100;
-
-            return race == c.Race && gender + 1 == c.Gender && cl -1 == c.Class;
-        }
     }
 
     public struct LoggedCharacter

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tera.Game;
 using Tera.Game.Messages;
 
 namespace DamageMeter.Heuristic
@@ -10,18 +11,14 @@ namespace DamageMeter.Heuristic
     public struct Character
     {
         public uint Id;
-        public uint Gender;
-        public uint Race;
-        public uint Class;
+        public RaceGenderClass RaceGenderClass;
         public uint Level;
         public string Name;
 
-        public Character(uint id, uint gender, uint race, uint c, uint level, string name)
+        public Character(uint id, RaceGenderClass raceGenderClass, uint level, string name)
         {
             Id = id;
-            Gender = gender;
-            Race = race;
-            Class = c;
+            RaceGenderClass = raceGenderClass;
             Level = level;
             Name = name;
         }
@@ -63,7 +60,7 @@ namespace DamageMeter.Heuristic
                     var level = Reader.ReadUInt32();
                     Reader.BaseStream.Position = nameOffset - 4;
                     var name = Reader.ReadTeraString();
-                    var ch = new Character(id, gender, race, cl, level, name);
+                    var ch = new Character(id, new RaceGenderClass((Race)race,(Gender)gender+1,(PlayerClass)cl+1), level, name);
                     chars.Add(id, ch);
                 }
                 OpcodeFinder.Instance.KnowledgeDatabase.Add(OpcodeFinder.KnowledgeDatabaseItem.Characters, new Tuple<Type, object>(typeof(Dictionary<uint, Character>), chars));
