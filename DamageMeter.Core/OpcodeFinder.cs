@@ -71,7 +71,7 @@ namespace DamageMeter
             message.PrintRaw();
 
             PacketCount++;
-            AllPacketsTimeOfArrival.Add(new Tuple<DateTime, OpcodeId>(message.Time, message.OpCode));
+            AllPackets.Add(PacketCount, message);
             NewMessage?.Invoke(message);
             if (message.Direction == Tera.MessageDirection.ClientToServer)
             {
@@ -83,10 +83,11 @@ namespace DamageMeter
         }
 
         // For the kind of heuristic "this opcode only appear less than 1 second after this other opcode"  
-        private List<Tuple<DateTime, OpcodeId>> AllPacketsTimeOfArrival = new List<Tuple<DateTime, OpcodeId>>();
+        private Dictionary<long, ParsedMessage> AllPackets = new Dictionary<long, ParsedMessage>();
 
-        public long TotalOccurrenceOpcode(OpcodeId opcode) => AllPacketsTimeOfArrival.Where(x => x.Item2 == opcode).Count();
-        
+        public long TotalOccurrenceOpcode(OpcodeId opcode) => AllPackets.Where(x => x.Value.OpCode == opcode).Count();
+        public ParsedMessage GetMessage(long messageNumber) => AllPackets[messageNumber];
+
         private static readonly List<Delegate> ClientOpcode = new List<Delegate>
         {
             {new Action<ParsedMessage>(x => Heuristic.C_CHECK_VERSION.Instance.Process(x))},
