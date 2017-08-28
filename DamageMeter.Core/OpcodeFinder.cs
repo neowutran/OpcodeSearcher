@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using Tera;
 using Tera.Game.Messages;
 using OpcodeId = System.UInt16;
 using Grade = System.UInt32;
 
 namespace DamageMeter
 {
+    
     public class OpcodeFinder
     {
         public static OpcodeFinder Instance => _instance ?? (_instance = new OpcodeFinder());
@@ -19,7 +23,7 @@ namespace DamageMeter
         // Use that to set value like CID etc ...
         public Dictionary<string, Tuple<Type, object>> KnowledgeDatabase = new Dictionary<string, Tuple<Type, object>>();
 
-        private Dictionary<OpcodeId, OpcodeEnum> KnownOpcode = new Dictionary<OpcodeId, OpcodeEnum>()
+        public Dictionary<OpcodeId, OpcodeEnum> KnownOpcode = new Dictionary<OpcodeId, OpcodeEnum>()
         {
             {19900, OpcodeEnum.C_CHECK_VERSION }, //Those 2 opcode never change
             {19901, OpcodeEnum.S_CHECK_VERSION }
@@ -28,6 +32,8 @@ namespace DamageMeter
             // Add here if you already know some opcode
         };
 
+        public event EventHandler OpcodeFound;
+        public event Action<ParsedMessage> NewMessage;
         // Once your module found a new opcode
         public void SetOpcode(OpcodeId opcode, OpcodeEnum opcodeName)
         {
@@ -41,6 +47,8 @@ namespace DamageMeter
                 throw new Exception("opcodename: " + Enum.GetName(typeof(OpcodeEnum), opcodeName) + " is already know = " + opcode);
             }
             KnownOpcode.Add(opcode, opcodeName);
+
+            OpcodeFound?.Invoke(this, EventArgs.Empty);
             Console.WriteLine(Enum.GetName(typeof(OpcodeEnum), opcodeName) + " = " + opcode);
             Debug.WriteLine(Enum.GetName(typeof(OpcodeEnum), opcodeName) + " = " + opcode);
         }
@@ -62,9 +70,9 @@ namespace DamageMeter
 
             message.PrintRaw();
 
-
             PacketCount++;
             AllPacketsTimeOfArrival.Add(new Tuple<DateTime, OpcodeId>(message.Time, message.OpCode));
+            NewMessage?.Invoke(message);
             if (message.Direction == Tera.MessageDirection.ClientToServer)
             {
                 ClientOpcode.ForEach(x => x.DynamicInvoke(message));
