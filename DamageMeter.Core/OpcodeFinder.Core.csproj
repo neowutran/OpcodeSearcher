@@ -107,6 +107,7 @@
     <Compile Include="Heuristic\S_LOGIN_ACCOUNT_INFO.cs" />
     <Compile Include="Heuristic\S_LOGIN_ARBITER.cs" />
     <Compile Include="Heuristic\S_PARTY_MEMBER_LIST.cs" />
+    <Compile Include="Heuristic\S_PLAYER_STAT_UPDATE.cs" />
     <Compile Include="Heuristic\S_REMAIN_PLAY_TIME.cs" />
     <Compile Include="Heuristic\S_SPAWN_ME.cs" />
     <Compile Include="Heuristic\S_SPAWN_NPC.cs" />
