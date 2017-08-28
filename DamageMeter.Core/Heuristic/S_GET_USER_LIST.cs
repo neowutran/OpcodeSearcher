@@ -60,7 +60,12 @@ namespace DamageMeter.Heuristic
                     var level = Reader.ReadUInt32();
                     Reader.BaseStream.Position = nameOffset - 4;
                     var name = Reader.ReadTeraString();
-                    var ch = new Character(id, new RaceGenderClass((Race)race,(Gender)gender+1,(PlayerClass)cl+1), level, name);
+                    // Unknown gender = baraka
+                    if(gender == 0)
+                    {
+                        gender = 2;
+                    }
+                    var ch = new Character(id, new RaceGenderClass((Race)race,(Gender)gender -1,(PlayerClass)cl+1), level, name);
                     chars.Add(id, ch);
                 }
                 OpcodeFinder.Instance.KnowledgeDatabase.Add(OpcodeFinder.KnowledgeDatabaseItem.Characters, new Tuple<Type, object>(typeof(Dictionary<uint, Character>), chars));
