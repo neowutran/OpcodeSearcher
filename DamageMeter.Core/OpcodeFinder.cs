@@ -131,6 +131,8 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.S_SPAWN_ME.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_SPAWN_NPC.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_SPAWN_USER.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_PARTY_MEMBER_LIST.Instance.Process(x))},
+
         };
     }
 }
