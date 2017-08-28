@@ -13,27 +13,37 @@ using Grade = System.UInt32;
 
 namespace DamageMeter
 {
-    
     public class OpcodeFinder
     {
         public static OpcodeFinder Instance => _instance ?? (_instance = new OpcodeFinder());
         private static OpcodeFinder _instance;
-        private OpcodeFinder(){}
+
+        private OpcodeFinder()
+        {
+        }
+
+        public enum KnowledgeDatabaseItem
+        {
+            LoggedCharacter = 0,
+            PlayerLocation = 1,
+            Characters = 2
+        }
 
         // Use that to set value like CID etc ...
-        public Dictionary<string, Tuple<Type, object>> KnowledgeDatabase = new Dictionary<string, Tuple<Type, object>>();
+        public Dictionary<KnowledgeDatabaseItem, Tuple<Type, object>> KnowledgeDatabase = new Dictionary<KnowledgeDatabaseItem, Tuple<Type, object>>();
 
         public Dictionary<OpcodeId, OpcodeEnum> KnownOpcode = new Dictionary<OpcodeId, OpcodeEnum>()
         {
             {19900, OpcodeEnum.C_CHECK_VERSION }, //Those 2 opcode never change
             {19901, OpcodeEnum.S_CHECK_VERSION }
 
-
             // Add here if you already know some opcode
         };
 
         public event Action<ushort> OpcodeFound;
+
         public event Action<ParsedMessage> NewMessage;
+
         // Once your module found a new opcode
         public void SetOpcode(OpcodeId opcode, OpcodeEnum opcodeName)
         {
@@ -54,20 +64,23 @@ namespace DamageMeter
         }
 
         public bool IsKnown(OpcodeId opcode) => KnownOpcode.ContainsKey(opcode);
+
         public bool IsKnown(OpcodeEnum opcode) => KnownOpcode.ContainsValue(opcode);
-        public ushort? GetOpcode(OpcodeEnum opcode) {
-            if (IsKnown(opcode)){
+
+        public ushort? GetOpcode(OpcodeEnum opcode)
+        {
+            if (IsKnown(opcode))
+            {
                 return KnownOpcode.Where(x => x.Value == opcode).Select(x => x.Key).First();
             }
             return null;
         }
 
-        //For the kind of heuristic "only appear in the first X packet" 
+        //For the kind of heuristic "only appear in the first X packet"
         public long PacketCount = 0;
 
         public void Find(ParsedMessage message)
         {
-
             message.PrintRaw();
 
             PacketCount++;
@@ -79,13 +92,13 @@ namespace DamageMeter
                 return;
             }
             ServerOpcode.ForEach(x => x.DynamicInvoke(message));
-
         }
 
-        // For the kind of heuristic "this opcode only appear less than 1 second after this other opcode"  
+        // For the kind of heuristic "this opcode only appear less than 1 second after this other opcode"
         private Dictionary<long, ParsedMessage> AllPackets = new Dictionary<long, ParsedMessage>();
 
         public long TotalOccurrenceOpcode(OpcodeId opcode) => AllPackets.Where(x => x.Value.OpCode == opcode).Count();
+
         public ParsedMessage GetMessage(long messageNumber) => AllPackets[messageNumber];
 
         private static readonly List<Delegate> ClientOpcode = new List<Delegate>
@@ -118,7 +131,6 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.S_SPAWN_ME.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_SPAWN_NPC.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_SPAWN_USER.Instance.Process(x))},
-
         };
     }
 }
