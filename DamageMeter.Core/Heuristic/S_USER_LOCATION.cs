@@ -7,7 +7,6 @@ using Tera.Game.Messages;
 
 namespace DamageMeter.Heuristic
 {
-   
     public class S_USER_LOCATION : AbstractPacketHeuristic
     {
         public static S_USER_LOCATION Instance => _instance ?? (_instance = new S_USER_LOCATION());
@@ -44,6 +43,11 @@ namespace DamageMeter.Heuristic
             var type = Reader.ReadUInt32();
             var unknown2 = Reader.ReadByte();
             var distance = origin.DistanceTo(destination);
+            //added check for SpawnedUser, sUserLocation detect will work after sSpawnUser (you should tp into town as example)
+            if (!OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(OpcodeFinder.KnowledgeDatabaseItem.SpawnedUsers))
+            {
+                return;
+            }
             var users = (List<ulong>)OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.SpawnedUsers].Item2;
             if (!users.Contains(target)) { return; }
             if (unknown1 == 0 && AcceptedTypeValue.Contains(type) && distance < 200 && distance >= 0 && unknown2 == 0)
