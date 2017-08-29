@@ -93,6 +93,7 @@
     <Compile Include="Heuristic\C_GET_USER_LIST.cs" />
     <Compile Include="Heuristic\C_LOGIN_ARBITER.cs" />
     <Compile Include="Heuristic\C_PLAYER_LOCATION.cs" />
+    <Compile Include="Heuristic\C_SELECT_USER.cs" />
     <Compile Include="Heuristic\C_SET_VISIBLE_RANGE.cs" />
     <Compile Include="Heuristic\C_WHISPER.cs" />
     <Compile Include="Heuristic\S_ABNORMALITY_BEGIN.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Heuristic\S_PARTY_MEMBER_LIST.cs" />
     <Compile Include="Heuristic\S_PLAYER_STAT_UPDATE.cs" />
     <Compile Include="Heuristic\S_REMAIN_PLAY_TIME.cs" />
+    <Compile Include="Heuristic\S_SELECT_USER.cs" />
     <Compile Include="Heuristic\S_SPAWN_ME.cs" />
     <Compile Include="Heuristic\S_SPAWN_NPC.cs" />
     <Compile Include="Heuristic\S_SPAWN_USER.cs" />

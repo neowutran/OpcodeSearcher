@@ -110,10 +110,12 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.C_PLAYER_LOCATION.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.C_WHISPER.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.C_CHAT.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.C_SELECT_USER.Instance.Process(x))},
         };
 
         private static readonly List<Delegate> ServerOpcode = new List<Delegate>
         {
+            {new Action<ParsedMessage>(x => Heuristic.S_SELECT_USER.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_LOGIN.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_LOADING_SCREEN_CONTROL_INFO.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_REMAIN_PLAY_TIME.Instance.Process(x))},
