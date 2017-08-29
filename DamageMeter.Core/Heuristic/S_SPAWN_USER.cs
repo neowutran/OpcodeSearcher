@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Interop;
 using Tera.Game.Messages;
 
 namespace DamageMeter.Heuristic
@@ -17,7 +18,16 @@ namespace DamageMeter.Heuristic
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
-            if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) { return; }
+            if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode))
+            {
+                if (OpcodeFinder.Instance.GetOpcode(OPCODE) == message.OpCode)
+                {
+                    Reader.Skip(10+2+2+2+2+2+2+2+4+4);
+                    var id = Reader.ReadUInt64();
+                    AddUserToDatabase(id);
+                }
+                return;
+            }
 
             if (message.Payload.Count < 200) return;
             Reader.Skip(2+2+2+2);
@@ -25,7 +35,9 @@ namespace DamageMeter.Heuristic
             Reader.Skip(2+2+2+2+2+2+2);
             var serverId = Reader.ReadUInt32();
             if (serverId != NetworkController.Instance.Server.ServerId) return; //assume that we are not in IM
-            Reader.Skip(4+8+4+4+4+2+4);
+            Reader.Skip(4);
+            var id2 = Reader.ReadUInt64();
+            Reader.Skip(4+4+4+2+4);
             var model = Reader.ReadUInt32();
             if (model < 10101 || model > 11108) return; //could me made more accurate by checking actual race/gender/class ranges
             var unk1 = Reader.ReadInt16();
@@ -68,8 +80,19 @@ namespace DamageMeter.Heuristic
             catch (Exception e) { return; }    
 
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
+            AddUserToDatabase(id2);
 
-
+        }
+        private void AddUserToDatabase(ulong id)
+        {
+            List<ulong> list = new List<ulong>();
+            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.SpawnedUsers, out Tuple<Type, object> result))
+            {
+                OpcodeFinder.Instance.KnowledgeDatabase.Remove(OpcodeFinder.KnowledgeDatabaseItem.SpawnedUsers);
+                list = (List<ulong>)result.Item2;
+            }
+            if (!list.Contains(id)) list.Add(id);
+            OpcodeFinder.Instance.KnowledgeDatabase.Add(OpcodeFinder.KnowledgeDatabaseItem.SpawnedUsers, new Tuple<Type, object>(typeof(List<ulong>), list));
         }
     }
 }
