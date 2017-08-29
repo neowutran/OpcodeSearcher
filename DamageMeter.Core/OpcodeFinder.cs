@@ -151,6 +151,8 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.S_BROCAST_GUILD_FLAG.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_USER_LOCATION.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_NPC_LOCATION.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_SPAWN_PROJECTILE.Instance.Process(x))},
+
         };
     }
 }
