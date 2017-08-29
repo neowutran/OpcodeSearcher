@@ -62,6 +62,9 @@ namespace DamageMeter.Heuristic
         public string Name;
         public uint PlayerId;
         public uint Level;
+        public uint MaxHp;
+        public uint MaxMp;
+        public uint MaxSt;
 
         public LoggedCharacter(ulong cid, uint model, string name, uint pId, uint lvl)
         {
@@ -70,6 +73,10 @@ namespace DamageMeter.Heuristic
             Name = name;
             PlayerId = pId;
             Level = lvl;
+            MaxHp = 0;
+            MaxMp = 0;
+            MaxSt = 0;
+
         }
     }
 }
