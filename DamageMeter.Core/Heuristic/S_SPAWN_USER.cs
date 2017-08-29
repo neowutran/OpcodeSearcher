@@ -60,7 +60,7 @@ namespace DamageMeter.Heuristic
             var unk45 = Reader.ReadInt32();
             if (unk45 != 0) return;
             var unk46 = Reader.ReadInt32();
-            if (unk46 != 0 && unk46 != 64) return;
+            if (unk46 != 0 && unk46 != 100) return;
             var unk47 = Reader.ReadSingle();
             if (unk47 != 1.0) return;
             Reader.BaseStream.Position = nameOffset - 4;
