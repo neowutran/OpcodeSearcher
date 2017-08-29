@@ -90,6 +90,7 @@
     <Compile Include="AbstractPacketHeuristic.cs" />
     <Compile Include="Heuristic\C_CHAT.cs" />
     <Compile Include="Heuristic\C_CHECK_VERSION.cs" />
+    <Compile Include="Heuristic\C_GET_USER_GUILD_LOGO.cs" />
     <Compile Include="Heuristic\C_GET_USER_LIST.cs" />
     <Compile Include="Heuristic\C_LOGIN_ARBITER.cs" />
     <Compile Include="Heuristic\C_PLAYER_LOCATION.cs" />

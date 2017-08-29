@@ -111,6 +111,7 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.C_WHISPER.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.C_CHAT.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.C_SELECT_USER.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.C_GET_USER_GUILD_LOGO.Instance.Process(x))},
         };
 
         private static readonly List<Delegate> ServerOpcode = new List<Delegate>

@@ -14,13 +14,16 @@ namespace DamageMeter.Heuristic
         public RaceGenderClass RaceGenderClass;
         public uint Level;
         public string Name;
+        
+        public int GuildId;
 
-        public Character(uint id, RaceGenderClass raceGenderClass, uint level, string name)
+        public Character(uint id, RaceGenderClass raceGenderClass, uint level, string name, int guildId)
         {
             Id = id;
             RaceGenderClass = raceGenderClass;
             Level = level;
             Name = name;
+            GuildId = guildId;
         }
     }
     public class S_GET_USER_LIST : AbstractPacketHeuristic
@@ -58,6 +61,16 @@ namespace DamageMeter.Heuristic
                     var race = Reader.ReadUInt32();
                     var cl = Reader.ReadUInt32();
                     var level = Reader.ReadUInt32();
+                    Reader.Skip(8);
+                    var worldMapWorldId = Reader.ReadUInt32();
+                    var worldMapGuardId = Reader.ReadUInt32();
+                    var areaNameId = Reader.ReadUInt32();
+                    Reader.Skip(8 + 1 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 8 + 4 + 4 + 4 + 2 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 2 + 4 + 1 + 4);
+                    var achievementPoints = Reader.ReadInt32();
+                    var laurel = Reader.ReadUInt32();
+                    var position = Reader.ReadInt32();
+                    var guildId = Reader.ReadInt32();
+
                     Reader.BaseStream.Position = nameOffset - 4;
                     var name = Reader.ReadTeraString();
                     // Unknown gender = baraka
@@ -65,7 +78,7 @@ namespace DamageMeter.Heuristic
                     {
                         gender = 2;
                     }
-                    var ch = new Character(id, new RaceGenderClass((Race)race,(Gender)gender -1,(PlayerClass)cl+1), level, name);
+                    var ch = new Character(id, new RaceGenderClass((Race)race,(Gender)gender -1,(PlayerClass)cl+1), level, name, guildId);
                     chars.Add(id, ch);
                 }
                 OpcodeFinder.Instance.KnowledgeDatabase.Add(OpcodeFinder.KnowledgeDatabaseItem.Characters, new Tuple<Type, object>(typeof(Dictionary<uint, Character>), chars));
