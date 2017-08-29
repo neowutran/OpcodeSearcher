@@ -148,7 +148,9 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.S_ABNORMALITY_BEGIN.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_ABNORMALITY_REFRESH.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_ABNORMALITY_END.Instance.Process(x))},
-
+            {new Action<ParsedMessage>(x => Heuristic.S_BROCAST_GUILD_FLAG.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_USER_LOCATION.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_NPC_LOCATION.Instance.Process(x))},
         };
     }
 }
