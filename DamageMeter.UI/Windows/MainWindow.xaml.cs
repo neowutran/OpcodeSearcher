@@ -76,7 +76,7 @@ namespace DamageMeter.UI
             if (msg.Direction == MessageDirection.ClientToServer && ClientCb.IsChecked == false) return;
             if (WhiteListedOpcodes.Count > 0 && !WhiteListedOpcodes.Contains(msg.OpCode)) return;
             if (BlackListedOpcodes.Contains(msg.OpCode)) return;
-            if (SpamCb.IsChecked == true && All.Last().Message.OpCode == msg.OpCode) return;
+            if (SpamCb.IsChecked == true && All.Count > 0 && All.Last().Message.OpCode == msg.OpCode) return;
             All.Add(new PacketViewModel(msg));
         }
 
