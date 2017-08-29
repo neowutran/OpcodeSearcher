@@ -10,6 +10,7 @@
                      Title="Shinra Meter"
                      MinHeight="60" MinWidth="219"
                      Width="Auto"
+        Background="#f5f5f5"
                     SizeToContent="Width"
                      Loaded="MainWindow_OnLoaded"
                      Closed="MainWindow_OnClosed" d:DataContext="{d:DesignInstance ui:MainWindow }">
@@ -275,6 +276,26 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </DataTemplate>
+        <DataTemplate x:Key="BlackListedOpcode">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Click="RemoveBlacklistedOpcode" Width="20">-</Button>
+                <TextBlock Text="{Binding}" Grid.Column="1" VerticalAlignment="Center" Margin="3,0"></TextBlock>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="WhiteListedOpcode">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding}" Grid.Column="1" Margin="3,0"></TextBlock>
+                <Button Grid.Column="0" Click="RemoveWhitelistedOpcode" Width="20">-</Button>
+            </Grid>
+        </DataTemplate>
     </Window.Resources>
     <Grid Margin="10" UseLayoutRounding="True">
         <Grid.ColumnDefinitions>
@@ -288,22 +309,109 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!--Known list-->
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
-            <TextBlock>Known opcodes</TextBlock>
-            <ScrollViewer Grid.Row="1">
-                <ItemsControl ItemsSource="{Binding Known}" ItemTemplate="{StaticResource opcdt}"  BorderThickness="1" BorderBrush="#2000" >
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
-            </ScrollViewer>
+            <TextBlock>Settings</TextBlock>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Border  Background="White" Grid.Row="0" Margin="0,5" Padding="3">
+                        <Border.Effect>
+                            <DropShadowEffect Opacity=".6" ShadowDepth="1"></DropShadowEffect>
+                        </Border.Effect>
+                    <StackPanel >
+                            <TextBlock Background="#2f59" Margin="-3,-3,-3,3" Padding="3">Exclude opcodes (dec)</TextBlock>
+                        <ScrollViewer VerticalAlignment="Stretch" Height="80" Margin="0,0,0,3">
+                            <ItemsControl ItemsSource="{Binding BlackListedOpcodes}"
+                                      ItemTemplate="{StaticResource BlackListedOpcode}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel></StackPanel>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </ScrollViewer>
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox HorizontalAlignment="Stretch" Name="OpcodeToBlacklist"></TextBox>
+                            <Button Click="AddBlackListedOpcode" Width="20" Grid.Column="1" >+</Button>
+                        </Grid>
+                    </StackPanel>
+                    </Border>
+                    <Border  Background="White" Grid.Row="1" Padding="3" Margin="0,5">
+                        <Border.Effect>
+                            <DropShadowEffect Opacity=".6" ShadowDepth="1"></DropShadowEffect>
+                        </Border.Effect>
+                    <StackPanel >
+                            <TextBlock Background="#25f9" Margin="-3,-3,-3,3" Padding="3">Show only opcodes (dec)</TextBlock>
+                            <ScrollViewer VerticalAlignment="Stretch" Height="80" Margin="0,0,0,3">
+                            <ItemsControl ItemsSource="{Binding WhiteListedOpcodes}"
+                                          ItemTemplate="{StaticResource WhiteListedOpcode}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel></StackPanel>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </ScrollViewer>
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox HorizontalAlignment="Stretch" Name="OpcodeToWhitelist"></TextBox>
+                            <Button Width="20" Grid.Column="1" Click="AddWhiteListedOpcode" >+</Button>
+                        </Grid>
+                    </StackPanel>
+                    </Border>
+
+                </Grid>
+                <Border  Background="White" Margin="0,5,10,5" Padding="3" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                    <Border.Effect>
+                        <DropShadowEffect Opacity=".6" ShadowDepth="1"></DropShadowEffect>
+                    </Border.Effect>
+
+                <StackPanel >
+                    <TextBlock Background="#259f" Margin="-3,-3,-3,3" Padding="3">Filters</TextBlock>
+                    <CheckBox Content="Server" Name="ServerCb" IsChecked="True"></CheckBox>
+                    <CheckBox Content="Client" Name="ClientCb" IsChecked="True"></CheckBox>
+                    <CheckBox Content="Spam filter" ToolTip="Discards a packet if the previous one has the same opcode." Name="SpamCb" IsChecked="False"></CheckBox>
+                    <Button Content="Clear all" Width="Auto" HorizontalAlignment="Left" Click="ClearAll" Margin="0,2,0,0"></Button>
+                    <Button Content="Dump known to file" Width="Auto" HorizontalAlignment="Left" Click="Dump" Margin="0,2,0,0"></Button>
+                    </StackPanel>
+                </Border>
+            </Grid>
+            <!--Known list-->
+            <Grid Grid.Row="2" Grid.ColumnSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock>Known opcodes</TextBlock>
+                <ScrollViewer Grid.Row="1">
+                    <ItemsControl ItemsSource="{Binding Known}" ItemTemplate="{StaticResource opcdt}"  BorderThickness="1" BorderBrush="#2000" >
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Background="White"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
         </Grid>
         <!--All list-->
         <Grid>
@@ -321,13 +429,13 @@
                               x:Name="AllItemsControl">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <VirtualizingStackPanel IsVirtualizing="True" VirtualizationMode="Recycling"/>
+                            <VirtualizingStackPanel IsVirtualizing="True" VirtualizationMode="Recycling" Background="White"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
             </ScrollViewer>
         </Grid>
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -337,7 +445,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.ColumnSpan="2">Text view</TextBlock>
-            <ScrollViewer Width="Auto" Grid.Row="1" 
+            <ScrollViewer Width="270" Grid.Row="1" MinWidth="100"
                           ScrollChanged="HexSwChanged" x:Name="HexSw" VerticalScrollBarVisibility="Hidden">
                 <ItemsControl ItemsSource="{Binding PacketDetails.RowsHex}"
                           ItemTemplate="{StaticResource HexRow}"
@@ -345,12 +453,12 @@
                           BorderThickness="1" BorderBrush="#ccc">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel />
+                            <StackPanel Background="White"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
             </ScrollViewer>
-            <ScrollViewer Width="Auto" Grid.Row="1" Grid.Column="1" x:Name="TextSw" ScrollChanged="HexSwChanged">
+            <ScrollViewer Width="160" MinWidth="50" Grid.Row="1" Grid.Column="1" x:Name="TextSw" ScrollChanged="HexSwChanged">
                 <ItemsControl ItemsSource="{Binding PacketDetails.RowsText}"
                               ItemTemplate="{StaticResource HexRow}"
                               HorizontalAlignment="Stretch"
@@ -358,16 +466,15 @@
                               BorderThickness="1" BorderBrush="#ccc">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel />
+                            <StackPanel Background="White"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
             </ScrollViewer>
         </Grid>
-        <StackPanel Grid.Row="2" Margin="0,5" Grid.ColumnSpan="1" HorizontalAlignment="Left" Orientation="Horizontal">
-            <Button Content="Clear all" Width="Auto" HorizontalAlignment="Center" Click="Button_Click"></Button>
-            <Button Content="Dump known to file" Width="Auto" HorizontalAlignment="Center" Click="Button_Click_1"></Button>
-        </StackPanel>
     </Grid>
 
 </Window>
+
+
+

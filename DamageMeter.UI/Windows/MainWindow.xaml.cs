@@ -64,10 +64,20 @@ namespace DamageMeter.UI
                 OnPropertyChanged(nameof(Known));
                 foreach (var packetViewModel in All.Where(x => x.Message.OpCode == opc)) { packetViewModel.RefreshName(); }
             };
-            OpcodeFinder.Instance.NewMessage += (msg) => Dispatcher.Invoke(() => All.Add(new PacketViewModel(msg)));
+            OpcodeFinder.Instance.NewMessage += (msg) => Dispatcher.Invoke(() => HandleNewMessage(msg));
             All.CollectionChanged += All_CollectionChanged;
             AllSw.ScrollChanged += AllSw_ScrollChanged;
             DataContext = this;
+        }
+
+        private void HandleNewMessage(ParsedMessage msg)
+        {
+            if (msg.Direction == MessageDirection.ServerToClient && ServerCb.IsChecked == false) return;
+            if (msg.Direction == MessageDirection.ClientToServer && ClientCb.IsChecked == false) return;
+            if (WhiteListedOpcodes.Count > 0 && !WhiteListedOpcodes.Contains(msg.OpCode)) return;
+            if (BlackListedOpcodes.Contains(msg.OpCode)) return;
+            if (SpamCb.IsChecked == true && All.Last().Message.OpCode == msg.OpCode) return;
+            All.Add(new PacketViewModel(msg));
         }
 
         private void AllSw_ScrollChanged(object sender, System.Windows.Controls.ScrollChangedEventArgs e)
@@ -86,6 +96,8 @@ namespace DamageMeter.UI
 
         public ObservableDictionary<ushort, OpcodeEnum> Known => new ObservableDictionary<ushort, OpcodeEnum>(OpcodeFinder.Instance.KnownOpcode);
         public ObservableCollection<PacketViewModel> All { get; set; } = new ObservableCollection<PacketViewModel>();
+        public ObservableCollection<ushort> BlackListedOpcodes { get; set; } = new ObservableCollection<ushort>();
+        public ObservableCollection<ushort> WhiteListedOpcodes { get; set; } = new ObservableCollection<ushort>();
         private void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
         {
             Exit();
@@ -187,6 +199,8 @@ namespace DamageMeter.UI
                 var s = ((Grid)sender);
                 PacketDetails = s.DataContext as PacketViewModel;
                 foreach (var packetViewModel in All) { packetViewModel.IsSelected = packetViewModel.Message == PacketDetails.Message; }
+                OpcodeToWhitelist.Text = PacketDetails.Message.OpCode.ToString();
+                OpcodeToBlacklist.Text = PacketDetails.Message.OpCode.ToString();
             }
         }
         private void SelectPacketByClick(object sender, MouseButtonEventArgs e)
@@ -194,6 +208,9 @@ namespace DamageMeter.UI
             var s = ((Grid)sender);
             PacketDetails = s.DataContext as PacketViewModel;
             foreach (var packetViewModel in All) { packetViewModel.IsSelected = packetViewModel.Message == PacketDetails.Message; }
+            OpcodeToWhitelist.Text = PacketDetails.Message.OpCode.ToString();
+            OpcodeToBlacklist.Text = PacketDetails.Message.OpCode.ToString();
+
         }
         private string FormatData(ArraySegment<byte> selectedPacketPayload)
         {
@@ -231,14 +248,15 @@ namespace DamageMeter.UI
         private void ChunkMouseEnter(object sender, MouseEventArgs e)
         {
             var s = sender as Border;
+            var dc = (string) s.DataContext;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ClearAll(object sender, RoutedEventArgs e)
         {
             All.Clear();
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Dump(object sender, RoutedEventArgs e)
         {
             var lines = new List<string>();
             foreach (KeyValuePair<ushort, OpcodeEnum> keyVal in Known)
@@ -247,6 +265,37 @@ namespace DamageMeter.UI
                 lines.Add(s);
             }
             File.WriteAllLines($"{Environment.CurrentDirectory}/opcodes {DateTime.Now.ToString().Replace('/','-').Replace(':', '-')}.txt", lines);
+        }
+
+        private void RemoveBlacklistedOpcode(object sender, RoutedEventArgs e)
+        {
+            var s = (System.Windows.Controls.Button) sender;
+            BlackListedOpcodes.Remove((ushort) s.DataContext);
+        }
+
+        private void RemoveWhitelistedOpcode(object sender, RoutedEventArgs e)
+        {
+            var s = (System.Windows.Controls.Button)sender;
+            WhiteListedOpcodes.Remove((ushort)s.DataContext);
+        }
+
+        private void AddBlackListedOpcode(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(OpcodeToBlacklist.Text)) return;
+            if (!ushort.TryParse(OpcodeToBlacklist.Text, out ushort result)) return;
+            if (BlackListedOpcodes.Contains(result)) return;
+            BlackListedOpcodes.Add(result);
+            OpcodeToBlacklist.Text = "";
+
+        }
+
+        private void AddWhiteListedOpcode(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(OpcodeToWhitelist.Text)) return;
+            if (!ushort.TryParse(OpcodeToWhitelist.Text, out ushort result)) return;
+            if (WhiteListedOpcodes.Contains(result)) return;
+            WhiteListedOpcodes.Add(result);
+            OpcodeToWhitelist.Text = "";
         }
     }
     public class DirectionToColor : IValueConverter
