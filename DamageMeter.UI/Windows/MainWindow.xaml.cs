@@ -428,7 +428,7 @@ namespace DamageMeter.UI
 
         public void RefreshName()
         {
-            OnPropertyChanged(nameof(Message.OpCodeName));
+            OnPropertyChanged(nameof(Message));
         }
     }
 }
