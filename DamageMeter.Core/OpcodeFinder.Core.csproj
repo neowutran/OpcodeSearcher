@@ -94,6 +94,7 @@
     <Compile Include="Heuristic\C_GET_USER_LIST.cs" />
     <Compile Include="Heuristic\C_LOGIN_ARBITER.cs" />
     <Compile Include="Heuristic\C_PLAYER_LOCATION.cs" />
+    <Compile Include="Heuristic\C_PONG.cs" />
     <Compile Include="Heuristic\C_SELECT_USER.cs" />
     <Compile Include="Heuristic\C_SET_VISIBLE_RANGE.cs" />
     <Compile Include="Heuristic\C_WHISPER.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="Heuristic\S_LOGIN_ACCOUNT_INFO.cs" />
     <Compile Include="Heuristic\S_LOGIN_ARBITER.cs" />
     <Compile Include="Heuristic\S_PARTY_MEMBER_LIST.cs" />
+    <Compile Include="Heuristic\S_PING.cs" />
     <Compile Include="Heuristic\S_PLAYER_CHANGE_MP.cs" />
     <Compile Include="Heuristic\S_PLAYER_CHANGE_STAMINA.cs" />
     <Compile Include="Heuristic\S_PLAYER_STAT_UPDATE.cs" />
