@@ -16,17 +16,38 @@ namespace DamageMeter.Heuristic
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
-            if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) { return; }
             if (message.Payload.Count != 231) return;
+            if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode))
+            {
+                if (!IsKnown) return;
+                Reader.Skip(12);
+                var maxHp = Reader.ReadUInt32();
+                var maxMp = Reader.ReadUInt32();
+                Reader.Skip(4+4+4+4+2+2+2+4+4+4+4+4+4+4+4+4+4+4+4+4+4+4+2+2+2+4+4+4+4+4+4+4+4+4+4+4+2+1+4+4+4+4+4);
+                //RE
+                var maxRe = Reader.ReadUInt32();
+                var bonusRe = Reader.ReadUInt32();
+
+                UpdatePlayerStats(maxHp, maxMp, maxRe+bonusRe);
+
+                return;
+            }
 
             if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, out Tuple<Type, object> result)) return;
             var ch = (LoggedCharacter)result.Item2;
-            Reader.Skip(4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 2 + 2 + 2 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 2 + 2 + 2 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4);
+            Reader.Skip(12);
+            var maxHp2 = Reader.ReadUInt32();
+            var maxMp2 = Reader.ReadUInt32();
+            Reader.Skip(4 + 4 + 4 + 4 + 2 + 2 + 2 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 2 + 2 + 2 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4);
             var lvl1 = Reader.ReadUInt16();
             if (lvl1 != ch.Level) return;
             var unk4 = Reader.ReadByte();
             if (unk4 != 0 && unk4 != 1) return;
-            Reader.Skip(4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4);
+            Reader.Skip(4 + 4 + 4 + 4 + 4 +4);
+            var maxRe2 = Reader.ReadUInt32();
+            var bonusRe2 = Reader.ReadUInt32();
+
+            Reader.Skip(4 + 4 + 4 + 4);
             var unk7 = Reader.ReadUInt16();
             if (unk7 != 0) return;
             Reader.Skip(2);
@@ -43,7 +64,18 @@ namespace DamageMeter.Heuristic
             //var unk14 = Reader.ReadSingle(); //same for this
             //if (unk14 != 1) return;
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
+            UpdatePlayerStats(maxHp2, maxMp2, maxRe2 + bonusRe2);
 
+        }
+
+        void UpdatePlayerStats(uint maxhp, uint maxmp, uint maxRe)
+        {
+            var c = ((LoggedCharacter)OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter].Item2);
+            c.MaxHp = maxhp;
+            c.MaxMp = maxmp;
+            c.MaxSt = maxRe;
+            OpcodeFinder.Instance.KnowledgeDatabase.Remove(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter);
+            OpcodeFinder.Instance.KnowledgeDatabase.Add(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, new Tuple<Type, object>(typeof(LoggedCharacter), c));
         }
     }
 }
