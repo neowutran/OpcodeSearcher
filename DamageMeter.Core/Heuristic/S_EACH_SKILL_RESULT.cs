@@ -21,7 +21,7 @@ namespace DamageMeter.Heuristic
             base.Process(message);
 
             if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) { return; }
-            if (message.Payload.Count != 99) { return; }
+            if (message.Payload.Count != 97) { return; }
 
             var source = Reader.ReadUInt64();
             var projectilOwnerId = Reader.ReadUInt64();

@@ -22,7 +22,7 @@ namespace DamageMeter.Heuristic
         {
             base.Process(message);
 
-            if (message.Payload.Count != 41) { return; }
+            if (message.Payload.Count != 39) { return; }
             var origin = Reader.ReadVector3f();
             var w = Reader.ReadUInt16();
             var unknown1 = Reader.ReadUInt16();

@@ -17,7 +17,7 @@ namespace DamageMeter.Heuristic
         {
             base.Process(message);
             if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) { return; }
-            var matchesLength = message.Payload.Count == 36;
+            var matchesLength = message.Payload.Count == 34;
             if (!matchesLength) return;
 
 

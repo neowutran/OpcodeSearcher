@@ -21,7 +21,7 @@ namespace DamageMeter.Heuristic
             base.Process(message);
             if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) { return; }
 
-            if (message.Payload.Count != 26) return;
+            if (message.Payload.Count != 24) return;
             var target = Reader.ReadUInt64();
             var pos = Reader.ReadVector3f(); //maybe add more checks based on pos?
             var w = Reader.ReadUInt16();

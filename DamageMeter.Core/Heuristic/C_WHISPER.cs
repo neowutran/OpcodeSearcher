@@ -21,7 +21,7 @@ namespace DamageMeter.Heuristic
             base.Process(message);
 
             if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) { return; }
-            if (message.Payload.Count < 12) { return; }
+            if (message.Payload.Count < 10) { return; }
             var offsetTarget = Reader.ReadUInt16();
             var offsetMessage = Reader.ReadUInt16();
           
