@@ -136,6 +136,9 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.S_SPAWN_USER.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_PARTY_MEMBER_LIST.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_PLAYER_STAT_UPDATE.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_CREATURE_CHANGE_HP.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_PLAYER_CHANGE_MP.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_PLAYER_CHANGE_STAMINA.Instance.Process(x))},
 
         };
     }
