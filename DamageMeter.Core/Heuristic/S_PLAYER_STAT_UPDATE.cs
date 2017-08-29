@@ -17,7 +17,7 @@ namespace DamageMeter.Heuristic
         {
             base.Process(message);
             if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) { return; }
-            if (message.Payload.Count != 233) return; //TODO: change to 231 after TeraMessageReader is fixed
+            if (message.Payload.Count != 231) return;
 
             if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, out Tuple<Type, object> result)) return;
             var ch = (LoggedCharacter)result.Item2;
