@@ -102,6 +102,8 @@
     <Compile Include="Heuristic\S_CHAT.cs" />
     <Compile Include="Heuristic\S_CONFIRM_INVITE_CODE_BUTTON.cs" />
     <Compile Include="Heuristic\S_CREATURE_CHANGE_HP.cs" />
+    <Compile Include="Heuristic\S_DESPAWN_NPC.cs" />
+    <Compile Include="Heuristic\S_DESPAWN_USER.cs" />
     <Compile Include="Heuristic\S_EACH_SKILL_RESULT.cs" />
     <Compile Include="Heuristic\S_GET_USER_LIST.cs" />
     <Compile Include="Heuristic\S_LOADING_SCREEN_CONTROL_INFO.cs" />
