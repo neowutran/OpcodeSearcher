@@ -67,7 +67,7 @@ namespace DamageMeter.Heuristic
                 return;
             }
           
-            if(Reader.BaseStream.Position +2 != Reader.BaseStream.Length) //at this point, we must have reached the end of the stream
+            if(Reader.BaseStream.Position != Reader.BaseStream.Length) //at this point, we must have reached the end of the stream
             {
                 return;
             }
