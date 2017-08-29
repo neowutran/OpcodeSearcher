@@ -28,7 +28,8 @@ namespace DamageMeter
             PlayerLocation = 1,
             Characters = 2,
             SpawnedUsers = 3,
-            SpawnedNpcs = 4
+            SpawnedNpcs = 4,
+            LoggedCharacterAbnormalities = 5,
         }
 
         // Use that to set value like CID etc ...
@@ -143,6 +144,9 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.S_PLAYER_CHANGE_STAMINA.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_DESPAWN_NPC.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_DESPAWN_USER.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_ABNORMALITY_BEGIN.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_ABNORMALITY_REFRESH.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_ABNORMALITY_END.Instance.Process(x))},
 
         };
     }

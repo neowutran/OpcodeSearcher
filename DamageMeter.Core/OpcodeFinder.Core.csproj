@@ -98,6 +98,8 @@
     <Compile Include="Heuristic\C_SET_VISIBLE_RANGE.cs" />
     <Compile Include="Heuristic\C_WHISPER.cs" />
     <Compile Include="Heuristic\S_ABNORMALITY_BEGIN.cs" />
+    <Compile Include="Heuristic\S_ABNORMALITY_END.cs" />
+    <Compile Include="Heuristic\S_ABNORMALITY_REFRESH.cs" />
     <Compile Include="Heuristic\S_ACCOUNT_PACKAGE_LIST.cs" />
     <Compile Include="Heuristic\S_CHAT.cs" />
     <Compile Include="Heuristic\S_CONFIRM_INVITE_CODE_BUTTON.cs" />
