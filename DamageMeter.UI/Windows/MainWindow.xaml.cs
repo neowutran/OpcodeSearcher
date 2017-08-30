@@ -267,6 +267,17 @@ namespace DamageMeter.UI
             File.WriteAllLines($"{Environment.CurrentDirectory}/opcodes {DateTime.Now.ToString().Replace('/','-').Replace(':', '-')}.txt", lines);
         }
 
+        private void Load(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog { Filter = "Supported Formats (*.TeraLog)|*.TeraLog" };
+            if (openFileDialog.ShowDialog() == false) return;
+            List<ParsedMessage> parsedList = LogReader.LoadLogFromFile(openFileDialog.FileName);
+            foreach (ParsedMessage pMessage in parsedList)
+            {
+                HandleNewMessage(pMessage);
+            }
+        }
+
         private void RemoveBlacklistedOpcode(object sender, RoutedEventArgs e)
         {
             var s = (System.Windows.Controls.Button) sender;
