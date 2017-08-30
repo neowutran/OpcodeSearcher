@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -142,6 +142,7 @@
     <Compile Include="Heuristic\S_UPDATE_CONTENTS_ON_OFF.cs" />
     <Compile Include="Heuristic\S_NPC_LOCATION.cs" />
     <Compile Include="Heuristic\S_UPDATE_FRIEND_INFO.cs" />
+    <Compile Include="Heuristic\S_LEAVE_PARTY_MEMBER.cs" />
     <Compile Include="Heuristic\S_USER_LOCATION.cs" />
     <Compile Include="Heuristic\S_USER_PAPERDOLL_INFO.cs" />
     <Compile Include="Heuristic\S_USER_STATUS.cs" />
