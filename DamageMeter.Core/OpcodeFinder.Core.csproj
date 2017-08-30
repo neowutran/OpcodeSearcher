@@ -114,9 +114,11 @@
     <Compile Include="Heuristic\S_GET_USER_LIST.cs" />
     <Compile Include="Heuristic\S_LOADING_SCREEN_CONTROL_INFO.cs" />
     <Compile Include="Heuristic\S_LOAD_CLIENT_ACCOUNT_SETTING.cs" />
+    <Compile Include="Heuristic\S_LOAD_TOPO.cs" />
     <Compile Include="Heuristic\S_LOGIN.cs" />
     <Compile Include="Heuristic\S_LOGIN_ACCOUNT_INFO.cs" />
     <Compile Include="Heuristic\S_LOGIN_ARBITER.cs" />
+    <Compile Include="Heuristic\S_NPC_STATUS.cs" />
     <Compile Include="Heuristic\S_PARTY_MEMBER_LIST.cs" />
     <Compile Include="Heuristic\S_PLAYER_CHANGE_MP.cs" />
     <Compile Include="Heuristic\S_PLAYER_CHANGE_STAMINA.cs" />
