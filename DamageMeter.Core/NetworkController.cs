@@ -45,6 +45,8 @@ namespace DamageMeter
 
         public bool TimedEncounter { get; set; }
 
+        public string FileName { get; set; }
+
         public static NetworkController Instance => _instance ?? (_instance = new NetworkController());
 
         public EntityTracker EntityTracker { get; internal set; }
@@ -97,7 +99,13 @@ namespace DamageMeter
      
             while (_keepAlive)
             {
-                
+
+                if (FileName != null)
+                {
+                    LoadFile();
+                    FileName = null;
+                }
+
                 Encounter = NewEncounter;
 
                 var packetsWaiting = TeraSniffer.Instance.Packets.Count;
@@ -124,6 +132,18 @@ namespace DamageMeter
         internal virtual void OnGuildIconAction(Bitmap icon)
         {
             GuildIconAction?.Invoke(icon);
+        }
+
+        void LoadFile()
+        {
+            if (FileName != null)
+            {
+                List<Message> nonparsedList = LogReader.LoadLogFromFile(FileName);
+                foreach (Message message in nonparsedList)
+                {
+                    TeraSniffer.Instance.Packets.Enqueue(message);
+                }
+            }
         }
     }
 }

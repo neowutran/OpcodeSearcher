@@ -13,18 +13,11 @@ namespace DamageMeter
 {
     public static class LogReader
     {
-        public static List<ParsedMessage> LoadLogFromFile(string filename)
+        public static List<Message> LoadLogFromFile(string filename)
         {
             var plf = new PacketLogFile(filename);
             var messageList = plf.Messages.ToList();
-            var parsedMessageList = new List<ParsedMessage>();
-            var mf = new MessageFactory();
-
-            foreach (var message in messageList)
-            {
-                parsedMessageList.Add(mf.Create(message));
-            }
-            return parsedMessageList;
+            return messageList;
         }
     }
 }

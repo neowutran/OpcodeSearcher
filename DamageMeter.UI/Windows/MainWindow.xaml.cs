@@ -271,11 +271,7 @@ namespace DamageMeter.UI
         {
             var openFileDialog = new Microsoft.Win32.OpenFileDialog { Filter = "Supported Formats (*.TeraLog)|*.TeraLog" };
             if (openFileDialog.ShowDialog() == false) return;
-            List<ParsedMessage> parsedList = LogReader.LoadLogFromFile(openFileDialog.FileName);
-            foreach (ParsedMessage pMessage in parsedList)
-            {
-                HandleNewMessage(pMessage);
-            }
+            NetworkController.Instance.FileName = openFileDialog.FileName;
         }
 
         private void RemoveBlacklistedOpcode(object sender, RoutedEventArgs e)
