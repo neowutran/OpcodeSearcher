@@ -102,6 +102,7 @@
     <Compile Include="Heuristic\S_ABNORMALITY_END.cs" />
     <Compile Include="Heuristic\S_ABNORMALITY_REFRESH.cs" />
     <Compile Include="Heuristic\S_ACCOUNT_PACKAGE_LIST.cs" />
+    <Compile Include="Heuristic\S_BOSS_GAGE_INFO.cs" />
     <Compile Include="Heuristic\S_BROCAST_GUILD_FLAG.cs" />
     <Compile Include="Heuristic\S_CHAT.cs" />
     <Compile Include="Heuristic\S_CONFIRM_INVITE_CODE_BUTTON.cs" />
