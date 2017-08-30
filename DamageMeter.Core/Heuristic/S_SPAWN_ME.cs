@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using Tera.Game;
 using Tera.Game.Messages;
 
 namespace DamageMeter.Heuristic
@@ -12,18 +14,33 @@ namespace DamageMeter.Heuristic
         public static S_SPAWN_ME Instance => _instance ?? (_instance = new S_SPAWN_ME());
         private static S_SPAWN_ME _instance;
 
-        private S_SPAWN_ME() : base(OpcodeEnum.S_SPAWN_ME)
-        {
-        }
+        public Vector3f LatestPos;
+
+
+        private S_SPAWN_ME() : base(OpcodeEnum.S_SPAWN_ME) { }
 
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
-            if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) { return; }
+            if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode))
+            {
+                if (OpcodeFinder.Instance.GetOpcode(OPCODE) == message.OpCode)
+                {
+                    Reader.Skip(8);
+                    LatestPos = Reader.ReadVector3f();
+                    if (!S_LOAD_TOPO.Instance.IsKnown)
+                    {
+
+                        S_LOAD_TOPO.Instance.Confirm(LatestPos);
+
+                    }
+                }
+                return;
+            }
 
             if (message.Payload.Count != 24) return;
             var target = Reader.ReadUInt64();
-            var pos = Reader.ReadVector3f(); //maybe add more checks based on pos?
+            LatestPos = Reader.ReadVector3f(); //maybe add more checks based on pos?
             var w = Reader.ReadUInt16();
             var alive = Reader.ReadBoolean();
             var unk = Reader.ReadByte();
@@ -37,6 +54,12 @@ namespace DamageMeter.Heuristic
             if (target != ch.Cid) return;
 
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OpcodeEnum.S_SPAWN_ME);
+            if (!S_LOAD_TOPO.Instance.IsKnown)
+            {
+
+                S_LOAD_TOPO.Instance.Confirm(LatestPos);
+
+            }
             UpdateLocationInDictionary(OpcodeFinder.KnowledgeDatabaseItem.CharacterSpawnedSuccesfully, true);
         }
 
