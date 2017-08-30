@@ -43,8 +43,8 @@ namespace DamageMeter.Heuristic
         {
             if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.SpawnedNpcs, out Tuple<Type, object> result))
             {
-                var list = (List<ulong>)result.Item2;
-                if (list.Contains(id)) return true;
+                var list = (List<Npc>)result.Item2;
+                if (list.Any(x => x.Cid == id)) return true;
             }
             return false;
         }
@@ -54,9 +54,9 @@ namespace DamageMeter.Heuristic
             {
                 OpcodeFinder.Instance.KnowledgeDatabase.Remove(OpcodeFinder.KnowledgeDatabaseItem.SpawnedNpcs);
             }
-            var list = (List<ulong>)result.Item2;
-            if (list.Contains(id)) list.Remove(id);
-            OpcodeFinder.Instance.KnowledgeDatabase.Add(OpcodeFinder.KnowledgeDatabaseItem.SpawnedNpcs, new Tuple<Type, object>(typeof(List<ulong>), list));
+            var list = (List<Npc>)result.Item2;
+            if (list.Any(x => x.Cid == id)) list.Remove(list.FirstOrDefault(x => x.Cid == id));
+            OpcodeFinder.Instance.KnowledgeDatabase.Add(OpcodeFinder.KnowledgeDatabaseItem.SpawnedNpcs, new Tuple<Type, object>(typeof(List<Npc>), list));
         }
 
     }

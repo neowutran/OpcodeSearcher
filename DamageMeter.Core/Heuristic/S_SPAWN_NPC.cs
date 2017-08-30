@@ -25,7 +25,11 @@ namespace DamageMeter.Heuristic
                 {
                     Reader.Skip(10);
                     var id = Reader.ReadUInt64();
-                    AddNpcToDatabase(id);
+                    Reader.Skip(8+4+4+4+2+4);
+                    var templateId0 = Reader.ReadUInt32();
+                    var zoneId0 = Reader.ReadUInt16();
+
+                    AddNpcToDatabase(id, zoneId0, templateId0);
                 }
                 return;
             }
@@ -33,12 +37,12 @@ namespace DamageMeter.Heuristic
 
             Reader.Skip(10);
             var cid = Reader.ReadUInt64();
-            Reader.Skip(8+4+4+4+2); //skipped pos, may be useful for more accuracy -- subtracted 2
+            Reader.Skip(8 + 4 + 4 + 4 + 2); //skipped pos, may be useful for more accuracy -- subtracted 2
             var unk1 = Reader.ReadInt32();
             if (unk1 != 0xC && unk1 != 0xA) return;
             var templateId = Reader.ReadUInt32();
-            var zoneId = Reader.ReadUInt32(); //can check on current player location, need to add player location to db tho
-            Reader.Skip(2);
+            var zoneId = Reader.ReadUInt16(); //can check on current player location, need to add player location to db tho
+            Reader.Skip(4);
             var unk5 = Reader.ReadUInt16();
             if (unk5 != 0 && unk5 != 4) return;
             Reader.Skip(2);
@@ -53,19 +57,35 @@ namespace DamageMeter.Heuristic
             var unk14 = Reader.ReadInt32();
             if (unk14 != 0) return;
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
-            AddNpcToDatabase(cid);
+            AddNpcToDatabase(cid, zoneId, templateId);
         }
 
-        private void AddNpcToDatabase(ulong id)
+        private void AddNpcToDatabase(ulong id, uint zoneId,  uint templId)
         {
-            List<ulong> list = new List<ulong>();
+            var newNpc = new Npc(id, zoneId, templId);
+            List<Npc> list = new List<Npc>();
             if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.SpawnedNpcs, out Tuple<Type, object> result))
             {
                 OpcodeFinder.Instance.KnowledgeDatabase.Remove(OpcodeFinder.KnowledgeDatabaseItem.SpawnedNpcs);
-                list = (List<ulong>)result.Item2;
+                list = (List<Npc>)result.Item2;
             }
-            if (!list.Contains(id)) list.Add(id);
-            OpcodeFinder.Instance.KnowledgeDatabase.Add(OpcodeFinder.KnowledgeDatabaseItem.SpawnedNpcs, new Tuple<Type, object>(typeof(List<ulong>), list));
+            if (!list.Contains(newNpc)) list.Add(newNpc);
+            OpcodeFinder.Instance.KnowledgeDatabase.Add(OpcodeFinder.KnowledgeDatabaseItem.SpawnedNpcs, new Tuple<Type, object>(typeof(List<Npc>), list));
+        }
+
+    }
+
+    public struct Npc
+    {
+        public ulong Cid;
+        public uint ZoneId;
+        public uint TemplateId;
+
+        public Npc(ulong cid, uint zoneId, uint templId)
+        {
+            Cid = cid;
+            ZoneId = zoneId;
+            TemplateId = templId;
         }
     }
 }
