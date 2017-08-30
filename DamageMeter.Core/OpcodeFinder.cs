@@ -117,6 +117,7 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.C_SELECT_USER.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.C_GET_USER_GUILD_LOGO.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.C_PONG.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.C_USE_ITEM.Instance.Process(x))}, //needed only for S_START_COOLTIME_ITEM
         };
 
         private static readonly List<Delegate> ServerOpcode = new List<Delegate>
@@ -158,6 +159,7 @@ namespace DamageMeter
   			{new Action<ParsedMessage>(x => Heuristic.S_C_PREPARE_RETURN_TO_LOBBY.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_NPC_STATUS.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_LOAD_TOPO.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_START_COOLTIME_ITEM.Instance.Process(x))},
 
         };
     }
