@@ -142,6 +142,7 @@
     <Compile Include="Heuristic\S_USER_PAPERDOLL_INFO.cs" />
     <Compile Include="Heuristic\S_USER_STATUS.cs" />
     <Compile Include="Heuristic\S_WHISPER.cs" />
+    <Compile Include="LogReader.cs" />
     <Compile Include="OpcodeEnum.cs" />
     <Compile Include="OpcodeFinder.cs" />
     <Compile Include="Properties\Annotations.cs" />
