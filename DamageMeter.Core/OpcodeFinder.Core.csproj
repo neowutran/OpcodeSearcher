@@ -103,6 +103,7 @@
     <Compile Include="Heuristic\C_REQUEST_USER_PAPERDOLL_INFO.cs" />
     <Compile Include="Heuristic\C_SELECT_USER.cs" />
     <Compile Include="Heuristic\C_SET_VISIBLE_RANGE.cs" />
+    <Compile Include="Heuristic\C_START_SKILL.cs" />
     <Compile Include="Heuristic\C_USE_ITEM.cs" />
     <Compile Include="Heuristic\C_WHISPER.cs" />
     <Compile Include="Heuristic\S_ABNORMALITY_BEGIN.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="Heuristic\S_SPAWN_PROJECTILE.cs" />
     <Compile Include="Heuristic\S_SPAWN_USER.cs" />
     <Compile Include="Heuristic\S_START_COOLTIME_ITEM.cs" />
+    <Compile Include="Heuristic\S_START_COOLTIME_SKILL.cs" />
     <Compile Include="Heuristic\S_TRADE_BROKER_DEAL_SUGGESTED.cs" />
     <Compile Include="Heuristic\S_UPDATE_CONTENTS_ON_OFF.cs" />
     <Compile Include="Heuristic\S_NPC_LOCATION.cs" />
