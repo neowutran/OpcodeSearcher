@@ -30,7 +30,8 @@ namespace DamageMeter
             SpawnedUsers = 3,
             SpawnedNpcs = 4,
             LoggedCharacterAbnormalities = 5,
-            CharacterSpawnedSuccesfully = 6
+            CharacterSpawnedSuccesfully = 6,
+            PartyMemberList
         }
 
         // Use that to set value like CID etc ...
@@ -170,6 +171,7 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.S_TRADE_BROKER_DEAL_SUGGESTED.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_ANSWER_INTERACTIVE.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_UPDATE_FRIEND_INFO.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_LEAVE_PARTY_MEMBER.Instance.Process(x))},
 
         };
     }
