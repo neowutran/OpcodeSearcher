@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Data;
+using Tera.Game;
 using Tera.Game.Messages;
 
 namespace DamageMeter.Heuristic
@@ -16,7 +18,11 @@ namespace DamageMeter.Heuristic
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
-            if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) { return; }
+            if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode))
+            {
+                if (OpcodeFinder.Instance.GetOpcode(OPCODE) == message.OpCode) { Parse(); }
+                return;
+            }
 
             if (message.Payload.Count < 118) return;
             var count = Reader.ReadUInt16();
@@ -37,13 +43,16 @@ namespace DamageMeter.Heuristic
             if (unk10 != 1) return;
             var unk11 = Reader.ReadByte();
             if (unk11 != 0) return;
-
+            var list = new List<PartyMember>();
             for (int i = 0; i < count; i++)
             {
                 Reader.BaseStream.Position = offset - 4;
-                Reader.Skip(4);
+                Reader.Skip(2);
+                offset = Reader.ReadUInt16();
                 var nameOffset = Reader.ReadUInt16();
-                Reader.Skip(4 + 4);
+                var serverId = Reader.ReadUInt32();
+                if (BasicTeraData.Instance.Servers.GetServer(serverId) == null) return; //assume we're not in IM
+                var playerId = Reader.ReadUInt32();
                 var level = Reader.ReadUInt32();
                 if (level > 65) return;
                 var cl = Reader.ReadUInt32();
@@ -52,13 +61,66 @@ namespace DamageMeter.Heuristic
                 var laurel = Reader.ReadUInt32();
                 if (laurel > 5) return;
                 Reader.BaseStream.Position = nameOffset - 4;
-
-                try { Reader.ReadTeraString(); }
+                var name = "";
+                try { name = Reader.ReadTeraString(); }
                 catch (Exception e) { return; }
+                var p = new PartyMember(playerId, serverId, name);
+                list.Add(p);
             }
 
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
+            UpdatePartyMemberList(list);
         }
 
+        private void Parse()
+        {
+            var count = Reader.ReadUInt16();
+            var offset = Reader.ReadUInt16();
+
+            Reader.Skip(1 + 1 + 4 + 4 + 2 + 2 + 4 + 4 +4+4+1+4+1+4+1);
+            var list = new List<PartyMember>();
+            for (int i = 0; i < count; i++)
+            {
+                Reader.BaseStream.Position = offset - 4;
+                Reader.Skip(2);
+                offset = Reader.ReadUInt16();
+                var nameOffset = Reader.ReadUInt16();
+                var serverId = Reader.ReadUInt32();
+                var playerId = Reader.ReadUInt32();
+                var level = Reader.ReadUInt32();
+                var cl = Reader.ReadUInt32();
+                Reader.Skip(1 + 8 + 4 + 1);
+                var laurel = Reader.ReadUInt32();
+                Reader.BaseStream.Position = nameOffset - 4;
+                var name = Reader.ReadTeraString(); 
+                var p = new PartyMember(playerId, serverId, name);
+                list.Add(p);
+            }
+
+            UpdatePartyMemberList(list);
+
+        }
+        private void UpdatePartyMemberList(List<PartyMember> list)
+        {
+            if (OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList))
+            {
+                OpcodeFinder.Instance.KnowledgeDatabase.Remove(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList);
+            }
+            OpcodeFinder.Instance.KnowledgeDatabase.Add(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList, new Tuple<Type, object>(typeof(List<PartyMember>), list));
+        }
+
+    }
+
+    public struct PartyMember
+    {
+        public string Name;
+        public uint PlayerId;
+        public uint ServerId;
+        public PartyMember(uint playerId, uint serverId, string name)
+        {
+            Name = name;
+            PlayerId = playerId;
+            ServerId = serverId;
+        }
     }
 }
