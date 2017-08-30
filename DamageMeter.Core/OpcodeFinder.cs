@@ -30,6 +30,7 @@ namespace DamageMeter
             SpawnedUsers = 3,
             SpawnedNpcs = 4,
             LoggedCharacterAbnormalities = 5,
+            CharacterSpawnedSuccesfully = 6
         }
 
         // Use that to set value like CID etc ...
@@ -154,7 +155,7 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.S_SPAWN_PROJECTILE.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_BOSS_GAGE_INFO.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_USER_STATUS.Instance.Process(x))},
-
+            {new Action<ParsedMessage>(x => Heuristic.S_C_PREPARE_RETURN_TO_LOBBY.Instance.Process(x))},
         };
     }
 }

@@ -28,13 +28,25 @@ namespace DamageMeter.Heuristic
             var alive = Reader.ReadBoolean();
             var unk = Reader.ReadByte();
             if (unk != 0) return;
-            if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, out Tuple<Type, object> currChar)) {
+            if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, out Tuple<Type, object> currChar))
+            {
+                UpdateLocationInDictionary(OpcodeFinder.KnowledgeDatabaseItem.CharacterSpawnedSuccesfully, false);
                 throw new Exception("Logger character should be know at this point.");
             }
             var ch = (LoggedCharacter)currChar.Item2;
             if (target != ch.Cid) return;
 
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OpcodeEnum.S_SPAWN_ME);
+            UpdateLocationInDictionary(OpcodeFinder.KnowledgeDatabaseItem.CharacterSpawnedSuccesfully, true);
+        }
+
+        private static void UpdateLocationInDictionary(OpcodeFinder.KnowledgeDatabaseItem knowledgeDatabaseKey, bool state)
+        {
+            if (OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(knowledgeDatabaseKey))
+            {
+                OpcodeFinder.Instance.KnowledgeDatabase.Remove(knowledgeDatabaseKey);
+            }
+            OpcodeFinder.Instance.KnowledgeDatabase.Add(knowledgeDatabaseKey, new Tuple<Type, object>(typeof(Boolean), state));
         }
     }
 }
