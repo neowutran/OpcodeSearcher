@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tera.Game.Messages;
+using Data;
 
 namespace DamageMeter.Heuristic
 {
@@ -22,7 +23,8 @@ namespace DamageMeter.Heuristic
             var model = Reader.ReadUInt32();
             var cid = Reader.ReadUInt64();
             var serverId = Reader.ReadUInt32();
-            if (NetworkController.Instance.Server.ServerId != serverId) return;
+            if (BasicTeraData.Instance.Servers.GetServer(serverId) == null) return;
+            //if (NetworkController.Instance.Server.ServerId != serverId) return;
             var playerId = Reader.ReadUInt32();
             Reader.Skip(4+1+4+4+4+8+2);
             var level = Reader.ReadUInt16();

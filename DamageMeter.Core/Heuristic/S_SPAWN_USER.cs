@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Data;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -34,7 +35,8 @@ namespace DamageMeter.Heuristic
             var nameOffset = Reader.ReadUInt16();
             Reader.Skip(2+2+2+2+2+2+2);
             var serverId = Reader.ReadUInt32();
-            if (serverId != NetworkController.Instance.Server.ServerId) return; //assume that we are not in IM
+            if (BasicTeraData.Instance.Servers.GetServer(serverId) == null) return;
+            //if (serverId != NetworkController.Instance.Server.ServerId) return; //assume that we are not in IM
             Reader.Skip(4);
             var id2 = Reader.ReadUInt64();
             Reader.Skip(4+4+4+2+4);
