@@ -169,6 +169,7 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.S_USER_PAPERDOLL_INFO.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_TRADE_BROKER_DEAL_SUGGESTED.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_ANSWER_INTERACTIVE.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_UPDATE_FRIEND_INFO.Instance.Process(x))},
 
         };
     }
