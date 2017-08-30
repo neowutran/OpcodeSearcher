@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -88,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractPacketHeuristic.cs" />
+    <Compile Include="Heuristic\C_CHANGE_PARTY_MEMBER_AUTHORITY.cs" />
     <Compile Include="Heuristic\C_CHAT.cs" />
     <Compile Include="Heuristic\C_CHECK_VERSION.cs" />
     <Compile Include="Heuristic\C_DUNGEON_CLEAR_COUNT_LIST.cs" />
@@ -108,6 +109,7 @@
     <Compile Include="Heuristic\S_ABNORMALITY_END.cs" />
     <Compile Include="Heuristic\S_ABNORMALITY_REFRESH.cs" />
     <Compile Include="Heuristic\S_ACCOUNT_PACKAGE_LIST.cs" />
+    <Compile Include="Heuristic\S_ANSWER_INTERACTIVE.cs" />
     <Compile Include="Heuristic\S_BOSS_GAGE_INFO.cs" />
     <Compile Include="Heuristic\S_BROCAST_GUILD_FLAG.cs" />
     <Compile Include="Heuristic\S_CHAT.cs" />
@@ -136,8 +138,10 @@
     <Compile Include="Heuristic\S_SPAWN_PROJECTILE.cs" />
     <Compile Include="Heuristic\S_SPAWN_USER.cs" />
     <Compile Include="Heuristic\S_START_COOLTIME_ITEM.cs" />
+    <Compile Include="Heuristic\S_TRADE_BROKER_DEAL_SUGGESTED.cs" />
     <Compile Include="Heuristic\S_UPDATE_CONTENTS_ON_OFF.cs" />
     <Compile Include="Heuristic\S_NPC_LOCATION.cs" />
+    <Compile Include="Heuristic\S_UPDATE_FRIEND_INFO.cs" />
     <Compile Include="Heuristic\S_USER_LOCATION.cs" />
     <Compile Include="Heuristic\S_USER_PAPERDOLL_INFO.cs" />
     <Compile Include="Heuristic\S_USER_STATUS.cs" />
