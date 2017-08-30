@@ -13,14 +13,19 @@ namespace DamageMeter.Heuristic
         private static S_SPAWN_PROJECTILE _instance;
 
         public bool Initialized = false;
-        private S_SPAWN_PROJECTILE() : base(OpcodeEnum.S_SPAWN_PROJECTILE) { }
+
+        private S_SPAWN_PROJECTILE() : base(OpcodeEnum.S_SPAWN_PROJECTILE)
+        {
+        }
 
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
 
             if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) { return; }
-            if (message.Payload.Count != 67) { return; }
+            // 65 - current packet size from NA (EU should be too), 67 will be in future (maybe?)
+            //TODO: ADD check with projectilOwnerId from sEachSkillResult
+            if (message.Payload.Count == 65 || message.Payload.Count == 67) { return; }
 
             var id = Reader.ReadUInt64();
             var unk1 = Reader.ReadInt32();
