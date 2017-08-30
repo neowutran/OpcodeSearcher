@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DamageMeter.Heuristic;
+using Tera.Game;
 
 namespace DamageMeter
 {
@@ -24,6 +25,13 @@ namespace DamageMeter
             var list = (List<Npc>)res;
 
             return list.Any(x => x.Cid == id && x.ZoneId == zoneId && x.TemplateId == templateId);
+        }
+
+        public static Vector3f GetPlayerLocation()
+        {
+            if (!OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(OpcodeFinder.KnowledgeDatabaseItem.PlayerLocation)) { return new Vector3f(); }
+            var res = OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.PlayerLocation].Item2;
+            return(Vector3f) res;
         }
     }
 }
