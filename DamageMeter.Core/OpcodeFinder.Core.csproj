@@ -129,6 +129,7 @@
     <Compile Include="Heuristic\S_UPDATE_CONTENTS_ON_OFF.cs" />
     <Compile Include="Heuristic\S_NPC_LOCATION.cs" />
     <Compile Include="Heuristic\S_USER_LOCATION.cs" />
+    <Compile Include="Heuristic\S_USER_STATUS.cs" />
     <Compile Include="Heuristic\S_WHISPER.cs" />
     <Compile Include="OpcodeEnum.cs" />
     <Compile Include="OpcodeFinder.cs" />

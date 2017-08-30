@@ -153,6 +153,7 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.S_NPC_LOCATION.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_SPAWN_PROJECTILE.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_BOSS_GAGE_INFO.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_USER_STATUS.Instance.Process(x))},
 
         };
     }
