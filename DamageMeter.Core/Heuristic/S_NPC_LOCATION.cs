@@ -35,8 +35,8 @@ namespace DamageMeter.Heuristic
             var type = Reader.ReadUInt32();
             var distance = origin.DistanceTo(destination);
             if (!OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(OpcodeFinder.KnowledgeDatabaseItem.SpawnedNpcs)) { return; }
-            var npc = (List<ulong>)OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.SpawnedNpcs].Item2;
-            if (!npc.Contains(target)) { return; }
+            var npc = (List<Npc>)OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.SpawnedNpcs].Item2;
+            if (npc.All(x => x.Cid != target)) { return; }
             if (AcceptedTypeValue.Contains(type) && distance < 200 && distance >= 0)
             {
                 OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
