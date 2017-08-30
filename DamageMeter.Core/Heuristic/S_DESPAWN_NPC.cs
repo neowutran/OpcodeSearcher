@@ -34,20 +34,11 @@ namespace DamageMeter.Heuristic
             if (type != 1 && type != 5) return;
             var unk = Reader.ReadUInt32();
             if (unk != 0) return;
-            if (!IsNpcSpanwed(cid)) return;
+            if (!DbUtils.IsNpcSpawned(cid)) return;
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
             RemoveNpcFromDatabase(cid);
         }
 
-        private bool IsNpcSpanwed(ulong id)
-        {
-            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.SpawnedNpcs, out Tuple<Type, object> result))
-            {
-                var list = (List<Npc>)result.Item2;
-                if (list.Any(x => x.Cid == id)) return true;
-            }
-            return false;
-        }
         private void RemoveNpcFromDatabase(ulong id)
         {
             if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.SpawnedNpcs, out Tuple<Type, object> result))

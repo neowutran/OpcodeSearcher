@@ -33,14 +33,7 @@ namespace DamageMeter.Heuristic
             if (unk3 != 1) return;
 
             //check that the cid is contained in spawned npcs list
-            if (OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(OpcodeFinder.KnowledgeDatabaseItem.SpawnedNpcs))
-            {
-                var res = OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.SpawnedNpcs].Item2;
-                var list = (List<Npc>) res;
-
-                if (!list.Any(x => x.Cid == cid && x.ZoneId == zoneId && x.TemplateId == templateId)) return;
-            }
-            else return;
+            if(!DbUtils.IsNpcSpawned(cid, zoneId, templateId)) return;
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
         }
     }

@@ -30,12 +30,7 @@ namespace DamageMeter.Heuristic
             if (unk1 != 4 && unk1 != 5) return;
             if (unk2 != 0 && unk2 != 1 && unk2 != 2 && unk2 != 4) return;
 
-            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.SpawnedNpcs, out Tuple<Type, object> res))
-            {
-                var list = (List<Npc>)res.Item2;
-                if (list.All(x => x.Cid != creature)) return;
-            }
-            else return;
+            if (!DbUtils.IsNpcSpawned(creature)) return;
 
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
         }
