@@ -118,6 +118,11 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.C_GET_USER_GUILD_LOGO.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.C_PONG.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.C_USE_ITEM.Instance.Process(x))}, //needed only for S_START_COOLTIME_ITEM
+            {new Action<ParsedMessage>(x => Heuristic.C_DUNGEON_COOL_TIME_LIST.Instance.Process(x))}, 
+            {new Action<ParsedMessage>(x => Heuristic.C_NPCGUILD_LIST.Instance.Process(x))}, 
+            {new Action<ParsedMessage>(x => Heuristic.C_DUNGEON_CLEAR_COUNT_LIST.Instance.Process(x))}, 
+            {new Action<ParsedMessage>(x => Heuristic.C_REQUEST_USER_ITEMLEVEL_INFO.Instance.Process(x))}, 
+            {new Action<ParsedMessage>(x => Heuristic.C_REQUEST_USER_PAPERDOLL_INFO.Instance.Process(x))}, 
         };
 
         private static readonly List<Delegate> ServerOpcode = new List<Delegate>
@@ -160,6 +165,7 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.S_NPC_STATUS.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_LOAD_TOPO.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_START_COOLTIME_ITEM.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_USER_PAPERDOLL_INFO.Instance.Process(x))},
 
         };
     }

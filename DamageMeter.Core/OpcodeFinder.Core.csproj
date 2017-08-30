@@ -90,11 +90,16 @@
     <Compile Include="AbstractPacketHeuristic.cs" />
     <Compile Include="Heuristic\C_CHAT.cs" />
     <Compile Include="Heuristic\C_CHECK_VERSION.cs" />
+    <Compile Include="Heuristic\C_DUNGEON_CLEAR_COUNT_LIST.cs" />
+    <Compile Include="Heuristic\C_NPCGUILD_LIST.cs" />
+    <Compile Include="Heuristic\C_DUNGEON_COOL_TIME_LIST.cs" />
     <Compile Include="Heuristic\C_GET_USER_GUILD_LOGO.cs" />
     <Compile Include="Heuristic\C_GET_USER_LIST.cs" />
     <Compile Include="Heuristic\C_LOGIN_ARBITER.cs" />
     <Compile Include="Heuristic\C_PLAYER_LOCATION.cs" />
     <Compile Include="Heuristic\C_PONG.cs" />
+    <Compile Include="Heuristic\C_REQUEST_USER_ITEMLEVEL_INFO.cs" />
+    <Compile Include="Heuristic\C_REQUEST_USER_PAPERDOLL_INFO.cs" />
     <Compile Include="Heuristic\C_SELECT_USER.cs" />
     <Compile Include="Heuristic\C_SET_VISIBLE_RANGE.cs" />
     <Compile Include="Heuristic\C_USE_ITEM.cs" />
@@ -134,6 +139,7 @@
     <Compile Include="Heuristic\S_UPDATE_CONTENTS_ON_OFF.cs" />
     <Compile Include="Heuristic\S_NPC_LOCATION.cs" />
     <Compile Include="Heuristic\S_USER_LOCATION.cs" />
+    <Compile Include="Heuristic\S_USER_PAPERDOLL_INFO.cs" />
     <Compile Include="Heuristic\S_USER_STATUS.cs" />
     <Compile Include="Heuristic\S_WHISPER.cs" />
     <Compile Include="OpcodeEnum.cs" />
