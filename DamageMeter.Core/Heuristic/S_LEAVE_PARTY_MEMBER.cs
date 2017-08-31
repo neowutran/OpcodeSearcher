@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Data;
+using Tera;
 using Tera.Game.Messages;
 
 namespace DamageMeter.Heuristic
@@ -20,15 +21,13 @@ namespace DamageMeter.Heuristic
             base.Process(message);
             if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode))
             {
-                if (OpcodeFinder.Instance.GetOpcode(OPCODE) == message.OpCode)
-                {
-                    Parse();
-                }
+                if (OpcodeFinder.Instance.GetOpcode(OPCODE) == message.OpCode) { Parse(); }
                 return;
             }
 
             if (message.Payload.Count < 2 + 4 + 4 + 4) return;
             if (!OpcodeFinder.Instance.IsKnown(OpcodeEnum.S_PARTY_MEMBER_LIST)) return;
+            if (!OpcodeFinder.Instance.IsKnown(OpcodeEnum.S_CHANGE_PARTY_MANAGER)) return; //avoid parsing that as it has the same structure
             if(!OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList)) return;
             var nameOffset = Reader.ReadUInt16();
             if (nameOffset != 14) return;
@@ -51,20 +50,13 @@ namespace DamageMeter.Heuristic
                 if (!list.Any(x => x.PlayerId == playerId && x.ServerId == serverId && x.Name == name)) return;
             }
             else return;
-            PossibleOpcode = message.OpCode;
+            if(OpcodeFinder.Instance.GetMessage(OpcodeFinder.Instance.PacketCount - 1).Direction == MessageDirection.ClientToServer &&
+               OpcodeFinder.Instance.GetMessage(OpcodeFinder.Instance.PacketCount - 1).Payload.Count == 8) return;
+            OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
+            RemovePartyMember(playerId, serverId, name);
+
         }
 
-        public ushort PossibleOpcode;
-        public uint LastPlayerId;
-        public uint LastServerId;
-        public string LastName;
-
-        public void Confirm()
-        {
-            OpcodeFinder.Instance.SetOpcode(PossibleOpcode, OPCODE);
-
-            RemovePartyMember(LastPlayerId, LastServerId, LastName);
-        }
         private void Parse()
         {
             Reader.Skip(2);

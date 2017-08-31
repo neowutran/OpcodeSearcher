@@ -22,9 +22,6 @@ namespace DamageMeter.Heuristic
 
             if (message.Payload.Count < 2 + 4 + 4 + 4) return;
             if (!OpcodeFinder.Instance.IsKnown(OpcodeEnum.S_PARTY_MEMBER_LIST)) return;
-            if (!OpcodeFinder.Instance.IsKnown(OpcodeEnum.S_LEAVE_PARTY_MEMBER)) return; //S_LEAVE_PARTY_MEMBER has the same structure
-                                                                                         //let's make sure we already know it, since it can be found more easily
-                                                                                         //we could also force detection only after C_CHANGE_PARTY_MANAGER
             if (!OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList)) return;
             var nameOffset = Reader.ReadUInt16();
             if (nameOffset != 14) return;
@@ -47,9 +44,15 @@ namespace DamageMeter.Heuristic
                 if (!list.Any(x => x.PlayerId == playerId && x.ServerId == serverId && x.Name == name)) return;
             }
             else return;
+            if (OpcodeFinder.Instance.GetMessage(OpcodeFinder.Instance.PacketCount - 1).OpCode == C_CHANGE_PARTY_MANAGER.Instance.PossibleOpcode)
+            {
+                if (C_CHANGE_PARTY_MANAGER.Instance.LastPlayerId == playerId && C_CHANGE_PARTY_MANAGER.Instance.LastServerId == serverId)
+                {
+                    C_CHANGE_PARTY_MANAGER.Instance.Confirm();
+                    OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
+                }
+            }
 
-
-            OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
         }
     }
 }
