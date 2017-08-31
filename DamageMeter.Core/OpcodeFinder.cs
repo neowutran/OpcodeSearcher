@@ -176,6 +176,9 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.S_GUILD_TOWER_INFO.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_START_COOLTIME_SKILL.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_DECREASE_COOLTIME_SKILL.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_WEAK_POINT.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_USER_EFFECT.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_DUNGEON_EVENT_MESSAGE.Instance.Process(x))},
 
         };
     }

@@ -120,6 +120,7 @@
     <Compile Include="Heuristic\S_DECREASE_COOLTIME_SKILL.cs" />
     <Compile Include="Heuristic\S_DESPAWN_NPC.cs" />
     <Compile Include="Heuristic\S_DESPAWN_USER.cs" />
+    <Compile Include="Heuristic\S_DUNGEON_EVENT_MESSAGE.cs" />
     <Compile Include="Heuristic\S_EACH_SKILL_RESULT.cs" />
     <Compile Include="Heuristic\S_GET_USER_LIST.cs" />
     <Compile Include="Heuristic\S_GUILD_TOWER_INFO.cs" />
@@ -147,9 +148,11 @@
     <Compile Include="Heuristic\S_NPC_LOCATION.cs" />
     <Compile Include="Heuristic\S_UPDATE_FRIEND_INFO.cs" />
     <Compile Include="Heuristic\S_LEAVE_PARTY_MEMBER.cs" />
+    <Compile Include="Heuristic\S_USER_EFFECT.cs" />
     <Compile Include="Heuristic\S_USER_LOCATION.cs" />
     <Compile Include="Heuristic\S_USER_PAPERDOLL_INFO.cs" />
     <Compile Include="Heuristic\S_USER_STATUS.cs" />
+    <Compile Include="Heuristic\S_WEAK_POINT.cs" />
     <Compile Include="Heuristic\S_WHISPER.cs" />
     <Compile Include="DbUtils.cs" />
     <Compile Include="LogReader.cs" />
