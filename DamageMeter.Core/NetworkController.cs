@@ -26,7 +26,6 @@ namespace DamageMeter
         private static NetworkController _instance;
 
         private bool _keepAlive = true;
-        private long _lastTick;
         internal MessageFactory MessageFactory = new MessageFactory();
         internal bool NeedInit = true;
         public Server Server;
@@ -91,7 +90,6 @@ namespace DamageMeter
         public List<ParsedMessage> UiUpdateData = new List<ParsedMessage>();
         private void UpdateUi()
         {
-            _lastTick = DateTime.UtcNow.Ticks;
             var currentLastPacket = OpcodeFinder.Instance.PacketCount;
             TickUpdated?.Invoke(new Tuple<List<ParsedMessage>, Dictionary<OpcodeId, OpcodeEnum>> (UiUpdateData, UiUpdateKnownOpcode));
             UiUpdateData = new List<ParsedMessage>();
@@ -103,11 +101,12 @@ namespace DamageMeter
         private void SaveLog()
         {
             if (!NeedToSave) { return; }
-            if(IsNetwork == 2)
+            NeedToSave = false;
+            if (IsNetwork == 2)
             {
                 MessageBox.Show("Saving saved log is retarded");
+                return;
             }
-            NeedToSave = false;
             var header = new LogHeader { Region =  Version.ToString()};
             PacketLogWriter writer = new PacketLogWriter(string.Format("{0}.TeraLog", DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss_"+Version, CultureInfo.InvariantCulture)), header);
             foreach(var message in OpcodeFinder.Instance.AllPackets)
@@ -124,12 +123,18 @@ namespace DamageMeter
      
             while (_keepAlive)
             {
-               LoadFile();
+                LoadFile();
                 SaveLog();
-                // Don't update the UI if too much packet to process: aka log loading & world boss
-                if (TeraSniffer.Instance.Packets.Count < 2000)
+
+                // Update the UI at every packet if the backend it not overload & if we are recording the network
+                if(IsNetwork == 1 && TeraSniffer.Instance.Packets.Count < 2000)
                 {
-                    CheckUpdateUi();
+                    UpdateUi();
+                }
+                // If loading log file, wait until completion before display
+                if (IsNetwork == 2 && TeraSniffer.Instance.Packets.Count == 0)
+                {
+                    UpdateUi();
                 }
                 var successDequeue = TeraSniffer.Instance.Packets.TryDequeue(out var obj);
                 if (!successDequeue)
@@ -138,11 +143,14 @@ namespace DamageMeter
                     continue;
                 }
                 
+                // Network
                 if (IsNetwork == 0) { IsNetwork = 1; }
+
                 if(IsNetwork == 2 && TeraSniffer.Instance.Connected)
                 {
                     throw new Exception("Not allowed to record network while reading log file");
                 }
+
                 var message = MessageFactory.Create(obj);
                 if(message is C_CHECK_VERSION)
                 {
@@ -152,12 +160,7 @@ namespace DamageMeter
             }
         }
 
-        public void CheckUpdateUi()
-        {
-            var second = DateTime.UtcNow.Ticks;
-            if (second - _lastTick < TimeSpan.TicksPerSecond) { return; }
-            UpdateUi();
-        }
+     
 
         internal virtual void OnGuildIconAction(Bitmap icon)
         {
