@@ -17,7 +17,7 @@ namespace DamageMeter.Heuristic
 
         public void Parse()
         {
-            LatestSkill = Reader.ReadUInt32();
+            LatestSkill = Reader.ReadUInt32() - 0x04000000;
         }
         public new void Process(ParsedMessage message)
         {
@@ -30,7 +30,7 @@ namespace DamageMeter.Heuristic
 
             if(message.Payload.Count != 4+2+4+4+4+4+4+4+1+1+1+8) return;
 
-            var skill = Reader.ReadUInt32(); //would need skill database or specific skillId to use
+            var skill = Reader.ReadUInt32()- 0x04000000; //would need skill database or specific skillId to use
             var w = Reader.ReadUInt16();
             var pos = Reader.ReadVector3f();
             var endPos = Reader.ReadVector3f();
