@@ -274,7 +274,7 @@ namespace DamageMeter.UI
         {
             var openFileDialog = new Microsoft.Win32.OpenFileDialog { Filter = "Supported Formats (*.TeraLog)|*.TeraLog" };
             if (openFileDialog.ShowDialog() == false) return;
-            NetworkController.Instance.FileName = openFileDialog.FileName;
+            NetworkController.Instance.LoadFileName = openFileDialog.FileName;
         }
 
         private void RemoveBlacklistedOpcode(object sender, RoutedEventArgs e)
@@ -306,6 +306,11 @@ namespace DamageMeter.UI
             if (WhiteListedOpcodes.Contains(result)) return;
             WhiteListedOpcodes.Add(result);
             OpcodeToWhitelist.Text = "";
+        }
+
+        private void Save(object sender, RoutedEventArgs e)
+        {
+            NetworkController.Instance.NeedToSave = true;
         }
     }
     public class DirectionToColor : IValueConverter

@@ -424,9 +424,10 @@
                             <CheckBox Content="Server" Name="ServerCb" IsChecked="True"></CheckBox>
                             <CheckBox Content="Client" Name="ClientCb" IsChecked="True"></CheckBox>
                             <CheckBox Content="Spam filter" ToolTip="Discards a packet if the previous one has the same opcode." Name="SpamCb" IsChecked="False"></CheckBox>
-                            <Button Content="Clear all" Width="Auto" HorizontalAlignment="Left" Click="ClearAll" Margin="1,4,0,2"></Button>
-                            <Button Content="Dump known to file" Width="Auto" HorizontalAlignment="Left" Click="Dump" Margin="1,2,0,0"></Button>
-                            <Button Content="Load Log" Width="Auto" HorizontalAlignment="Left" Click="Load" Margin="1,2,0,0"></Button>
+                            <Button Content="Clear all" Width="Auto" HorizontalAlignment="Stretch"  Click="ClearAll" Margin="1,1,1,1"></Button>
+                            <Button Content="Dump known to file" Width="Auto" HorizontalAlignment="Stretch" Click="Dump" Margin="1,1,1,1"></Button>
+                            <Button Content="Load Log"  Width="Auto" HorizontalAlignment="Stretch" Click="Load" Margin="1,1,1,1"></Button>
+                            <Button Content="Save Log"  Width="Auto" HorizontalAlignment="Stretch" Click="Save" Margin="1,1,1,1"></Button>
                         </StackPanel>
                     </Grid>
                 </Border>
