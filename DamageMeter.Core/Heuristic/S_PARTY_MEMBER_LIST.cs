@@ -13,7 +13,7 @@ namespace DamageMeter.Heuristic
     {
         public static S_PARTY_MEMBER_LIST Instance => _instance ?? (_instance = new S_PARTY_MEMBER_LIST());
         private static S_PARTY_MEMBER_LIST _instance;
-
+        public int LastCount;
         public S_PARTY_MEMBER_LIST() : base(OpcodeEnum.S_PARTY_MEMBER_LIST) { }
         public new void Process(ParsedMessage message)
         {
@@ -70,6 +70,7 @@ namespace DamageMeter.Heuristic
 
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
             UpdatePartyMemberList(list);
+            LastCount = count;
         }
 
         private void Parse()
@@ -98,6 +99,8 @@ namespace DamageMeter.Heuristic
             }
 
             UpdatePartyMemberList(list);
+            //if(LastCount > count) S_LEAVE_PARTY_MEMBER.Instance.Confirm(); //server doesen't send party list after member leaves, so this doesen't work
+            LastCount = count;
 
         }
         private void UpdatePartyMemberList(List<PartyMember> list)

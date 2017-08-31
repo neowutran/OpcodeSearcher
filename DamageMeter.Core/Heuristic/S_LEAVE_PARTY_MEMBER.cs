@@ -51,10 +51,20 @@ namespace DamageMeter.Heuristic
                 if (!list.Any(x => x.PlayerId == playerId && x.ServerId == serverId && x.Name == name)) return;
             }
             else return;
-            OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
-            RemovePartyMember(playerId, serverId, name);
+            PossibleOpcode = message.OpCode;
         }
 
+        public ushort PossibleOpcode;
+        public uint LastPlayerId;
+        public uint LastServerId;
+        public string LastName;
+
+        public void Confirm()
+        {
+            OpcodeFinder.Instance.SetOpcode(PossibleOpcode, OPCODE);
+
+            RemovePartyMember(LastPlayerId, LastServerId, LastName);
+        }
         private void Parse()
         {
             Reader.Skip(2);
