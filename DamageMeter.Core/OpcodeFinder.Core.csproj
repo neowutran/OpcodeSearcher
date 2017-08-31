@@ -117,6 +117,7 @@
     <Compile Include="Heuristic\S_CONFIRM_INVITE_CODE_BUTTON.cs" />
     <Compile Include="Heuristic\S_CREATURE_CHANGE_HP.cs" />
     <Compile Include="Heuristic\S_C_PREPARE_RETURN_TO_LOBBY.cs" />
+    <Compile Include="Heuristic\S_DECREASE_COOLTIME_SKILL.cs" />
     <Compile Include="Heuristic\S_DESPAWN_NPC.cs" />
     <Compile Include="Heuristic\S_DESPAWN_USER.cs" />
     <Compile Include="Heuristic\S_EACH_SKILL_RESULT.cs" />
