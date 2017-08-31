@@ -116,11 +116,19 @@ namespace DamageMeter.Heuristic
         public string Name;
         public uint PlayerId;
         public uint ServerId;
+        public uint MaxHp;
+        public uint MaxMp;
+        public uint MaxRe;
+        public List<uint> Abnormals;
         public PartyMember(uint playerId, uint serverId, string name)
         {
             Name = name;
             PlayerId = playerId;
             ServerId = serverId;
+            Abnormals = new List<uint>();
+            MaxHp = 0;
+            MaxMp = 0;
+            MaxRe = 0;
         }
     }
 }

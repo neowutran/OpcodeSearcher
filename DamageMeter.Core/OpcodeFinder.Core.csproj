@@ -130,8 +130,17 @@
     <Compile Include="Heuristic\S_LOGIN.cs" />
     <Compile Include="Heuristic\S_LOGIN_ACCOUNT_INFO.cs" />
     <Compile Include="Heuristic\S_LOGIN_ARBITER.cs" />
+    <Compile Include="Heuristic\S_LOGOUT_PARTY_MEMBER.cs" />
     <Compile Include="Heuristic\S_NPC_STATUS.cs" />
+    <Compile Include="Heuristic\S_PARTY_MEMBER_ABNORMAL_ADD.cs" />
+    <Compile Include="Heuristic\S_PARTY_MEMBER_ABNORMAL_CLEAR.cs" />
+    <Compile Include="Heuristic\S_PARTY_MEMBER_ABNORMAL_DEL.cs" />
+    <Compile Include="Heuristic\S_PARTY_MEMBER_ABNORMAL_REFRESH.cs" />
+    <Compile Include="Heuristic\S_PARTY_MEMBER_CHANGE_HP.cs" />
+    <Compile Include="Heuristic\S_PARTY_MEMBER_CHANGE_MP.cs" />
+    <Compile Include="Heuristic\S_PARTY_MEMBER_CHANGE_STAMINA.cs" />
     <Compile Include="Heuristic\S_PARTY_MEMBER_LIST.cs" />
+    <Compile Include="Heuristic\S_PARTY_MEMBER_STAT_UPDATE.cs" />
     <Compile Include="Heuristic\S_PLAYER_CHANGE_MP.cs" />
     <Compile Include="Heuristic\S_PLAYER_CHANGE_STAMINA.cs" />
     <Compile Include="Heuristic\S_PLAYER_STAT_UPDATE.cs" />

@@ -15,7 +15,7 @@ namespace DamageMeter.Heuristic
 
         public S_LEAVE_PARTY_MEMBER() : base(OpcodeEnum.S_LEAVE_PARTY_MEMBER) { }
 
-        public new void Process(ParsedMessage message)
+        public new void Process(ParsedMessage message) //TODO: find some other check, since it is confused with S_CHANGE_PARTY_MANAGER (not sure)
         {
             base.Process(message);
             if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode))
@@ -28,6 +28,8 @@ namespace DamageMeter.Heuristic
             }
 
             if (message.Payload.Count < 2 + 4 + 4 + 4) return;
+            if (!OpcodeFinder.Instance.IsKnown(OpcodeEnum.S_PARTY_MEMBER_LIST)) return;
+            if(!OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList)) return;
             var nameOffset = Reader.ReadUInt16();
             if (nameOffset != 14) return;
 

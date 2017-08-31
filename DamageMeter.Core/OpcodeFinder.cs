@@ -179,6 +179,15 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.S_WEAK_POINT.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_USER_EFFECT.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_DUNGEON_EVENT_MESSAGE.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_PARTY_MEMBER_ABNORMAL_ADD.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_PARTY_MEMBER_ABNORMAL_DEL.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_PARTY_MEMBER_ABNORMAL_REFRESH.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_PARTY_MEMBER_ABNORMAL_CLEAR.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_PARTY_MEMBER_STAT_UPDATE.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_PARTY_MEMBER_CHANGE_HP.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_PARTY_MEMBER_CHANGE_MP.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_PARTY_MEMBER_CHANGE_STAMINA.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_LOGOUT_PARTY_MEMBER.Instance.Process(x))},
 
         };
     }

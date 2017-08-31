@@ -18,7 +18,7 @@ namespace DamageMeter.Heuristic
         {
             base.Process(message);
             if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) { return; }
-
+            if(!OpcodeFinder.Instance.IsKnown(OpcodeEnum.S_LOGIN)) return;
             if (message.Payload.Count != 4+4+4+4+4) return;
 
             var curSt = Reader.ReadUInt32();
