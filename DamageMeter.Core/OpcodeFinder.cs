@@ -118,6 +118,7 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.C_REQUEST_USER_ITEMLEVEL_INFO.Instance.Process(x))}, 
             {new Action<ParsedMessage>(x => Heuristic.C_REQUEST_USER_PAPERDOLL_INFO.Instance.Process(x))}, 
             {new Action<ParsedMessage>(x => Heuristic.C_CHANGE_PARTY_MEMBER_AUTHORITY.Instance.Process(x))}, 
+            {new Action<ParsedMessage>(x => Heuristic.C_CHANGE_PARTY_MANAGER.Instance.Process(x))}, 
             {new Action<ParsedMessage>(x => Heuristic.C_START_SKILL.Instance.Process(x))}, 
         };
 
@@ -180,6 +181,7 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.S_PARTY_MEMBER_CHANGE_MP.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_PARTY_MEMBER_CHANGE_STAMINA.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_LOGOUT_PARTY_MEMBER.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_CHANGE_PARTY_MANAGER.Instance.Process(x))},
 
         };
     }

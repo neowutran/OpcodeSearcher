@@ -30,9 +30,7 @@ namespace DamageMeter.Heuristic
                     LatestPos = Reader.ReadVector3f();
                     if (!S_LOAD_TOPO.Instance.IsKnown)
                     {
-
                         S_LOAD_TOPO.Instance.Confirm(LatestPos);
-
                     }
                 }
                 return;

@@ -88,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractPacketHeuristic.cs" />
+    <Compile Include="Heuristic\C_CHANGE_PARTY_MANAGER.cs" />
     <Compile Include="Heuristic\C_CHANGE_PARTY_MEMBER_AUTHORITY.cs" />
     <Compile Include="Heuristic\C_CHAT.cs" />
     <Compile Include="Heuristic\C_CHECK_VERSION.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="Heuristic\S_ANSWER_INTERACTIVE.cs" />
     <Compile Include="Heuristic\S_BOSS_GAGE_INFO.cs" />
     <Compile Include="Heuristic\S_BROCAST_GUILD_FLAG.cs" />
+    <Compile Include="Heuristic\S_CHANGE_PARTY_MANAGER.cs" />
     <Compile Include="Heuristic\S_CHAT.cs" />
     <Compile Include="Heuristic\S_CONFIRM_INVITE_CODE_BUTTON.cs" />
     <Compile Include="Heuristic\S_CREATURE_CHANGE_HP.cs" />
