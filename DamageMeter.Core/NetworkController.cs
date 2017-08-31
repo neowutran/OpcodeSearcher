@@ -86,7 +86,11 @@ namespace DamageMeter
             MessageFactory = new MessageFactory();
             Connected?.Invoke(server.Name);
         }
-        public Dictionary<OpcodeId, OpcodeEnum> UiUpdateKnownOpcode = new Dictionary<OpcodeId, OpcodeEnum>();
+        public Dictionary<OpcodeId, OpcodeEnum> UiUpdateKnownOpcode = new Dictionary<OpcodeId, OpcodeEnum>()
+        {
+            { 19900, OpcodeEnum.C_CHECK_VERSION },
+            { 19901, OpcodeEnum.S_CHECK_VERSION },
+        };
         public List<ParsedMessage> UiUpdateData = new List<ParsedMessage>();
         private void UpdateUi()
         {
@@ -102,7 +106,8 @@ namespace DamageMeter
         {
             if (!NeedToSave) { return; }
             NeedToSave = false;
-            if (IsNetwork == 2)
+            if(AnalysisType  == AnalysisTypeEnum.Unknown) { return; }
+            if (AnalysisType == AnalysisTypeEnum.LogFile)
             {
                 MessageBox.Show("Saving saved log is retarded");
                 return;
@@ -116,8 +121,13 @@ namespace DamageMeter
             writer.Dispose();
             MessageBox.Show("Saved");
         }
-
-        private int IsNetwork = 0;
+        public enum AnalysisTypeEnum
+        {
+            Unknown = 0,
+            Network = 1,
+            LogFile = 2
+        }
+        private AnalysisTypeEnum AnalysisType = 0;
         private void PacketAnalysisLoop()
         {
      
@@ -127,12 +137,12 @@ namespace DamageMeter
                 SaveLog();
 
                 // Update the UI at every packet if the backend it not overload & if we are recording the network
-                if(IsNetwork == 1 && TeraSniffer.Instance.Packets.Count < 2000)
+                if(AnalysisType == AnalysisTypeEnum.Network && TeraSniffer.Instance.Packets.Count < 2000)
                 {
                     UpdateUi();
                 }
                 // If loading log file, wait until completion before display
-                if (IsNetwork == 2 && TeraSniffer.Instance.Packets.Count == 0)
+                if (AnalysisType == AnalysisTypeEnum.LogFile && TeraSniffer.Instance.Packets.Count == 0)
                 {
                     UpdateUi();
                 }
@@ -144,9 +154,9 @@ namespace DamageMeter
                 }
                 
                 // Network
-                if (IsNetwork == 0) { IsNetwork = 1; }
+                if (AnalysisType == AnalysisTypeEnum.Unknown) { AnalysisType = AnalysisTypeEnum.Network; }
 
-                if(IsNetwork == 2 && TeraSniffer.Instance.Connected)
+                if(AnalysisType == AnalysisTypeEnum.LogFile && TeraSniffer.Instance.Connected)
                 {
                     throw new Exception("Not allowed to record network while reading log file");
                 }
@@ -170,8 +180,8 @@ namespace DamageMeter
         void LoadFile()
         {
             if (LoadFileName == null) { return; }
-            if(IsNetwork != 0) { throw new Exception("Not allowed to load a log file while recording in the network"); }
-            IsNetwork = 2;
+            if(AnalysisType != AnalysisTypeEnum.Unknown) { throw new Exception("Not allowed to load a log file while recording in the network"); }
+            AnalysisType = AnalysisTypeEnum.LogFile;
             LogReader.LoadLogFromFile(LoadFileName).ForEach(x => TeraSniffer.Instance.Packets.Enqueue(x));
             LoadFileName = null;
 

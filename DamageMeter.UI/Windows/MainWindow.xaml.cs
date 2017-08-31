@@ -74,6 +74,16 @@ namespace DamageMeter.UI
 
         private void HandleNewMessage(Tuple<List<ParsedMessage>, Dictionary<OpcodeId, OpcodeEnum>> update)
         {
+            if (update.Item2.Count != 0)
+            {
+                foreach (var opcode in update.Item2)
+                {
+                    Known.Add(opcode.Key, opcode.Value);
+                }
+                KnownSw.ScrollToBottom();
+                foreach (var packetViewModel in All.Where(x => update.Item2.ContainsKey(x.Message.OpCode))) { packetViewModel.RefreshName(); }
+            }
+
             foreach (var msg in update.Item1)
             {
                 if (msg.Direction == MessageDirection.ServerToClient && ServerCb.IsChecked == false) return;
@@ -82,17 +92,6 @@ namespace DamageMeter.UI
                 if (BlackListedOpcodes.Contains(msg.OpCode)) return;
                 if (SpamCb.IsChecked == true && All.Count > 0 && All.Last().Message.OpCode == msg.OpCode) return;
                 All.Add(new PacketViewModel(msg));
-            }
-
-            if(update.Item2.Count != 0)
-            {
-                foreach(var opcode in update.Item2)
-                {
-                    Known.Add(opcode.Key, opcode.Value);
-                }
-                KnownSw.ScrollToBottom();
-                
-                foreach (var packetViewModel in All.Where(x => update.Item2.ContainsKey(x.Message.OpCode))) { packetViewModel.RefreshName(); }
             }
         }
 
