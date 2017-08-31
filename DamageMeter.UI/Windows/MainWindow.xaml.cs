@@ -25,6 +25,7 @@ using Tera.Game.Messages;
 using Brushes = System.Drawing.Brushes;
 using Color = System.Windows.Media.Color;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+using OpcodeId = System.UInt16;
 
 namespace DamageMeter.UI
 {
@@ -33,7 +34,6 @@ namespace DamageMeter.UI
     /// </summary>
     public partial class MainWindow : INotifyPropertyChanged
     {
-        private readonly DispatcherTimer _dispatcherTimer;
         private bool _topMost = true;
 
 
@@ -57,28 +57,43 @@ namespace DamageMeter.UI
             //TeraSniffer.Instance.Warning += PcapWarning;
             NetworkController.Instance.Connected += HandleConnected;
             NetworkController.Instance.GuildIconAction += InstanceOnGuildIconAction;
+            Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
             Title = "Opcode finder V0";
             SystemEvents.SessionEnding += new SessionEndingEventHandler(SystemEvents_SessionEnding);
-            OpcodeFinder.Instance.OpcodeFound += (opc) =>
-            {
-                OnPropertyChanged(nameof(Known));
-                Dispatcher.Invoke(() =>KnownSw.ScrollToBottom());
-                foreach (var packetViewModel in All.Where(x => x.Message.OpCode == opc)) { packetViewModel.RefreshName(); }
-            };
-            OpcodeFinder.Instance.NewMessage += (msg) => Dispatcher.Invoke(() => HandleNewMessage(msg));
+            NetworkController.Instance.TickUpdated += (msg) => Dispatcher.Invoke(() => HandleNewMessage(msg));
             All.CollectionChanged += All_CollectionChanged;
             AllSw.ScrollChanged += AllSw_ScrollChanged;
             DataContext = this;
-        }
+            ((ItemsControl)KnownSw.Content).ItemsSource = Known;
 
-        private void HandleNewMessage(ParsedMessage msg)
+        }
+        private static MainWindow _instance;
+
+        public static MainWindow Instance => _instance ?? (_instance = new MainWindow());
+
+
+        private void HandleNewMessage(Tuple<List<ParsedMessage>, Dictionary<OpcodeId, OpcodeEnum>> update)
         {
-            if (msg.Direction == MessageDirection.ServerToClient && ServerCb.IsChecked == false) return;
-            if (msg.Direction == MessageDirection.ClientToServer && ClientCb.IsChecked == false) return;
-            if (WhiteListedOpcodes.Count > 0 && !WhiteListedOpcodes.Contains(msg.OpCode)) return;
-            if (BlackListedOpcodes.Contains(msg.OpCode)) return;
-            if (SpamCb.IsChecked == true && All.Count > 0 && All.Last().Message.OpCode == msg.OpCode) return;
-            All.Add(new PacketViewModel(msg));
+            foreach (var msg in update.Item1)
+            {
+                if (msg.Direction == MessageDirection.ServerToClient && ServerCb.IsChecked == false) return;
+                if (msg.Direction == MessageDirection.ClientToServer && ClientCb.IsChecked == false) return;
+                if (WhiteListedOpcodes.Count > 0 && !WhiteListedOpcodes.Contains(msg.OpCode)) return;
+                if (BlackListedOpcodes.Contains(msg.OpCode)) return;
+                if (SpamCb.IsChecked == true && All.Count > 0 && All.Last().Message.OpCode == msg.OpCode) return;
+                All.Add(new PacketViewModel(msg));
+            }
+
+            if(update.Item2.Count != 0)
+            {
+                foreach(var opcode in update.Item2)
+                {
+                    Known.Add(opcode.Key, opcode.Value);
+                }
+                KnownSw.ScrollToBottom();
+                
+                foreach (var packetViewModel in All.Where(x => update.Item2.ContainsKey(x.Message.OpCode))) { packetViewModel.RefreshName(); }
+            }
         }
 
         private void AllSw_ScrollChanged(object sender, System.Windows.Controls.ScrollChangedEventArgs e)
@@ -93,9 +108,7 @@ namespace DamageMeter.UI
         {
             if (_bottom) Dispatcher.Invoke(() => AllSw.ScrollToBottom());
         }
-
-
-        public ObservableDictionary<ushort, OpcodeEnum> Known => new ObservableDictionary<ushort, OpcodeEnum>(OpcodeFinder.Instance.KnownOpcode); //TODO: make a separate ObservableCollection for this
+        public ObservableDictionary<ushort, OpcodeEnum> Known = new ObservableDictionary<ushort, OpcodeEnum>();
         public ObservableCollection<PacketViewModel> All { get; set; } = new ObservableCollection<PacketViewModel>();
         public ObservableCollection<ushort> BlackListedOpcodes { get; set; } = new ObservableCollection<ushort>();
         public ObservableCollection<ushort> WhiteListedOpcodes { get; set; } = new ObservableCollection<ushort>();
@@ -131,17 +144,6 @@ namespace DamageMeter.UI
             _topMost = false;
             NetworkController.Instance.Exit();
         }
-
-        public void Update(UiUpdateMessage nmessage)
-        {
-            void ChangeUi(UiUpdateMessage message)
-            {
-
-            }
-
-            Dispatcher.Invoke((NetworkController.UpdateUiHandler)ChangeUi, nmessage);
-        }
-
 
         public void HandleConnected(string serverName)
         {
@@ -329,7 +331,7 @@ namespace DamageMeter.UI
             var opn = (string)value;
             if (opn.Length == 4 && opn[1] != '_')
             {
-                if (OpcodeFinder.Instance.KnownOpcode.TryGetValue(System.Convert.ToUInt16(opn, 16), out OpcodeEnum opc))
+                if (MainWindow.Instance.Known.TryGetValue(System.Convert.ToUInt16(opn, 16), out OpcodeEnum opc))
                 {
                     return opc.ToString();
                 }

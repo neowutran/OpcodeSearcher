@@ -10,6 +10,8 @@ using Tera.Game;
 using Tera.Game.Abnormality;
 using Tera.Game.Messages;
 using Message = Tera.Message;
+using OpcodeId = System.UInt16;
+
 
 namespace DamageMeter
 {
@@ -18,9 +20,8 @@ namespace DamageMeter
         public delegate void ConnectedHandler(string serverName);
 
         public delegate void GuildIconEvent(Bitmap icon);
-
-        public delegate void UpdateUiHandler(UiUpdateMessage message);
-
+        public delegate void UpdateUiHandler(Tuple<List<ParsedMessage>, Dictionary<OpcodeId, OpcodeEnum>> message);
+        public event UpdateUiHandler TickUpdated;
         private static NetworkController _instance;
 
         private bool _keepAlive = true;
@@ -66,10 +67,8 @@ namespace DamageMeter
         {
             Connected?.Invoke(message);
         }
-
-    
+            
         public event ConnectedHandler Connected;
-        public event UpdateUiHandler TickUpdated;
 
         protected virtual void HandleEndConnection()
         {
@@ -86,30 +85,29 @@ namespace DamageMeter
             MessageFactory = new MessageFactory();
             Connected?.Invoke(server.Name);
         }
-
-        private void UpdateUi(int packetsWaiting = 0)
+        public Dictionary<OpcodeId, OpcodeEnum> UiUpdateKnownOpcode = new Dictionary<OpcodeId, OpcodeEnum>();
+        public List<ParsedMessage> UiUpdateData = new List<ParsedMessage>();
+        private void UpdateUi()
         {
-            /*
-            var uiMessage = new UiUpdateMessage(statsSummary, skills, filteredEntities, timedEncounter, abnormals, teradpsHistory, chatbox, flash);
-            handler?.Invoke(uiMessage);
-            */
+            _lastTick = DateTime.UtcNow.Ticks;
+            var currentLastPacket = OpcodeFinder.Instance.PacketCount;
+            TickUpdated?.Invoke(new Tuple<List<ParsedMessage>, Dictionary<OpcodeId, OpcodeEnum>> (UiUpdateData, UiUpdateKnownOpcode));
+            UiUpdateData = new List<ParsedMessage>();
+            UiUpdateKnownOpcode = new Dictionary<OpcodeId, OpcodeEnum>();
         }
         private void PacketAnalysisLoop()
         {
      
             while (_keepAlive)
             {
+               LoadFile();
 
-                if (FileName != null)
+                // Don't update the UI if too much packet to process: aka log loading & world boss
+                if (TeraSniffer.Instance.Packets.Count < 2000)
                 {
-                    LoadFile();
-                    FileName = null;
+                    CheckUpdateUi();
                 }
 
-                Encounter = NewEncounter;
-
-                var packetsWaiting = TeraSniffer.Instance.Packets.Count;
-                CheckUpdateUi(packetsWaiting);
                 var successDequeue = TeraSniffer.Instance.Packets.TryDequeue(out var obj);
                 if (!successDequeue)
                 {
@@ -122,11 +120,11 @@ namespace DamageMeter
             }
         }
 
-        public void CheckUpdateUi(int packetsWaiting)
+        public void CheckUpdateUi()
         {
             var second = DateTime.UtcNow.Ticks;
             if (second - _lastTick < TimeSpan.TicksPerSecond) { return; }
-            UpdateUi(packetsWaiting);
+            UpdateUi();
         }
 
         internal virtual void OnGuildIconAction(Bitmap icon)
@@ -136,14 +134,9 @@ namespace DamageMeter
 
         void LoadFile()
         {
-            if (FileName != null)
-            {
-                List<Message> nonparsedList = LogReader.LoadLogFromFile(FileName);
-                foreach (Message message in nonparsedList)
-                {
-                    TeraSniffer.Instance.Packets.Enqueue(message);
-                }
-            }
+            if (FileName == null) { return; }
+            LogReader.LoadLogFromFile(FileName).ForEach(x => TeraSniffer.Instance.Packets.Enqueue(x));
+            FileName = null;
         }
     }
 }

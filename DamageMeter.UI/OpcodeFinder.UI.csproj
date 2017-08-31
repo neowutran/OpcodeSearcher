@@ -143,9 +143,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="IconUtils.cs" />
+    <Compile Include="ObservableDictionary.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="WindowServices.cs" />
-    <Compile Include="ObservableDictionary.cs" />
     <Page Include="Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -49,7 +49,7 @@ namespace DamageMeter.Heuristic
 
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
             var ch = new LoggedCharacter(cid, model, name, playerId, level);
-            OpcodeFinder.Instance.KnowledgeDatabase.Add(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, new Tuple<Type, object>(typeof(LoggedCharacter), ch));
+            OpcodeFinder.Instance.KnowledgeDatabase.TryAdd(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, new Tuple<Type, object>(typeof(LoggedCharacter), ch));
             //TODO
 
 

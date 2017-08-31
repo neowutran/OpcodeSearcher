@@ -10,6 +10,8 @@ using Tera;
 using Tera.Game.Messages;
 using OpcodeId = System.UInt16;
 using Grade = System.UInt32;
+using System.Collections.Concurrent;
+using System.Runtime.CompilerServices;
 
 namespace DamageMeter
 {
@@ -18,9 +20,7 @@ namespace DamageMeter
         public static OpcodeFinder Instance => _instance ?? (_instance = new OpcodeFinder());
         private static OpcodeFinder _instance;
 
-        private OpcodeFinder()
-        {
-        }
+        private OpcodeFinder() { }
 
         public enum KnowledgeDatabaseItem
         {
@@ -35,19 +35,17 @@ namespace DamageMeter
         }
 
         // Use that to set value like CID etc ...
-        public Dictionary<KnowledgeDatabaseItem, Tuple<Type, object>> KnowledgeDatabase = new Dictionary<KnowledgeDatabaseItem, Tuple<Type, object>>();
-
-        public Dictionary<OpcodeId, OpcodeEnum> KnownOpcode = new Dictionary<OpcodeId, OpcodeEnum>()
+        public ConcurrentDictionary<KnowledgeDatabaseItem, Tuple<Type, object>> KnowledgeDatabase = new ConcurrentDictionary<KnowledgeDatabaseItem, Tuple<Type, object>>();
+        private Dictionary<OpcodeId, OpcodeEnum> KnownOpcode = new Dictionary<OpcodeId, OpcodeEnum>()
         {
-            {19900, OpcodeEnum.C_CHECK_VERSION }, //Those 2 opcode never change
-            {19901, OpcodeEnum.S_CHECK_VERSION }
-
-            // Add here if you already know some opcode
+            { 19900, OpcodeEnum.C_CHECK_VERSION },
+            { 19901, OpcodeEnum.S_CHECK_VERSION },
         };
-
-        public event Action<ushort> OpcodeFound;
-
-        public event Action<ParsedMessage> NewMessage;
+        private Dictionary<OpcodeEnum, OpcodeId> ReverseKnownOpcode = new Dictionary<OpcodeEnum, OpcodeId>()
+        {
+            { OpcodeEnum.C_CHECK_VERSION, 19900 },
+            { OpcodeEnum.S_CHECK_VERSION, 19901 },
+        };
 
         // Once your module found a new opcode
         public void SetOpcode(OpcodeId opcode, OpcodeEnum opcodeName)
@@ -57,28 +55,24 @@ namespace DamageMeter
                 KnownOpcode.TryGetValue(opcode, out var value);
                 throw new Exception("opcode: " + opcode + " is already know = " + value + " . You try to add instead = " + Enum.GetName(typeof(OpcodeEnum), opcodeName));
             }
-            if (KnownOpcode.ContainsValue(opcodeName))
+            if (KnownOpcode.Values.Contains(opcodeName))
             {
                 throw new Exception("opcodename: " + Enum.GetName(typeof(OpcodeEnum), opcodeName) + " is already know = " + opcode);
             }
+            Console.WriteLine(opcode +" => "+opcodeName);
+            ReverseKnownOpcode.Add(opcodeName, opcode);
             KnownOpcode.Add(opcode, opcodeName);
-
-            OpcodeFound?.Invoke(opcode);
-            Console.WriteLine(Enum.GetName(typeof(OpcodeEnum), opcodeName) + " = " + opcode);
-            Debug.WriteLine(Enum.GetName(typeof(OpcodeEnum), opcodeName) + " = " + opcode);
+            NetworkController.Instance.UiUpdateKnownOpcode.Add(opcode, opcodeName);
         }
 
         public bool IsKnown(OpcodeId opcode) => KnownOpcode.ContainsKey(opcode);
 
-        public bool IsKnown(OpcodeEnum opcode) => KnownOpcode.ContainsValue(opcode);
+        public bool IsKnown(OpcodeEnum opcode) => ReverseKnownOpcode.ContainsKey(opcode);
 
         public ushort? GetOpcode(OpcodeEnum opcode)
         {
-            if (IsKnown(opcode))
-            {
-                return KnownOpcode.Where(x => x.Value == opcode).Select(x => x.Key).First();
-            }
-            return null;
+            if (!ReverseKnownOpcode.ContainsKey(opcode)) { return null; }
+            return ReverseKnownOpcode[opcode];
         }
 
         //For the kind of heuristic "only appear in the first X packet"
@@ -86,21 +80,20 @@ namespace DamageMeter
 
         public void Find(ParsedMessage message)
         {
-            message.PrintRaw();
-
             PacketCount++;
             AllPackets.Add(PacketCount, message);
-            NewMessage?.Invoke(message);
-            if (message.Direction == Tera.MessageDirection.ClientToServer)
-            {
-                ClientOpcode.ForEach(x => x.DynamicInvoke(message));
-                return;
+            NetworkController.Instance.UiUpdateData.Add(message);
+            if (message.Direction == MessageDirection.ClientToServer) {         
+                Parallel.ForEach(ClientOpcode, x => x.DynamicInvoke(message));
             }
-            ServerOpcode.ForEach(x => x.DynamicInvoke(message));
+            else
+            {                
+                Parallel.ForEach(ServerOpcode, x => x.DynamicInvoke(message));
+            }
         }
 
         // For the kind of heuristic "this opcode only appear less than 1 second after this other opcode"
-        private Dictionary<long, ParsedMessage> AllPackets = new Dictionary<long, ParsedMessage>();
+        public Dictionary<long, ParsedMessage> AllPackets = new Dictionary<long, ParsedMessage>();
 
         public long TotalOccurrenceOpcode(OpcodeId opcode) => AllPackets.Where(x => x.Value.OpCode == opcode).Count();
 
@@ -131,7 +124,6 @@ namespace DamageMeter
         private static readonly List<Delegate> ServerOpcode = new List<Delegate>
         {
             {new Action<ParsedMessage>(x => Heuristic.S_SELECT_USER.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_LOGIN.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_LOADING_SCREEN_CONTROL_INFO.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_REMAIN_PLAY_TIME.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_LOGIN_ARBITER.Instance.Process(x))},

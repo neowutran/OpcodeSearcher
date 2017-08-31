@@ -27,7 +27,7 @@ namespace DamageMeter.Heuristic
             
             if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.Characters, out Tuple<Type, object> currChar))
             {
-                throw new Exception("Logger character is not in database.");
+                return;
             }
             var chList = (Dictionary<uint, Character>)currChar.Item2;
             if (!chList.TryGetValue(playerId, out var character)) return;

@@ -73,9 +73,7 @@ namespace DamageMeter
             list.Remove(member);
             member.Abnormals.Add(abnormId);
             list.Add(member);
-            OpcodeFinder.Instance.KnowledgeDatabase.Remove(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList);
-            OpcodeFinder.Instance.KnowledgeDatabase.Add(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList, new Tuple<Type, object>(typeof(List<PartyMember>), list));
-
+            OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList] = new Tuple<Type, object>(typeof(List<PartyMember>), list);
         }
         public static void RemovePartyMemberAbnormal(uint playerId, uint serverId, uint abnormId)
         {
@@ -88,9 +86,7 @@ namespace DamageMeter
             list.Remove(member);
             member.Abnormals.Remove(abnormId);
             list.Add(member);
-            OpcodeFinder.Instance.KnowledgeDatabase.Remove(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList);
-            OpcodeFinder.Instance.KnowledgeDatabase.Add(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList, new Tuple<Type, object>(typeof(List<PartyMember>), list));
-
+            OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList] = new Tuple<Type, object>(typeof(List<PartyMember>), list);
         }
 
         public static bool PartyMemberHasAbnorm(uint playerId, uint serverId, uint abnormId)
@@ -114,8 +110,7 @@ namespace DamageMeter
             list.Remove(member);
             member.MaxHp = maxHp;
             list.Add(member);
-            OpcodeFinder.Instance.KnowledgeDatabase.Remove(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList);
-            OpcodeFinder.Instance.KnowledgeDatabase.Add(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList, new Tuple<Type, object>(typeof(List<PartyMember>), list));
+            OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList] = new Tuple<Type, object>(typeof(List<PartyMember>), list);
         }
         public static void UpdatePartyMemberMaxMp(uint playerId, uint serverId, uint maxMp)
         {
@@ -127,8 +122,7 @@ namespace DamageMeter
             list.Remove(member);
             member.MaxMp = maxMp;
             list.Add(member);
-            OpcodeFinder.Instance.KnowledgeDatabase.Remove(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList);
-            OpcodeFinder.Instance.KnowledgeDatabase.Add(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList, new Tuple<Type, object>(typeof(List<PartyMember>), list));
+            OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList] = new Tuple<Type, object>(typeof(List<PartyMember>), list); 
         }
         public static void UpdatePartyMemberMaxRe(uint playerId, uint serverId, uint maxRe)
         {
@@ -140,8 +134,7 @@ namespace DamageMeter
             list.Remove(member);
             member.MaxRe = maxRe;
             list.Add(member);
-            OpcodeFinder.Instance.KnowledgeDatabase.Remove(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList);
-            OpcodeFinder.Instance.KnowledgeDatabase.Add(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList, new Tuple<Type, object>(typeof(List<PartyMember>), list));
+            OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList] = new Tuple<Type, object>(typeof(List<PartyMember>), list);
         }
 
         public static PartyMember GetPartyMember(uint playerId, uint serverId)

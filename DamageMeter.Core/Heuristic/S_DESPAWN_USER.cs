@@ -48,13 +48,8 @@ namespace DamageMeter.Heuristic
         }
         private void RemoveUserFromDatabase(ulong id)
         {
-            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.SpawnedUsers, out Tuple<Type, object> result))
-            {
-                OpcodeFinder.Instance.KnowledgeDatabase.Remove(OpcodeFinder.KnowledgeDatabaseItem.SpawnedUsers);
-            }
-            var list = (List<ulong>)result.Item2;
+            var list = (List<ulong>)OpcodeFinder.Instance.KnowledgeDatabase.Where(x => x.Key == OpcodeFinder.KnowledgeDatabaseItem.SpawnedUsers).First().Value.Item2;
             if (list.Contains(id)) list.Remove(id);
-            OpcodeFinder.Instance.KnowledgeDatabase.Add(OpcodeFinder.KnowledgeDatabaseItem.SpawnedUsers, new Tuple<Type, object>(typeof(List<ulong>), list));
         }
 
     }

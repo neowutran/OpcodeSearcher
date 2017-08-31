@@ -81,7 +81,7 @@ namespace DamageMeter.Heuristic
                     var ch = new Character(id, new RaceGenderClass((Race)race,(Gender)gender -1,(PlayerClass)cl+1), level, name, guildId);
                     chars.Add(id, ch);
                 }
-                OpcodeFinder.Instance.KnowledgeDatabase.Add(OpcodeFinder.KnowledgeDatabaseItem.Characters, new Tuple<Type, object>(typeof(Dictionary<uint, Character>), chars));
+                OpcodeFinder.Instance.KnowledgeDatabase.TryAdd(OpcodeFinder.KnowledgeDatabaseItem.Characters, new Tuple<Type, object>(typeof(Dictionary<uint, Character>), chars));
             }
 
         }

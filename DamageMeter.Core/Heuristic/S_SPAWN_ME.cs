@@ -67,9 +67,9 @@ namespace DamageMeter.Heuristic
         {
             if (OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(knowledgeDatabaseKey))
             {
-                OpcodeFinder.Instance.KnowledgeDatabase.Remove(knowledgeDatabaseKey);
+                OpcodeFinder.Instance.KnowledgeDatabase.TryRemove(knowledgeDatabaseKey, out var garbage);
             }
-            OpcodeFinder.Instance.KnowledgeDatabase.Add(knowledgeDatabaseKey, new Tuple<Type, object>(typeof(Boolean), state));
+            OpcodeFinder.Instance.KnowledgeDatabase.TryAdd(knowledgeDatabaseKey, new Tuple<Type, object>(typeof(Boolean), state));
         }
     }
 }

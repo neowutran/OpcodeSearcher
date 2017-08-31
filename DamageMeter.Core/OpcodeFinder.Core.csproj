@@ -171,7 +171,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TeraWindow.cs" />
     <Compile Include="NetworkController.cs" />
-    <Compile Include="UiUpdateMessage.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Data\Data.csproj">

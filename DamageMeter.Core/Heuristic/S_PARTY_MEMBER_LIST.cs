@@ -102,11 +102,7 @@ namespace DamageMeter.Heuristic
         }
         private void UpdatePartyMemberList(List<PartyMember> list)
         {
-            if (OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList))
-            {
-                OpcodeFinder.Instance.KnowledgeDatabase.Remove(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList);
-            }
-            OpcodeFinder.Instance.KnowledgeDatabase.Add(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList, new Tuple<Type, object>(typeof(List<PartyMember>), list));
+            OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList] = new Tuple<Type, object>(typeof(List<PartyMember>), list);
         }
 
     }

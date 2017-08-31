@@ -68,11 +68,7 @@ namespace DamageMeter.Heuristic
 
         private static void UpdateLocationInDictionary(OpcodeFinder.KnowledgeDatabaseItem knowledgeDatabaseKey, Tera.Game.Vector3f destination)
         {
-            if (OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(knowledgeDatabaseKey))
-            {
-                OpcodeFinder.Instance.KnowledgeDatabase.Remove(knowledgeDatabaseKey);
-            }
-            OpcodeFinder.Instance.KnowledgeDatabase.Add(knowledgeDatabaseKey, new Tuple<Type, object>(typeof(PlayerLocation), destination));
+            OpcodeFinder.Instance.KnowledgeDatabase[knowledgeDatabaseKey]= new Tuple<Type, object>(typeof(PlayerLocation), destination);
         }
     }
 }

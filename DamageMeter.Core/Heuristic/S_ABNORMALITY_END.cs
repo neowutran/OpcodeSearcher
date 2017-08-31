@@ -34,10 +34,8 @@ namespace DamageMeter.Heuristic
                 }
             }
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
-            if (OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacterAbnormalities))
-            {
-                OpcodeFinder.Instance.KnowledgeDatabase.Remove(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacterAbnormalities);
-            }
+            OpcodeFinder.Instance.KnowledgeDatabase.TryRemove(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacterAbnormalities, out var garbage);
+            
         }
     }
 }

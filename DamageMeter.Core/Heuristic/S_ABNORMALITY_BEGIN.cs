@@ -61,11 +61,10 @@ namespace DamageMeter.Heuristic
             List<uint> list = new List<uint>();
             if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacterAbnormalities, out Tuple<Type, object> result))
             {
-                OpcodeFinder.Instance.KnowledgeDatabase.Remove(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacterAbnormalities);
                 list = (List<uint>)result.Item2;
             }
             if (!list.Contains(abId)) list.Add(abId);
-            OpcodeFinder.Instance.KnowledgeDatabase.Add(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacterAbnormalities, new Tuple<Type, object>(typeof(List<ulong>), list));
+            OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacterAbnormalities] = new Tuple<Type, object>(typeof(List<ulong>), list);
 
         }
     }

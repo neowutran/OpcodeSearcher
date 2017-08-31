@@ -71,8 +71,8 @@ namespace DamageMeter.Heuristic
                 var list = (List<PartyMember>)res.Item2;
                 if (!list.Any(x => x.PlayerId == playerId && x.ServerId == serverId && x.Name == name)) return;
                 list.Remove(new PartyMember(playerId, serverId, name));
-                OpcodeFinder.Instance.KnowledgeDatabase.Remove(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList);
-                OpcodeFinder.Instance.KnowledgeDatabase.Add(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList, new Tuple<Type, object>(typeof(List<PartyMember>), list));
+                OpcodeFinder.Instance.KnowledgeDatabase.TryRemove(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList, out var garbage);
+                OpcodeFinder.Instance.KnowledgeDatabase.TryAdd(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList, new Tuple<Type, object>(typeof(List<PartyMember>), list));
             }
         }
     }
