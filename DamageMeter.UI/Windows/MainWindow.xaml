@@ -97,14 +97,20 @@
         <ui:BoolToVisibleHidden x:Key="BoolToVisibleHidden"></ui:BoolToVisibleHidden>
         <ui:OpcodeNameConv x:Key="OpcodeNameConv"></ui:OpcodeNameConv>
         <DataTemplate x:Key="opcdt" >
-            <StackPanel Orientation="Horizontal" Margin="1">
-                <Border Background="{Binding Value, Converter={StaticResource DirectionToColor}}" Width="45" CornerRadius="4,0,0,4" Padding="7,1,5,1" HorizontalAlignment="Left">
-                    <TextBlock Text="{Binding Key}" Foreground="White" VerticalAlignment="Center" FontWeight="DemiBold" HorizontalAlignment="Left"/>
+            <Grid Margin="0,-1,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Border Background="MediumSeaGreen" Width="50" Padding="5,0,5,0" HorizontalAlignment="Stretch" Grid.Column="0" Opacity=".9">
+                    <TextBlock Text="{Binding Key}" Foreground="White" VerticalAlignment="Center" FontWeight="Normal" FontSize="11" Margin="0,1" HorizontalAlignment="Center" FontFamily="/ShinraMeter;component/#Droid Sans Mono"/>
                 </Border>
-                <Border Background="{Binding Value, Converter={StaticResource DirectionToColor}}" CornerRadius="0,4,4,0" Padding="5,1" HorizontalAlignment="Left">
-                    <TextBlock Text="{Binding Value}" Foreground="White" VerticalAlignment="Center" />
-                </Border>
-            </StackPanel>
+                <Grid HorizontalAlignment="Stretch" Grid.Column="1">
+                    
+                <Border Background="MediumSeaGreen" Opacity=".5"  HorizontalAlignment="Stretch"/>
+                    <TextBlock Text="{Binding Value}" Foreground="Black" Margin="5,0" VerticalAlignment="Center" FontSize="11" FontFamily="/ShinraMeter;component/#Droid Sans Mono"/>
+                </Grid>
+            </Grid>
         </DataTemplate>
         <DataTemplate x:Key="msg" DataType="ui:PacketViewModel">
             <Grid MouseEnter="SelectPacketByDrag" MouseLeftButtonDown="SelectPacketByClick" Margin="0,0,0,-1"
@@ -432,7 +438,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <TextBlock>Known opcodes</TextBlock>
-                <ScrollViewer Grid.Row="1" >
+                <ScrollViewer Grid.Row="1" x:Name="KnownSw">
                     <ItemsControl ItemsSource="{Binding Known}" ItemTemplate="{StaticResource opcdt}"  BorderThickness="1" BorderBrush="#2000" >
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>

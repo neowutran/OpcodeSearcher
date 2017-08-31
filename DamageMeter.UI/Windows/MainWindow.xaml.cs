@@ -62,6 +62,7 @@ namespace DamageMeter.UI
             OpcodeFinder.Instance.OpcodeFound += (opc) =>
             {
                 OnPropertyChanged(nameof(Known));
+                Dispatcher.Invoke(() =>KnownSw.ScrollToBottom());
                 foreach (var packetViewModel in All.Where(x => x.Message.OpCode == opc)) { packetViewModel.RefreshName(); }
             };
             OpcodeFinder.Instance.NewMessage += (msg) => Dispatcher.Invoke(() => HandleNewMessage(msg));
@@ -94,7 +95,7 @@ namespace DamageMeter.UI
         }
 
 
-        public ObservableDictionary<ushort, OpcodeEnum> Known => new ObservableDictionary<ushort, OpcodeEnum>(OpcodeFinder.Instance.KnownOpcode);
+        public ObservableDictionary<ushort, OpcodeEnum> Known => new ObservableDictionary<ushort, OpcodeEnum>(OpcodeFinder.Instance.KnownOpcode); //TODO: make a separate ObservableCollection for this
         public ObservableCollection<PacketViewModel> All { get; set; } = new ObservableCollection<PacketViewModel>();
         public ObservableCollection<ushort> BlackListedOpcodes { get; set; } = new ObservableCollection<ushort>();
         public ObservableCollection<ushort> WhiteListedOpcodes { get; set; } = new ObservableCollection<ushort>();
