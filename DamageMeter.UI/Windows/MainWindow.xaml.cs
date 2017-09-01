@@ -111,7 +111,12 @@ namespace DamageMeter.UI
                 {
                     if (msg.Payload.Count != _sizeFilter) return;
                 }
-                All.Add(new PacketViewModel(msg, _count));
+                var vm = new PacketViewModel(msg, _count);
+                All.Add(vm);
+                if (SearchList.Count > 0)
+                {
+                    if (SearchList[0].Message.OpCode == msg.OpCode) UpdateSearch(msg.OpCode.ToString(), false); //could be performance intensive
+                }
             }
         }
 
@@ -405,17 +410,30 @@ namespace DamageMeter.UI
         private void SearchBoxChanged(object sender, TextChangedEventArgs e)
         {
             var s = sender as System.Windows.Controls.TextBox;
+            UpdateSearch(s.Text, true);
+        }
+
+        private void UpdateSearch(string q, bool bringIntoView)
+        {
             SearchList.Clear();
-            foreach (var packetViewModel in All) { packetViewModel.IsSearched = false; }
-            if (string.IsNullOrEmpty(s.Text))
+            foreach (var packetViewModel in All)
             {
-                foreach (var packetViewModel in All) { packetViewModel.IsSearched = false; }
+                //packetViewModel.IsSearched = true;
+                packetViewModel.IsSearched = false;
+            }
+            if (string.IsNullOrEmpty(q))
+            {
+                foreach (var packetViewModel in All)
+                {
+                    //packetViewModel.IsSearched = true;
+                    packetViewModel.IsSearched = false;
+                }
 
                 return;
             }
             try
             {
-                var query = Convert.ToUInt16(s.Text);
+                var query = Convert.ToUInt16(q);
                 //search by opcode
                 foreach (var packetViewModel in All.Where(x => x.Message.OpCode == query))
                 {
@@ -425,8 +443,11 @@ namespace DamageMeter.UI
                 if (SearchList.Count != 0)
                 {
                     var i = All.IndexOf(SearchList[0]);
-                    var container = AllItemsControl.ItemContainerGenerator.ContainerFromItem(All[i]) as FrameworkElement;
-                    container.BringIntoView();
+                    if (bringIntoView)
+                    {
+                        var container = AllItemsControl.ItemContainerGenerator.ContainerFromItem(All[i]) as FrameworkElement;
+                        container.BringIntoView();
+                    }
                     foreach (var packetViewModel in All) { packetViewModel.IsSelected = packetViewModel == All[i]; }
 
                 }
@@ -438,7 +459,7 @@ namespace DamageMeter.UI
                 OpcodeEnum opEnum;
                 try
                 {
-                    opEnum = (OpcodeEnum) Enum.Parse(typeof(OpcodeEnum), s.Text);
+                    opEnum = (OpcodeEnum)Enum.Parse(typeof(OpcodeEnum), q);
                 }
                 catch (Exception e1) { return; }
 
@@ -451,18 +472,23 @@ namespace DamageMeter.UI
                 if (SearchList.Count != 0)
                 {
                     var i = All.IndexOf(SearchList[0]);
-                    var container = AllItemsControl.ItemContainerGenerator.ContainerFromItem(All[i]) as FrameworkElement;
-                    container.BringIntoView();
+                    if (bringIntoView)
+                    {
+                        var container = AllItemsControl.ItemContainerGenerator.ContainerFromItem(All[i]) as FrameworkElement;
+                        container.BringIntoView();
+                    }
                     foreach (var packetViewModel in All) { packetViewModel.IsSelected = packetViewModel == All[i]; }
 
                 }
             }
+            OnPropertyChanged(nameof(SearchList));
+
         }
 
         private int _currentSelectedItemIndex = 0;
         private void PreviousResult(object sender, RoutedEventArgs e)
         {
-            if(SearchList.Count == 0) return;
+            if (SearchList.Count == 0) return;
             if (_currentSelectedItemIndex == 0) _currentSelectedItemIndex = SearchList.Count - 1;
             else _currentSelectedItemIndex--;
             var i = All.IndexOf(SearchList[_currentSelectedItemIndex]);
@@ -662,7 +688,7 @@ namespace DamageMeter.UI
             get => _isSearched;
             set
             {
-                if (_isSelected == value) return;
+                //if (_isSelected == value) return;
                 _isSearched = value;
                 OnPropertyChanged(nameof(IsSearched));
             }

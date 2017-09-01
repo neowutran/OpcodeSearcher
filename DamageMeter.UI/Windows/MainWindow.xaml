@@ -365,7 +365,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <TextBlock>Settings</TextBlock>
-            <Grid>
+            <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -374,10 +374,10 @@
                     <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Border  Style="{StaticResource CardBorder}" Grid.Row="0" Margin="0,0,0,5" Padding="3">
+                <Border  Style="{StaticResource CardBorder}" Grid.Row="0" Margin="0,0,0,5" Padding="3" VerticalAlignment="Top">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <!--Card title-->
@@ -396,7 +396,7 @@
                                     </ItemsControl.ItemsPanel>
                                 </ItemsControl>
                             </ScrollViewer>
-                            <Grid >
+                            <Grid Margin="-3,0,-3,-3">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
@@ -429,7 +429,7 @@
                                     </ItemsControl.ItemsPanel>
                                 </ItemsControl>
                             </ScrollViewer>
-                            <Grid >
+                            <Grid Margin="-3,0,-3,-3">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
@@ -461,7 +461,7 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0">Size</TextBlock>
-                                <TextBox Grid.Column="1" Margin="3,0,0,0" Background="#2000" CaretBrush="Black" TextChanged="TextBoxBase_OnTextChanged"></TextBox>
+                                <TextBox Grid.Column="1" Margin="3,0,0,0"  CaretBrush="Black" TextChanged="TextBoxBase_OnTextChanged"></TextBox>
                             </Grid>
                             <Button Content="Clear all" Width="Auto" HorizontalAlignment="Stretch"  Click="ClearAll" Margin="1,4,1,1" BorderThickness="0"></Button>
                             <Button Content="Dump known to file" Width="Auto" HorizontalAlignment="Stretch" Click="Dump" Margin="1,1,1,1" BorderThickness="0"></Button>
@@ -483,7 +483,7 @@
                         <TextBlock Foreground="White" HorizontalAlignment="Right" Margin="1,-1" Text="{Binding SearchList.Count}"></TextBlock>
                         <!--Card content-->
                         <StackPanel Grid.Row="1" Margin="3,0,3,3">
-                            <TextBox BorderThickness="0" Background="#2000" Margin="0,4,0,0" TextChanged="SearchBoxChanged"></TextBox>
+                            <TextBox BorderThickness="0" Margin="0,4,0,0" TextChanged="SearchBoxChanged"></TextBox>
                             <UniformGrid Rows="1" Margin="-6,0,-6,0">
                                 <Button BorderThickness="0" Content="&lt;" HorizontalAlignment="Stretch" Padding="0,-1,0,1" Background="#1000" Click="PreviousResult" ></Button>
                                 <Button BorderThickness="0" Content="&gt;" HorizontalAlignment="Stretch" Padding="0,-1,0,1" Background="#1000" Click="NextResult"></Button>
