@@ -22,7 +22,7 @@ namespace DamageMeter
         public delegate void ConnectedHandler(string serverName);
 
         public delegate void GuildIconEvent(Bitmap icon);
-        public delegate void UpdateUiHandler(Tuple<List<ParsedMessage>, Dictionary<OpcodeId, OpcodeEnum>> message);
+        public delegate void UpdateUiHandler(Tuple<List<ParsedMessage>, Dictionary<OpcodeId, OpcodeEnum>, int> message);
         public event UpdateUiHandler TickUpdated;
         private static NetworkController _instance;
 
@@ -92,7 +92,7 @@ namespace DamageMeter
         private void UpdateUi()
         {
             var currentLastPacket = OpcodeFinder.Instance.PacketCount;
-            TickUpdated?.Invoke(new Tuple<List<ParsedMessage>, Dictionary<OpcodeId, OpcodeEnum>> (UiUpdateData, UiUpdateKnownOpcode));
+            TickUpdated?.Invoke(new Tuple<List<ParsedMessage>, Dictionary<OpcodeId, OpcodeEnum>, int> (UiUpdateData, UiUpdateKnownOpcode, TeraSniffer.Instance.Packets.Count));
             UiUpdateData = new List<ParsedMessage>();
             UiUpdateKnownOpcode = new Dictionary<OpcodeId, OpcodeEnum>();
         }
