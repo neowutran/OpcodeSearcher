@@ -106,8 +106,8 @@
                     <TextBlock Text="{Binding Key}" Foreground="White" VerticalAlignment="Center" FontWeight="Normal" FontSize="11" Margin="0,1" HorizontalAlignment="Center" FontFamily="/ShinraMeter;component/#Droid Sans Mono"/>
                 </Border>
                 <Grid HorizontalAlignment="Stretch" Grid.Column="1">
-                    
-                <Border Background="MediumSeaGreen" Opacity=".5"  HorizontalAlignment="Stretch"/>
+
+                    <Border Background="MediumSeaGreen" Opacity=".5"  HorizontalAlignment="Stretch"/>
                     <TextBlock Text="{Binding Value}" Foreground="Black" Margin="5,0" VerticalAlignment="Center" FontSize="11" FontFamily="/ShinraMeter;component/#Droid Sans Mono"/>
                 </Grid>
             </Grid>
@@ -311,6 +311,25 @@
             <Setter Property="Background" Value="#1000"></Setter>
             <Setter Property="CaretBrush" Value="#000"></Setter>
         </Style>
+        <DataTemplate x:Key="DataHex" DataType="ui:ByteViewModel">
+            <Grid MouseEnter="UIElement_OnMouseEnter" MouseLeave="UIElement_OnMouseLeave"  VerticalAlignment="Top" Height="14">
+                <TextBlock FontFamily="/ShinraMeter;component/#Droid Sans Mono" Text="{Binding Hex}" 
+                           Margin="3,1,0,0" HorizontalAlignment="Left" Width="60"
+                           TextWrapping="NoWrap" Height="Auto" VerticalAlignment="Top" TextAlignment="Left"/>
+                <Border BorderBrush="DodgerBlue" BorderThickness="1" CornerRadius="3"
+                        Background="#301e90ff" Margin="0" Visibility="{Binding IsHovered, Converter={StaticResource BoolToVisibleHidden}}">
+                </Border>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="DataText" DataType="ui:ByteViewModel">
+            <Grid MouseEnter="UIElement_OnMouseEnter" MouseLeave="UIElement_OnMouseLeave"  VerticalAlignment="Top">
+                <TextBlock FontFamily="/ShinraMeter;component/#Droid Sans Mono" Text="{Binding Text}" Margin="0,0" HorizontalAlignment="Center" 
+                           TextWrapping="NoWrap" Height="Auto" VerticalAlignment="Top" TextAlignment="Left"/>
+                <Border BorderBrush="DodgerBlue" BorderThickness="1" CornerRadius="3"
+                        Background="#301e90ff" Margin="0" Visibility="{Binding IsHovered, Converter={StaticResource BoolToVisibleHidden}}">
+                </Border>
+            </Grid>
+        </DataTemplate>
     </Window.Resources>
     <Grid Margin="10" UseLayoutRounding="True">
         <Grid.ColumnDefinitions>
@@ -324,10 +343,10 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Menu DockPanel.Dock="Top" Margin="-10,-10,-10,0" Grid.ColumnSpan="3" Background="#1000">
-            <MenuItem Header="Logs">
+        <Menu DockPanel.Dock="Top" Margin="-10,-10,-10,0" Grid.ColumnSpan="3" Background="#1000" >
+            <MenuItem Header="Logs" >
                 <MenuItem Header="Load log..." Click="Load"></MenuItem>
-                <MenuItem Header="Save log" Click="Save"></MenuItem> 
+                <MenuItem Header="Save log" Click="Save"></MenuItem>
             </MenuItem>
         </Menu>
         <Grid Grid.Column="2" Grid.Row="1">
@@ -487,28 +506,32 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.ColumnSpan="2">Text view</TextBlock>
-            <ScrollViewer Width="270" Grid.Row="1" MinWidth="100"
+            <ScrollViewer Width="260" Grid.Row="1" MinWidth="100"
                           ScrollChanged="HexSwChanged" x:Name="HexSw" VerticalScrollBarVisibility="Hidden">
-                <ItemsControl ItemsSource="{Binding PacketDetails.RowsHex}"
-                          ItemTemplate="{StaticResource HexRow}"
-                          
+                <ItemsControl ItemsSource="{Binding PacketDetails.Data}"
+                          ItemTemplate="{StaticResource DataHex}"
+                              Background="White" 
+                              Name="HexIc"
                           BorderThickness="1" BorderBrush="#ccc">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel Background="White"/>
+                            <UniformGrid Columns="4"  VerticalAlignment="Top"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
             </ScrollViewer>
             <ScrollViewer Width="160" MinWidth="50" Grid.Row="1" Grid.Column="1" x:Name="TextSw" ScrollChanged="HexSwChanged">
-                <ItemsControl ItemsSource="{Binding PacketDetails.RowsText}"
-                              ItemTemplate="{StaticResource HexRow}"
+                <ItemsControl ItemsSource="{Binding PacketDetails.Data}"
+                              ItemTemplate="{StaticResource DataText}"
+                              Background="White"
                               HorizontalAlignment="Stretch"
                               Margin="-1,0,0,0"
-                              BorderThickness="1" BorderBrush="#ccc">
+                              BorderThickness="1" 
+                              BorderBrush="#ccc"
+                              Name="TextIc">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel Background="White"/>
+                            <UniformGrid Columns="4"  VerticalAlignment="Top"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
