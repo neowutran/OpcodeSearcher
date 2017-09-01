@@ -7,7 +7,7 @@
                      xmlns:tera="clr-namespace:Tera;assembly=Tera.Core"
                      xmlns:messages="clr-namespace:Tera.Game.Messages;assembly=Tera.Core"
                      mc:Ignorable="d"
-                     Title="Shinra Meter"
+                     Title="Opcode Searcher"
                      MinHeight="60" MinWidth="219"
                      Width="Auto"
         Background="#f5f5f5"
@@ -124,7 +124,6 @@
                         Grid.ColumnSpan="3" Opacity=".4"/>
                 <Border  
                         Background="{Binding Message.Direction, Converter={StaticResource DirectionToColor}}" 
-                        BorderBrush="{Binding Message.Direction, Converter={StaticResource DirectionToColor}}" 
                         Visibility="{Binding IsSelected, Converter={StaticResource BoolToVisibleHidden}}" 
                         Grid.ColumnSpan="3" x:Name="SelectionBorder" Opacity=".9"></Border>
                 <TextBlock Text="{Binding Message.OpCode}" Foreground="Black" Margin="4,0" FontWeight="Normal"
@@ -320,12 +319,18 @@
             <ColumnDefinition Width="300"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-
-        <Grid Grid.Column="2">
+        <Menu DockPanel.Dock="Top" Margin="-10,-10,-10,0" Grid.ColumnSpan="3" Background="#1000">
+            <MenuItem Header="Logs">
+                <MenuItem Header="Load log..." Click="Load"></MenuItem>
+                <MenuItem Header="Save log" Click="Save"></MenuItem> 
+            </MenuItem>
+        </Menu>
+        <Grid Grid.Column="2" Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -420,14 +425,14 @@
                             <TextBlock Margin="3,2,0,2" Padding="3,0,3,1" Foreground="White">Filters</TextBlock>
                         </Border>
                         <!--Card content-->
-                        <StackPanel Grid.Row="1" Margin="3,0,0,3">
+                        <StackPanel Grid.Row="1" Margin="3,0,3,3">
                             <CheckBox Content="Server" Name="ServerCb" IsChecked="True"></CheckBox>
                             <CheckBox Content="Client" Name="ClientCb" IsChecked="True"></CheckBox>
                             <CheckBox Content="Spam filter" ToolTip="Discards a packet if the previous one has the same opcode." Name="SpamCb" IsChecked="False"></CheckBox>
-                            <Button Content="Clear all" Width="Auto" HorizontalAlignment="Stretch"  Click="ClearAll" Margin="1,1,1,1"></Button>
-                            <Button Content="Dump known to file" Width="Auto" HorizontalAlignment="Stretch" Click="Dump" Margin="1,1,1,1"></Button>
-                            <Button Content="Load Log"  Width="Auto" HorizontalAlignment="Stretch" Click="Load" Margin="1,1,1,1"></Button>
-                            <Button Content="Save Log"  Width="Auto" HorizontalAlignment="Stretch" Click="Save" Margin="1,1,1,1"></Button>
+                            <Button Content="Clear all" Width="Auto" HorizontalAlignment="Stretch"  Click="ClearAll" Margin="1,4,1,1" BorderThickness="0"></Button>
+                            <Button Content="Dump known to file" Width="Auto" HorizontalAlignment="Stretch" Click="Dump" Margin="1,1,1,1" BorderThickness="0"></Button>
+                            <!--<Button Content="Load Log"  Width="Auto" HorizontalAlignment="Stretch" Click="Load" Margin="1,1,1,1"></Button>
+                            <Button Content="Save Log"  Width="Auto" HorizontalAlignment="Stretch" Click="Save" Margin="1,1,1,1"></Button>-->
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -451,7 +456,7 @@
             </Grid>
         </Grid>
         <!--All list-->
-        <Grid>
+        <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -472,7 +477,7 @@
                 </ItemsControl>
             </ScrollViewer>
         </Grid>
-        <Grid Grid.Column="1" >
+        <Grid Grid.Column="1" Grid.Row="1" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
