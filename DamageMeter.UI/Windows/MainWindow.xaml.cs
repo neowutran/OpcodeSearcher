@@ -64,12 +64,9 @@ namespace DamageMeter.UI
             All.CollectionChanged += All_CollectionChanged;
             AllSw.ScrollChanged += AllSw_ScrollChanged;
             DataContext = this;
-            ((ItemsControl)KnownSw.Content).ItemsSource = Known;
+            //((ItemsControl)KnownSw.Content).ItemsSource = Known;
 
         }
-        private static MainWindow _instance;
-
-        public static MainWindow Instance => _instance ?? (_instance = new MainWindow());
 
 
         private void HandleNewMessage(Tuple<List<ParsedMessage>, Dictionary<OpcodeId, OpcodeEnum>> update)
@@ -79,11 +76,15 @@ namespace DamageMeter.UI
                 foreach (var opcode in update.Item2)
                 {
                     Known.Add(opcode.Key, opcode.Value);
+                    OpcodeNameConv.Instance.Known.Add(opcode.Key, opcode.Value);
+                    foreach (var packetViewModel in All.Where(x => x.Message.OpCode == opcode.Key))
+                    {
+                        packetViewModel.RefreshName();
+                    }
                 }
                 KnownSw.ScrollToBottom();
-                foreach (var packetViewModel in All.Where(x => update.Item2.ContainsKey(x.Message.OpCode))) { packetViewModel.RefreshName(); }
-            }
 
+            }
             foreach (var msg in update.Item1)
             {
                 if (msg.Direction == MessageDirection.ServerToClient && ServerCb.IsChecked == false) return;
@@ -107,7 +108,7 @@ namespace DamageMeter.UI
         {
             if (_bottom) Dispatcher.Invoke(() => AllSw.ScrollToBottom());
         }
-        public ObservableDictionary<ushort, OpcodeEnum> Known = new ObservableDictionary<ushort, OpcodeEnum>();
+        public ObservableDictionary<ushort, OpcodeEnum> Known { get; set; } = new ObservableDictionary<ushort, OpcodeEnum>();
         public ObservableCollection<PacketViewModel> All { get; set; } = new ObservableCollection<PacketViewModel>();
         public ObservableCollection<ushort> BlackListedOpcodes { get; set; } = new ObservableCollection<ushort>();
         public ObservableCollection<ushort> WhiteListedOpcodes { get; set; } = new ObservableCollection<ushort>();
@@ -330,12 +331,16 @@ namespace DamageMeter.UI
     }
     public class OpcodeNameConv : IValueConverter
     {
+        private static OpcodeNameConv _instance;
+        public static OpcodeNameConv Instance => _instance ?? (_instance = new OpcodeNameConv());
+        public ObservableDictionary<ushort, OpcodeEnum> Known { get; set; } = new ObservableDictionary<ushort, OpcodeEnum>();
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var opn = (string)value;
             if (opn.Length == 4 && opn[1] != '_')
             {
-                if (MainWindow.Instance.Known.TryGetValue(System.Convert.ToUInt16(opn, 16), out OpcodeEnum opc))
+                if (Instance.Known.TryGetValue(System.Convert.ToUInt16(opn, 16), out OpcodeEnum opc))
                 {
                     return opc.ToString();
                 }

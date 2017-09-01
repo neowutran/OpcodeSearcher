@@ -440,7 +440,7 @@
                 </Grid.RowDefinitions>
                 <TextBlock>Known opcodes</TextBlock>
                 <ScrollViewer Grid.Row="1" x:Name="KnownSw">
-                    <ItemsControl ItemsSource="{Binding}" ItemTemplate="{StaticResource opcdt}"  BorderThickness="1" BorderBrush="#2000" >
+                    <ItemsControl ItemsSource="{Binding Known}" ItemTemplate="{StaticResource opcdt}"  BorderThickness="1" BorderBrush="#2000" >
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Background="White"/>
