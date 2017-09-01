@@ -7,14 +7,14 @@ using Tera.Game.Messages;
 
 namespace DamageMeter.Heuristic
 {
-    public class S_C_PREPARE_RETURN_TO_LOBBY : AbstractPacketHeuristic
+    public class S_PREPARE_RETURN_TO_LOBBY : AbstractPacketHeuristic
     {
-        public static S_C_PREPARE_RETURN_TO_LOBBY Instance => _instance ?? (_instance = new S_C_PREPARE_RETURN_TO_LOBBY());
-        private static S_C_PREPARE_RETURN_TO_LOBBY _instance;
+        public static S_PREPARE_RETURN_TO_LOBBY Instance => _instance ?? (_instance = new S_PREPARE_RETURN_TO_LOBBY());
+        private static S_PREPARE_RETURN_TO_LOBBY _instance;
 
         public bool Initialized = false;
 
-        private S_C_PREPARE_RETURN_TO_LOBBY() : base(OpcodeEnum.S_PREPARE_RETURN_TO_LOBBY)
+        private S_PREPARE_RETURN_TO_LOBBY() : base(OpcodeEnum.S_PREPARE_RETURN_TO_LOBBY)
         {
         }
 

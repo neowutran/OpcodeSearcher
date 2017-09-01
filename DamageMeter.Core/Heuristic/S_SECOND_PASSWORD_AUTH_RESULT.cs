@@ -1,0 +1,35 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Tera.Game.Messages;
+
+namespace DamageMeter.Heuristic
+{
+
+    public class S_SECOND_PASSWORD_AUTH_RESULT : AbstractPacketHeuristic
+    {
+        public static S_SECOND_PASSWORD_AUTH_RESULT Instance => _instance ?? (_instance = new S_SECOND_PASSWORD_AUTH_RESULT());
+        private static S_SECOND_PASSWORD_AUTH_RESULT _instance;
+
+        private S_SECOND_PASSWORD_AUTH_RESULT() : base(OpcodeEnum.S_SECOND_PASSWORD_AUTH_RESULT)
+        {
+        }
+
+        public new void Process(ParsedMessage message)
+        {
+            base.Process(message);
+
+            if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) { return; }
+            if (OpcodeFinder.Instance.PacketCount > 10) { return; }
+            if (message.Payload.Count != 7) { return; }
+            var previousPacket = OpcodeFinder.Instance.GetMessage(OpcodeFinder.Instance.PacketCount - 1);
+            var previousOpcode = OpcodeFinder.Instance.GetOpcode(OpcodeEnum.C_SECOND_PASSWORD_AUTH);
+            if (previousOpcode != null && previousOpcode.HasValue && previousOpcode == previousPacket.OpCode)
+            {
+                OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
+            }
+        }
+    }
+}

@@ -13,6 +13,7 @@ using Message = Tera.Message;
 using OpcodeId = System.UInt16;
 using Tera.PacketLog;
 using System.Globalization;
+using System.Diagnostics;
 
 namespace DamageMeter
 {
@@ -86,11 +87,7 @@ namespace DamageMeter
             MessageFactory = new MessageFactory();
             Connected?.Invoke(server.Name);
         }
-        public Dictionary<OpcodeId, OpcodeEnum> UiUpdateKnownOpcode = new Dictionary<OpcodeId, OpcodeEnum>()
-        {
-            { 19900, OpcodeEnum.C_CHECK_VERSION },
-            { 19901, OpcodeEnum.S_CHECK_VERSION },
-        };
+        public Dictionary<OpcodeId, OpcodeEnum> UiUpdateKnownOpcode = new Dictionary<OpcodeId, OpcodeEnum>();
         public List<ParsedMessage> UiUpdateData = new List<ParsedMessage>();
         private void UpdateUi()
         {
@@ -162,6 +159,8 @@ namespace DamageMeter
                 }
 
                 var message = MessageFactory.Create(obj);
+                message.PrintRaw();
+
                 if(message is C_CHECK_VERSION)
                 {
                     Version = (message as C_CHECK_VERSION).Versions[0];

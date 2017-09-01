@@ -20,7 +20,7 @@ namespace DamageMeter.Heuristic
             if (!OpcodeFinder.Instance.IsKnown(OpcodeEnum.S_GET_USER_LIST)) return;
             if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) { return; }
             
-            if (OpcodeFinder.Instance.PacketCount < 15 && message.Payload.Count > 1000)
+            if (OpcodeFinder.Instance.PacketCount < 18 && message.Payload.Count > 1000)
             {
                 OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
             }

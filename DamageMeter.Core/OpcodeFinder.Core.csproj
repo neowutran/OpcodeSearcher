@@ -102,6 +102,7 @@
     <Compile Include="Heuristic\C_PONG.cs" />
     <Compile Include="Heuristic\C_REQUEST_USER_ITEMLEVEL_INFO.cs" />
     <Compile Include="Heuristic\C_REQUEST_USER_PAPERDOLL_INFO.cs" />
+    <Compile Include="Heuristic\C_SECOND_PASSWORD_AUTH.cs" />
     <Compile Include="Heuristic\C_SELECT_USER.cs" />
     <Compile Include="Heuristic\C_SET_VISIBLE_RANGE.cs" />
     <Compile Include="Heuristic\C_START_SKILL.cs" />
@@ -118,7 +119,7 @@
     <Compile Include="Heuristic\S_CHAT.cs" />
     <Compile Include="Heuristic\S_CONFIRM_INVITE_CODE_BUTTON.cs" />
     <Compile Include="Heuristic\S_CREATURE_CHANGE_HP.cs" />
-    <Compile Include="Heuristic\S_C_PREPARE_RETURN_TO_LOBBY.cs" />
+    <Compile Include="Heuristic\S_PREPARE_RETURN_TO_LOBBY.cs" />
     <Compile Include="Heuristic\S_DECREASE_COOLTIME_SKILL.cs" />
     <Compile Include="Heuristic\S_DESPAWN_NPC.cs" />
     <Compile Include="Heuristic\S_DESPAWN_USER.cs" />
@@ -147,6 +148,8 @@
     <Compile Include="Heuristic\S_PLAYER_CHANGE_STAMINA.cs" />
     <Compile Include="Heuristic\S_PLAYER_STAT_UPDATE.cs" />
     <Compile Include="Heuristic\S_REMAIN_PLAY_TIME.cs" />
+    <Compile Include="Heuristic\S_REQUEST_SECOND_PASSWORD_AUTH.cs" />
+    <Compile Include="Heuristic\S_SECOND_PASSWORD_AUTH_RESULT.cs" />
     <Compile Include="Heuristic\S_SELECT_USER.cs" />
     <Compile Include="Heuristic\S_SPAWN_ME.cs" />
     <Compile Include="Heuristic\S_SPAWN_NPC.cs" />

@@ -46,7 +46,7 @@ namespace DamageMeter.Heuristic
             if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, out Tuple<Type, object> currChar))
             {
                 UpdateLocationInDictionary(OpcodeFinder.KnowledgeDatabaseItem.CharacterSpawnedSuccesfully, false);
-                throw new Exception("Logger character should be know at this point.");
+                return;
             }
             var ch = (LoggedCharacter)currChar.Item2;
             if (target != ch.Cid) return;

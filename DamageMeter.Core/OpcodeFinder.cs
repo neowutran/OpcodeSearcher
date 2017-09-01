@@ -20,7 +20,10 @@ namespace DamageMeter
         public static OpcodeFinder Instance => _instance ?? (_instance = new OpcodeFinder());
         private static OpcodeFinder _instance;
 
-        private OpcodeFinder() { }
+        private OpcodeFinder() {
+            NetworkController.Instance.UiUpdateKnownOpcode.Add(19900, OpcodeEnum.C_CHECK_VERSION);
+            NetworkController.Instance.UiUpdateKnownOpcode.Add(19901, OpcodeEnum.S_CHECK_VERSION);
+        }
 
         public enum KnowledgeDatabaseItem
         {
@@ -101,6 +104,7 @@ namespace DamageMeter
 
         private static readonly List<Delegate> ClientOpcode = new List<Delegate>
         {
+            {new Action<ParsedMessage>(x => Heuristic.C_SECOND_PASSWORD_AUTH.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.C_CHECK_VERSION.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.C_LOGIN_ARBITER.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.C_SET_VISIBLE_RANGE.Instance.Process(x))},
@@ -124,6 +128,8 @@ namespace DamageMeter
 
         private static readonly List<Delegate> ServerOpcode = new List<Delegate>
         {
+            {new Action<ParsedMessage>(x => Heuristic.S_SECOND_PASSWORD_AUTH_RESULT.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_REQUEST_SECOND_PASSWORD_AUTH.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_SELECT_USER.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_LOADING_SCREEN_CONTROL_INFO.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_REMAIN_PLAY_TIME.Instance.Process(x))},
@@ -157,7 +163,7 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.S_SPAWN_PROJECTILE.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_BOSS_GAGE_INFO.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_USER_STATUS.Instance.Process(x))},
-  			{new Action<ParsedMessage>(x => Heuristic.S_C_PREPARE_RETURN_TO_LOBBY.Instance.Process(x))},
+  			{new Action<ParsedMessage>(x => Heuristic.S_PREPARE_RETURN_TO_LOBBY.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_NPC_STATUS.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_LOAD_TOPO.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_START_COOLTIME_ITEM.Instance.Process(x))},
