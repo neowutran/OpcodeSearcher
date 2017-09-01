@@ -101,12 +101,16 @@ namespace DamageMeter.UI
 
             foreach (var msg in update.Item1)
             {
+                _count++;
                 if (msg.Direction == MessageDirection.ServerToClient && ServerCb.IsChecked == false) return;
                 if (msg.Direction == MessageDirection.ClientToServer && ClientCb.IsChecked == false) return;
                 if (WhiteListedOpcodes.Count > 0 && !WhiteListedOpcodes.Contains(msg.OpCode)) return;
                 if (BlackListedOpcodes.Contains(msg.OpCode)) return;
                 if (SpamCb.IsChecked == true && All.Count > 0 && All.Last().Message.OpCode == msg.OpCode) return;
-                _count++;
+                if (_sizeFilter != -1)
+                {
+                    if(msg.Payload.Count != _sizeFilter) return;
+                }
                 All.Add(new PacketViewModel(msg, _count));
             }
         }
@@ -375,6 +379,26 @@ namespace DamageMeter.UI
             var openFileDialog = new Microsoft.Win32.OpenFileDialog { Filter = "Supported Formats, with / without '=' separator (*.txt)|*.txt" };
             if (openFileDialog.ShowDialog() == false) return;
             NetworkController.Instance.LoadOpcodeCheck = openFileDialog.FileName;
+        }
+
+        private int _sizeFilter = -1;
+        private void TextBoxBase_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var s = sender as System.Windows.Controls.TextBox;
+            if (string.IsNullOrEmpty(s.Text))
+            {
+                _sizeFilter = -1;
+                return;
+            }
+            try
+            {
+                _sizeFilter = Convert.ToInt32(s.Text);
+            }
+            catch (Exception exception)
+            {
+                _sizeFilter = -1;
+                return;
+            }
         }
     }
     public class DirectionToColor : IValueConverter

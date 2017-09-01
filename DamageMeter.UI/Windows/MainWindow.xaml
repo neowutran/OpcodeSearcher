@@ -456,6 +456,14 @@
                             <CheckBox Content="Server" Name="ServerCb" IsChecked="True"></CheckBox>
                             <CheckBox Content="Client" Name="ClientCb" IsChecked="True"></CheckBox>
                             <CheckBox Content="Spam filter" ToolTip="Discards a packet if the previous one has the same opcode." Name="SpamCb" IsChecked="False"></CheckBox>
+                            <Grid Margin="1,2,1,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0">Size</TextBlock>
+                                <TextBox Grid.Column="1" Margin="3,0,0,0" Background="#2000" CaretBrush="Black" TextChanged="TextBoxBase_OnTextChanged"></TextBox>
+                            </Grid>
                             <Button Content="Clear all" Width="Auto" HorizontalAlignment="Stretch"  Click="ClearAll" Margin="1,4,1,1" BorderThickness="0"></Button>
                             <Button Content="Dump known to file" Width="Auto" HorizontalAlignment="Stretch" Click="Dump" Margin="1,1,1,1" BorderThickness="0"></Button>
                             <!--<Button Content="Load Log"  Width="Auto" HorizontalAlignment="Stretch" Click="Load" Margin="1,1,1,1"></Button>
@@ -535,7 +543,7 @@
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
             </ScrollViewer>
-            <ScrollViewer Width="160" MinWidth="50" Grid.Row="1" Grid.Column="1" x:Name="TextSw" ScrollChanged="HexSwChanged">
+            <ScrollViewer Width="150" MinWidth="50" Grid.Row="1" Grid.Column="1" x:Name="TextSw" ScrollChanged="HexSwChanged">
                 <ItemsControl ItemsSource="{Binding PacketDetails.Data}"
                               ItemTemplate="{StaticResource DataText}"
                               Background="White"
