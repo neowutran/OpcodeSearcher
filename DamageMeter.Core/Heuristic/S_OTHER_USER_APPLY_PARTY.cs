@@ -39,7 +39,7 @@ namespace DamageMeter.Heuristic
                 var rgc = new RaceGenderClass((Race)race, (Gender)gender, (PlayerClass)clas);
             }
             catch (Exception e) { return; }
-
+            //TODO: add end of stream check (gets confused with some IM packet)
             try
             {
                 if(nameOffset != Reader.BaseStream.Position + 4) return;
