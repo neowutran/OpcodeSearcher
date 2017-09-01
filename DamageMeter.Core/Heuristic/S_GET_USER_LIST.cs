@@ -65,7 +65,7 @@ namespace DamageMeter.Heuristic
                     var worldMapWorldId = Reader.ReadUInt32();
                     var worldMapGuardId = Reader.ReadUInt32();
                     var areaNameId = Reader.ReadUInt32();
-                    Reader.Skip(8 + 1 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 8 + 4 + 4 + 4 + 2 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 2 + 4 + 1 + 4);
+                    Reader.Skip(8 + 1 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 8 + 4 + 4 + 4 + 2 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 2 + 4 + 1 + 4 + 8);
                     var achievementPoints = Reader.ReadInt32();
                     var laurel = Reader.ReadUInt32();
                     var position = Reader.ReadInt32();
