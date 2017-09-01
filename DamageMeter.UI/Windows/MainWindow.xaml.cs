@@ -312,6 +312,25 @@ namespace DamageMeter.UI
         {
             NetworkController.Instance.NeedToSave = true;
         }
+
+        private void UIElement_OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            var s = sender as FrameworkElement;
+            var bvm = s.DataContext as ByteViewModel;
+            bvm.IsHovered = true;
+            int i = 0;
+            i = HexIc.Items.IndexOf(bvm);
+            if (i == -1) i = TextIc.Items.IndexOf(bvm);
+            PacketDetails.RefreshData(i);
+        }
+
+        private void UIElement_OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            var s = sender as FrameworkElement;
+            var bvm = s.DataContext as ByteViewModel;
+            bvm.IsHovered = false;
+
+        }
     }
     public class DirectionToColor : IValueConverter
     {
@@ -408,9 +427,6 @@ namespace DamageMeter.UI
     {
         public ParsedMessage Message { get; }
         private bool _isSelected = false;
-        public List<List<string>> RowsHex => ParseDataHex(Message.Payload);
-        public List<List<string>> RowsText => ParseDataText(Message.Payload);
-
         public bool IsSelected
         {
             get { return _isSelected; }
@@ -421,6 +437,9 @@ namespace DamageMeter.UI
                 OnPropertyChanged(nameof(IsSelected));
             }
         }
+
+        public List<List<string>> RowsHex => ParseDataHex(Message.Payload);
+        public List<List<string>> RowsText => ParseDataText(Message.Payload);
 
         private List<List<string>> ParseDataHex(ArraySegment<byte> p)
         {
@@ -480,6 +499,22 @@ namespace DamageMeter.UI
             return result;
         }
 
+        private List<ByteViewModel> _data;
+        public List<ByteViewModel> Data => _data ?? (_data = BuildByteView());
+
+        private List<ByteViewModel> BuildByteView()
+        {
+            var res = new List<ByteViewModel>();
+            for (int i = 0; i < Message.Payload.Count; i+=4)
+            {
+                var count = i + 4 > Message.Payload.Count? Message.Payload.Count - i : 4;
+                var chunk = new ArraySegment<byte>(Message.Payload.ToArray(), i, count);
+                var bvm = new ByteViewModel(chunk.ToArray());
+                res.Add(bvm);
+            }
+            return res;
+        }
+
         public PacketViewModel(ParsedMessage message)
         {
             Message = message;
@@ -497,6 +532,58 @@ namespace DamageMeter.UI
         public void RefreshName()
         {
             OnPropertyChanged(nameof(Message));
+        }
+
+        public void RefreshData(int i)
+        {
+             Data[i].Refresh();
+            
+        }
+    }
+
+    public class ByteViewModel : INotifyPropertyChanged
+    {
+        private byte[] _value;
+        public string Hex => BitConverter.ToString(_value).Replace("-", string.Empty);
+        public string Text => BuildString();
+
+        private string BuildString()
+        {
+            var sb = new StringBuilder();
+            foreach (var b in _value)
+            {
+                sb.Append(b > 0x21 && b < 0x80 ? (char) b : '⋅');
+            }
+            return sb.ToString();
+        }
+        private bool _isHovered;
+        public bool IsHovered
+        {
+            get => _isHovered;
+            set
+            {
+                if(_isHovered == value)return;
+                _isHovered = value;
+                OnPropertyChanged((nameof(IsHovered)));
+            }
+        }
+
+        public ByteViewModel(byte[] v)
+        {
+            _value = v;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void Refresh()
+        {
+            OnPropertyChanged(nameof(IsHovered));
         }
     }
 }
