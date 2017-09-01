@@ -229,6 +229,8 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.S_CHANGE_PARTY_MANAGER.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_FIN_INTER_PARTY_MATCH.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_OTHER_USER_APPLY_PARTY.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_RESULT_BIDDING_DICE_THROW.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_RESULT_ITEM_BIDDING.Instance.Process(x))},
         };
     }
 }

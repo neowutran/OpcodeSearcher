@@ -152,6 +152,8 @@
     <Compile Include="Heuristic\S_PLAYER_STAT_UPDATE.cs" />
     <Compile Include="Heuristic\S_REMAIN_PLAY_TIME.cs" />
     <Compile Include="Heuristic\S_REQUEST_SECOND_PASSWORD_AUTH.cs" />
+    <Compile Include="Heuristic\S_RESULT_BIDDING_DICE_THROW.cs" />
+    <Compile Include="Heuristic\S_RESULT_ITEM_BIDDING.cs" />
     <Compile Include="Heuristic\S_SECOND_PASSWORD_AUTH_RESULT.cs" />
     <Compile Include="Heuristic\S_SELECT_USER.cs" />
     <Compile Include="Heuristic\S_SPAWN_ME.cs" />
