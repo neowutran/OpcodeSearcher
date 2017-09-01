@@ -188,7 +188,7 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.S_PARTY_MEMBER_CHANGE_STAMINA.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_LOGOUT_PARTY_MEMBER.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_CHANGE_PARTY_MANAGER.Instance.Process(x))},
-
+            {new Action<ParsedMessage>(x => Heuristic.S_FIN_INTER_PARTY_MATCH.Instance.Process(x))},
         };
     }
 }
