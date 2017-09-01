@@ -58,7 +58,7 @@ namespace DamageMeter
                     matched = false;
                 }else if(ReverseKnownOpcode.ContainsKey(opcodeName) && ReverseKnownOpcode[opcodeName] != opcodeId)
                 {
-                    Console.WriteLine("Incorrect match type 2 for " + KnownOpcode[opcodeId] + " : " + opcodeId);
+                    Console.WriteLine("Incorrect match type 2 for " + opcodeName + " : " + opcodeId);
                     matched = false;
                 }else if(!ReverseKnownOpcode.ContainsKey(opcodeName) && !KnownOpcode.ContainsKey(opcodeId))
                 {
