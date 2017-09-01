@@ -109,7 +109,7 @@ namespace DamageMeter.UI
                 if (SpamCb.IsChecked == true && All.Count > 0 && All.Last().Message.OpCode == msg.OpCode) return;
                 if (_sizeFilter != -1)
                 {
-                    if(msg.Payload.Count != _sizeFilter) return;
+                    if (msg.Payload.Count != _sizeFilter) return;
                 }
                 All.Add(new PacketViewModel(msg, _count));
             }
@@ -400,6 +400,89 @@ namespace DamageMeter.UI
                 return;
             }
         }
+
+        public List<PacketViewModel> SearchList { get; set; } = new List<PacketViewModel>();
+        private void SearchBoxChanged(object sender, TextChangedEventArgs e)
+        {
+            var s = sender as System.Windows.Controls.TextBox;
+            SearchList.Clear();
+            foreach (var packetViewModel in All) { packetViewModel.IsSearched = false; }
+            if (string.IsNullOrEmpty(s.Text))
+            {
+                foreach (var packetViewModel in All) { packetViewModel.IsSearched = false; }
+
+                return;
+            }
+            try
+            {
+                var query = Convert.ToUInt16(s.Text);
+                //search by opcode
+                foreach (var packetViewModel in All.Where(x => x.Message.OpCode == query))
+                {
+                    packetViewModel.IsSearched = true;
+                    SearchList.Add(packetViewModel);
+                }
+                if (SearchList.Count != 0)
+                {
+                    var i = All.IndexOf(SearchList[0]);
+                    var container = AllItemsControl.ItemContainerGenerator.ContainerFromItem(All[i]) as FrameworkElement;
+                    container.BringIntoView();
+                    foreach (var packetViewModel in All) { packetViewModel.IsSelected = packetViewModel == All[i]; }
+
+                }
+            }
+            catch (Exception exception)
+            {
+                //search by opcodename
+
+                OpcodeEnum opEnum;
+                try
+                {
+                    opEnum = (OpcodeEnum) Enum.Parse(typeof(OpcodeEnum), s.Text);
+                }
+                catch (Exception e1) { return; }
+
+
+                foreach (var packetViewModel in All.Where(x => x.Message.OpCode == OpcodeFinder.Instance.GetOpcode(opEnum)))
+                {
+                    packetViewModel.IsSearched = true;
+                    SearchList.Add(packetViewModel);
+                }
+                if (SearchList.Count != 0)
+                {
+                    var i = All.IndexOf(SearchList[0]);
+                    var container = AllItemsControl.ItemContainerGenerator.ContainerFromItem(All[i]) as FrameworkElement;
+                    container.BringIntoView();
+                    foreach (var packetViewModel in All) { packetViewModel.IsSelected = packetViewModel == All[i]; }
+
+                }
+            }
+        }
+
+        private int _currentSelectedItemIndex = 0;
+        private void PreviousResult(object sender, RoutedEventArgs e)
+        {
+            if(SearchList.Count == 0) return;
+            if (_currentSelectedItemIndex == 0) _currentSelectedItemIndex = SearchList.Count - 1;
+            else _currentSelectedItemIndex--;
+            var i = All.IndexOf(SearchList[_currentSelectedItemIndex]);
+            var container = AllItemsControl.ItemContainerGenerator.ContainerFromItem(All[i]) as FrameworkElement;
+            container.BringIntoView();
+            foreach (var packetViewModel in All) { packetViewModel.IsSelected = packetViewModel == All[i]; }
+
+        }
+        private void NextResult(object sender, RoutedEventArgs e)
+        {
+            if (SearchList.Count == 0) return;
+            if (_currentSelectedItemIndex == SearchList.Count - 1) _currentSelectedItemIndex = 0;
+            else _currentSelectedItemIndex++;
+            var i = All.IndexOf(SearchList[_currentSelectedItemIndex]);
+            var container = AllItemsControl.ItemContainerGenerator.ContainerFromItem(All[i]) as FrameworkElement;
+            container.BringIntoView();
+            foreach (var packetViewModel in All) { packetViewModel.IsSelected = packetViewModel == All[i]; }
+
+        }
+
     }
     public class DirectionToColor : IValueConverter
     {
@@ -495,7 +578,7 @@ namespace DamageMeter.UI
     public class PacketViewModel : INotifyPropertyChanged
     {
         public ParsedMessage Message { get; }
-        public  int Count { get; }
+        public int Count { get; }
         private bool _isSelected = false;
         public bool IsSelected
         {
@@ -571,7 +654,19 @@ namespace DamageMeter.UI
         }
 
         private List<ByteViewModel> _data;
+        private bool _isSearched;
         public List<ByteViewModel> Data => _data ?? (_data = BuildByteView());
+
+        public bool IsSearched
+        {
+            get => _isSearched;
+            set
+            {
+                if (_isSelected == value) return;
+                _isSearched = value;
+                OnPropertyChanged(nameof(IsSearched));
+            }
+        }
 
         private List<ByteViewModel> BuildByteView()
         {
