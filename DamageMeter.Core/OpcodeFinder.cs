@@ -231,6 +231,7 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.S_OTHER_USER_APPLY_PARTY.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_RESULT_BIDDING_DICE_THROW.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_RESULT_ITEM_BIDDING.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_ASK_BIDDING_RARE_ITEM.Instance.Process(x))},
         };
     }
 }

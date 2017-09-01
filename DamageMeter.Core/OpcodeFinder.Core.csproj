@@ -114,6 +114,7 @@
     <Compile Include="Heuristic\S_ABNORMALITY_REFRESH.cs" />
     <Compile Include="Heuristic\S_ACCOUNT_PACKAGE_LIST.cs" />
     <Compile Include="Heuristic\S_ANSWER_INTERACTIVE.cs" />
+    <Compile Include="Heuristic\S_ASK_BIDDING_RARE_ITEM.cs" />
     <Compile Include="Heuristic\S_BOSS_GAGE_INFO.cs" />
     <Compile Include="Heuristic\S_BROCAST_GUILD_FLAG.cs" />
     <Compile Include="Heuristic\S_CHANGE_PARTY_MANAGER.cs" />
