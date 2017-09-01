@@ -119,6 +119,7 @@
     <Compile Include="Heuristic\S_CHAT.cs" />
     <Compile Include="Heuristic\S_CONFIRM_INVITE_CODE_BUTTON.cs" />
     <Compile Include="Heuristic\S_CREATURE_CHANGE_HP.cs" />
+    <Compile Include="Heuristic\S_FIN_INTER_PARTY_MATCH .cs" />
     <Compile Include="Heuristic\S_PREPARE_RETURN_TO_LOBBY.cs" />
     <Compile Include="Heuristic\S_DECREASE_COOLTIME_SKILL.cs" />
     <Compile Include="Heuristic\S_DESPAWN_NPC.cs" />
