@@ -21,6 +21,7 @@ namespace DamageMeter.Heuristic
             if(message.Payload.Count != 8) return;
 
             if(!OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList)) return;
+            if(!OpcodeFinder.Instance.IsKnown(OpcodeEnum.S_RESULT_BIDDING_DICE_THROW))return;
             var playerId = Reader.ReadUInt64(); //this is uint32 in def, but doesen't match
             if(!DbUtils.IsPartyMember(playerId)) return;
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
