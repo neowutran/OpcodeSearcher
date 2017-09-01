@@ -116,23 +116,30 @@
             <Grid MouseEnter="SelectPacketByDrag" MouseLeftButtonDown="SelectPacketByClick" Margin="0,0,0,-1"
                   Height="20">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="45"/>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="48"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Border Background="{Binding Message.Direction, Converter={StaticResource DirectionToColor}}" 
-                        Grid.ColumnSpan="3" Opacity=".4"/>
-                <Border  
+                        Grid.ColumnSpan="5" Opacity=".4" Grid.Column="0"/>
+                <Border  Grid.Column="0"
                         Background="{Binding Message.Direction, Converter={StaticResource DirectionToColor}}" 
                         Visibility="{Binding IsSelected, Converter={StaticResource BoolToVisibleHidden}}" 
-                        Grid.ColumnSpan="3" x:Name="SelectionBorder" Opacity=".9"></Border>
-                <TextBlock Text="{Binding Message.OpCode}" Foreground="Black" Margin="4,0" FontWeight="Normal"
-                           FontFamily="/ShinraMeter;component/#Droid Sans Mono" VerticalAlignment="Center"/>
+                        Grid.ColumnSpan="5" x:Name="SelectionBorder" Opacity=".9"></Border>
+                <TextBlock Text="{Binding Count}" Foreground="#a000" Margin="4,0" FontSize="10" TextAlignment="Right"
+                           FontFamily="/ShinraMeter;component/#Droid Sans Mono" VerticalAlignment="Center"></TextBlock>
+                <TextBlock Text="{Binding Time}" Foreground="Black" Margin="4,0" FontSize="10" Grid.Column="1"
+                           FontFamily="/ShinraMeter;component/#Droid Sans Mono" VerticalAlignment="Center"></TextBlock>
+                <TextBlock Text="{Binding Message.OpCode}" Foreground="Black" Background="#1000" Margin="4,0" Padding="1,3" FontWeight="Normal" 
+                           Grid.Column="2" TextAlignment="Center"
+                           FontFamily="/ShinraMeter;component/#Droid Sans Mono" VerticalAlignment="Center" />
                 <TextBlock Text="{Binding Message.OpCodeName, Converter={StaticResource OpcodeNameConv}}" 
-                           Foreground="Black" Margin="4,0"  Grid.Column="1" VerticalAlignment="Center"
+                           Foreground="Black" Margin="4,0"  Grid.Column="3" VerticalAlignment="Center"
                            FontFamily="/ShinraMeter;component/#Droid Sans Mono"
                            />
-                <TextBlock Text="{Binding Message.Payload.Count}" Foreground="Black" Grid.Column="2" 
+                <TextBlock Text="{Binding Message.Payload.Count}" Foreground="Black" Grid.Column="4" 
                            HorizontalAlignment="Right" Margin="4,0" VerticalAlignment="Center"
                            FontFamily="/ShinraMeter;component/#Droid Sans Mono"/>
             </Grid>
@@ -333,7 +340,7 @@
     </Window.Resources>
     <Grid Margin="10" UseLayoutRounding="True">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="350"/>
+            <ColumnDefinition Width="450"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="300"/>
         </Grid.ColumnDefinitions>
@@ -483,6 +490,10 @@
             <TextBlock >
                 <Run Text="All packets  - "></Run>
                 <Run Text="{Binding All.Count, Mode=OneWay}"></Run>
+                <Run>(</Run>
+                <Run Text="{Binding Queued, Mode=OneWay}"></Run>
+                <Run>)</Run>
+
             </TextBlock>
             <ScrollViewer Grid.Row="1" x:Name="AllSw">
                 <ItemsControl ItemsSource="{Binding All}" ItemTemplate="{StaticResource msg}"  
@@ -495,6 +506,9 @@
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
             </ScrollViewer>
+            <Border Visibility="{Binding NewMessagesBelow, Converter={StaticResource BoolToVisibleHidden}}" Height="30" Background="MediumSeaGreen" VerticalAlignment="Bottom" Grid.Row="1" Margin="0,0,18,0" Cursor="Hand" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown">
+                <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15" >New messages</TextBlock>
+            </Border>
         </Grid>
         <Grid Grid.Column="1" Grid.Row="1" >
             <Grid.RowDefinitions>

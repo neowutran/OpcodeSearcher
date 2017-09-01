@@ -60,7 +60,7 @@ namespace DamageMeter.UI
             Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
             Title = "Opcode finder V0";
             SystemEvents.SessionEnding += new SessionEndingEventHandler(SystemEvents_SessionEnding);
-            NetworkController.Instance.TickUpdated += (msg) => Dispatcher.Invoke(() => HandleNewMessage(msg));
+            NetworkController.Instance.TickUpdated += (msg) => Dispatcher.BeginInvoke(new Action(() => HandleNewMessage(msg)), DispatcherPriority.Background);
             All.CollectionChanged += All_CollectionChanged;
             AllSw.ScrollChanged += AllSw_ScrollChanged;
             DataContext = this;
@@ -68,14 +68,28 @@ namespace DamageMeter.UI
 
         }
 
-
-        private void HandleNewMessage(Tuple<List<ParsedMessage>, Dictionary<OpcodeId, OpcodeEnum>> update)
+        private int _count;
+        private int _queued;
+        public int Queued
         {
+            get => _queued;
+            set
+            {
+                _queued = value;
+                OnPropertyChanged(nameof(Queued));
+            }
+        }
+
+        private void HandleNewMessage(Tuple<List<ParsedMessage>, Dictionary<OpcodeId, OpcodeEnum>, int> update)
+        {
+            Queued = update.Item3;
             if (update.Item2.Count != 0)
             {
                 foreach (var opcode in update.Item2)
                 {
-                    Known.Add(opcode.Key, opcode.Value);
+                    Dispatcher.Invoke(() =>
+                        Known.Add(opcode.Key, opcode.Value)
+                    );
                     OpcodeNameConv.Instance.Known.Add(opcode.Key, opcode.Value);
                     foreach (var packetViewModel in All.Where(x => x.Message.OpCode == opcode.Key))
                     {
@@ -83,8 +97,8 @@ namespace DamageMeter.UI
                     }
                 }
                 KnownSw.ScrollToBottom();
-
             }
+
             foreach (var msg in update.Item1)
             {
                 if (msg.Direction == MessageDirection.ServerToClient && ServerCb.IsChecked == false) return;
@@ -92,21 +106,40 @@ namespace DamageMeter.UI
                 if (WhiteListedOpcodes.Count > 0 && !WhiteListedOpcodes.Contains(msg.OpCode)) return;
                 if (BlackListedOpcodes.Contains(msg.OpCode)) return;
                 if (SpamCb.IsChecked == true && All.Count > 0 && All.Last().Message.OpCode == msg.OpCode) return;
-                All.Add(new PacketViewModel(msg));
+                _count++;
+                All.Add(new PacketViewModel(msg, _count));
             }
         }
 
         private void AllSw_ScrollChanged(object sender, System.Windows.Controls.ScrollChangedEventArgs e)
         {
-            if (AllSw.VerticalOffset == AllSw.ScrollableHeight) _bottom = true;
+            if (AllSw.VerticalOffset == AllSw.ScrollableHeight)
+            {
+                _bottom = true;
+                NewMessagesBelow = false;
+            }
             else _bottom = false;
         }
 
         private bool _bottom;
-
+        private bool _newMessagesBelow;
+        public bool NewMessagesBelow
+        {
+            get => _newMessagesBelow;
+            set
+            {
+                if (_newMessagesBelow == value) return;
+                _newMessagesBelow = value;
+                OnPropertyChanged(nameof(NewMessagesBelow));
+            }
+        }
         private void All_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (_bottom) Dispatcher.Invoke(() => AllSw.ScrollToBottom());
+            else
+            {
+                NewMessagesBelow = true;
+            }
         }
         public ObservableDictionary<ushort, OpcodeEnum> Known { get; set; } = new ObservableDictionary<ushort, OpcodeEnum>();
         public ObservableCollection<PacketViewModel> All { get; set; } = new ObservableCollection<PacketViewModel>();
@@ -244,14 +277,14 @@ namespace DamageMeter.UI
         private void HexSwChanged(object sender, ScrollChangedEventArgs e)
         {
             var s = sender as ScrollViewer;
-            if(s.Name == nameof(HexSw)) TextSw.ScrollToVerticalOffset(HexSw.VerticalOffset);
+            if (s.Name == nameof(HexSw)) TextSw.ScrollToVerticalOffset(HexSw.VerticalOffset);
             else HexSw.ScrollToVerticalOffset(TextSw.VerticalOffset);
         }
 
         private void ChunkMouseEnter(object sender, MouseEventArgs e)
         {
             var s = sender as Border;
-            var dc = (string) s.DataContext;
+            var dc = (string)s.DataContext;
         }
 
         private void ClearAll(object sender, RoutedEventArgs e)
@@ -267,7 +300,7 @@ namespace DamageMeter.UI
                 var s = $"{keyVal.Value} = {keyVal.Key}";
                 lines.Add(s);
             }
-            File.WriteAllLines($"{Environment.CurrentDirectory}/opcodes {DateTime.Now.ToString().Replace('/','-').Replace(':', '-')}.txt", lines);
+            File.WriteAllLines($"{Environment.CurrentDirectory}/opcodes {DateTime.Now.ToString().Replace('/', '-').Replace(':', '-')}.txt", lines);
         }
 
         private void Load(object sender, RoutedEventArgs e)
@@ -279,8 +312,8 @@ namespace DamageMeter.UI
 
         private void RemoveBlacklistedOpcode(object sender, RoutedEventArgs e)
         {
-            var s = (System.Windows.Controls.Button) sender;
-            BlackListedOpcodes.Remove((ushort) s.DataContext);
+            var s = (System.Windows.Controls.Button)sender;
+            BlackListedOpcodes.Remove((ushort)s.DataContext);
         }
 
         private void RemoveWhitelistedOpcode(object sender, RoutedEventArgs e)
@@ -330,6 +363,11 @@ namespace DamageMeter.UI
             var bvm = s.DataContext as ByteViewModel;
             bvm.IsHovered = false;
 
+        }
+
+        private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            AllSw.ScrollToBottom();
         }
     }
     public class DirectionToColor : IValueConverter
@@ -413,7 +451,7 @@ namespace DamageMeter.UI
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var v = (bool) value;
+            var v = (bool)value;
             return v ? Visibility.Visible : Visibility.Hidden;
         }
 
@@ -426,6 +464,7 @@ namespace DamageMeter.UI
     public class PacketViewModel : INotifyPropertyChanged
     {
         public ParsedMessage Message { get; }
+        public  int Count { get; }
         private bool _isSelected = false;
         public bool IsSelected
         {
@@ -438,6 +477,7 @@ namespace DamageMeter.UI
             }
         }
 
+        public string Time => $"{Message.Time.ToString("HH:mm:ss.ffff")}";
         public List<List<string>> RowsHex => ParseDataHex(Message.Payload);
         public List<List<string>> RowsText => ParseDataText(Message.Payload);
 
@@ -505,9 +545,9 @@ namespace DamageMeter.UI
         private List<ByteViewModel> BuildByteView()
         {
             var res = new List<ByteViewModel>();
-            for (int i = 0; i < Message.Payload.Count; i+=4)
+            for (int i = 0; i < Message.Payload.Count; i += 4)
             {
-                var count = i + 4 > Message.Payload.Count? Message.Payload.Count - i : 4;
+                var count = i + 4 > Message.Payload.Count ? Message.Payload.Count - i : 4;
                 var chunk = new ArraySegment<byte>(Message.Payload.ToArray(), i, count);
                 var bvm = new ByteViewModel(chunk.ToArray());
                 res.Add(bvm);
@@ -515,9 +555,10 @@ namespace DamageMeter.UI
             return res;
         }
 
-        public PacketViewModel(ParsedMessage message)
+        public PacketViewModel(ParsedMessage message, int c)
         {
             Message = message;
+            Count = c;
         }
 
 
@@ -536,8 +577,8 @@ namespace DamageMeter.UI
 
         public void RefreshData(int i)
         {
-             Data[i].Refresh();
-            
+            Data[i].Refresh();
+
         }
     }
 
@@ -552,7 +593,7 @@ namespace DamageMeter.UI
             var sb = new StringBuilder();
             foreach (var b in _value)
             {
-                sb.Append(b > 0x21 && b < 0x80 ? (char) b : '⋅');
+                sb.Append(b > 0x21 && b < 0x80 ? (char)b : '⋅');
             }
             return sb.ToString();
         }
@@ -562,7 +603,7 @@ namespace DamageMeter.UI
             get => _isHovered;
             set
             {
-                if(_isHovered == value)return;
+                if (_isHovered == value) return;
                 _isHovered = value;
                 OnPropertyChanged((nameof(IsHovered)));
             }
