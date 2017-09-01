@@ -124,6 +124,7 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.C_CHANGE_PARTY_MEMBER_AUTHORITY.Instance.Process(x))}, 
             {new Action<ParsedMessage>(x => Heuristic.C_CHANGE_PARTY_MANAGER.Instance.Process(x))}, 
             {new Action<ParsedMessage>(x => Heuristic.C_START_SKILL.Instance.Process(x))}, 
+            {new Action<ParsedMessage>(x => Heuristic.C_PARTY_APPLICATION_DENIED.Instance.Process(x))}, 
         };
 
         private static readonly List<Delegate> ServerOpcode = new List<Delegate>
@@ -189,6 +190,7 @@ namespace DamageMeter
             {new Action<ParsedMessage>(x => Heuristic.S_LOGOUT_PARTY_MEMBER.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_CHANGE_PARTY_MANAGER.Instance.Process(x))},
             {new Action<ParsedMessage>(x => Heuristic.S_FIN_INTER_PARTY_MATCH.Instance.Process(x))},
+            {new Action<ParsedMessage>(x => Heuristic.S_OTHER_USER_APPLY_PARTY.Instance.Process(x))},
         };
     }
 }

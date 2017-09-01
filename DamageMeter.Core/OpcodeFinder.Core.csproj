@@ -98,6 +98,7 @@
     <Compile Include="Heuristic\C_GET_USER_GUILD_LOGO.cs" />
     <Compile Include="Heuristic\C_GET_USER_LIST.cs" />
     <Compile Include="Heuristic\C_LOGIN_ARBITER.cs" />
+    <Compile Include="Heuristic\C_PARTY_APPLICATION_DENIED.cs" />
     <Compile Include="Heuristic\C_PLAYER_LOCATION.cs" />
     <Compile Include="Heuristic\C_PONG.cs" />
     <Compile Include="Heuristic\C_REQUEST_USER_ITEMLEVEL_INFO.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="Heuristic\S_CONFIRM_INVITE_CODE_BUTTON.cs" />
     <Compile Include="Heuristic\S_CREATURE_CHANGE_HP.cs" />
     <Compile Include="Heuristic\S_FIN_INTER_PARTY_MATCH .cs" />
+    <Compile Include="Heuristic\S_OTHER_USER_APPLY_PARTY.cs" />
     <Compile Include="Heuristic\S_PREPARE_RETURN_TO_LOBBY.cs" />
     <Compile Include="Heuristic\S_DECREASE_COOLTIME_SKILL.cs" />
     <Compile Include="Heuristic\S_DESPAWN_NPC.cs" />
