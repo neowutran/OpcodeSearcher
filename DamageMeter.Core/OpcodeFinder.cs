@@ -12,6 +12,7 @@ using OpcodeId = System.UInt16;
 using Grade = System.UInt32;
 using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 
 namespace DamageMeter
 {
@@ -35,6 +36,43 @@ namespace DamageMeter
             LoggedCharacterAbnormalities = 5,
             CharacterSpawnedSuccesfully = 6,
             PartyMemberList
+        }
+
+        public bool OpcodePartialMatch()
+        {
+            var opcodeFile = NetworkController.Instance.LoadOpcodeCheck;
+            NetworkController.Instance.LoadOpcodeCheck = null;
+            var file = new System.IO.StreamReader(opcodeFile);
+            string line;
+            bool matched = true;
+            while ((line = file.ReadLine()) != null)
+            {
+                line = line.Replace("=", "");
+                var match = Regex.Match(line, @"(?i)^\s*([a-z_0-9]+)\s+(\d+)\s*$");
+                Enum.TryParse(match.Groups[1].Value, out OpcodeEnum opcodeName);
+                OpcodeId opcodeId = OpcodeId.Parse(match.Groups[2].Value);
+
+                if(KnownOpcode.ContainsKey(opcodeId) && KnownOpcode[opcodeId] != opcodeName)
+                {
+                    Console.WriteLine("Incorrect match type 1 for " + KnownOpcode[opcodeId] + " : " + opcodeId);
+                    matched = false;
+                }else if(ReverseKnownOpcode.ContainsKey(opcodeName) && ReverseKnownOpcode[opcodeName] != opcodeId)
+                {
+                    Console.WriteLine("Incorrect match type 2 for " + KnownOpcode[opcodeId] + " : " + opcodeId);
+                    matched = false;
+                }else if(!ReverseKnownOpcode.ContainsKey(opcodeName) && !KnownOpcode.ContainsKey(opcodeId))
+                {
+                    // Stay silent if the parser didn't found every opcode. 
+                    // TODO: add option for strict match: aka -> this case generate error 
+                }
+                else
+                {
+                    Console.WriteLine("Correct match for " + KnownOpcode[opcodeId] + " : " + opcodeId);
+                }
+            }
+
+            file.Close();
+            return matched;
         }
 
         // Use that to set value like CID etc ...

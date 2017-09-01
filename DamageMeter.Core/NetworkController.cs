@@ -49,6 +49,7 @@ namespace DamageMeter
 
         public string LoadFileName { get; set; }
         public bool NeedToSave { get; set; }
+        public string LoadOpcodeCheck { get; set; }
 
         public static NetworkController Instance => _instance ?? (_instance = new NetworkController());
 
@@ -124,6 +125,8 @@ namespace DamageMeter
             Network = 1,
             LogFile = 2
         }
+
+
         private AnalysisTypeEnum AnalysisType = 0;
         private void PacketAnalysisLoop()
         {
@@ -132,9 +135,19 @@ namespace DamageMeter
             {
                 LoadFile();
                 SaveLog();
+                if (LoadOpcodeCheck != null) {
+                    if (OpcodeFinder.Instance.OpcodePartialMatch())
+                    {
+                        MessageBox.Show("Partial match: SUCCESS");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Partial match: FAIL");
+                    }
+                }
 
                 // Update the UI at every packet if the backend it not overload & if we are recording the network
-                if(AnalysisType == AnalysisTypeEnum.Network && TeraSniffer.Instance.Packets.Count < 2000)
+                if (AnalysisType == AnalysisTypeEnum.Network && TeraSniffer.Instance.Packets.Count < 2000)
                 {
                     UpdateUi();
                 }
