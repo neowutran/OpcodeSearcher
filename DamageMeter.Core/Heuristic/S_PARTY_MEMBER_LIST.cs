@@ -36,7 +36,7 @@ namespace DamageMeter.Heuristic
             var unk7 = Reader.ReadByte();
             if (unk7 != 0) return;
             var unk8 = Reader.ReadUInt32();
-            if (unk8 != 1) return;
+            //if (unk8 != 1) return;  //not always 1 (always 257 when logging in while already in party?)
             var unk9 = Reader.ReadByte();
             if (unk9 != 0) return;
             var unk10 = Reader.ReadUInt32();
