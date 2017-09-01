@@ -55,6 +55,12 @@ namespace DamageMeter
             var list = (List<PartyMember>)res.Item2;
             return list.Any(x => x.PlayerId == playerId);
         }
+        public static bool IsPartyMember(ulong cId)
+        {
+            if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList, out var res)) { return false; }
+            var list = (List<PartyMember>)res.Item2;
+            return list.Any(x => x.Cid == cId);
+        }
         public static bool IsPartyMember(uint playerId, uint serverId)
         {
             if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList, out var res)) { return false; }
@@ -139,9 +145,9 @@ namespace DamageMeter
 
         public static PartyMember GetPartyMember(uint playerId, uint serverId)
         {
-            if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList, out var res)) { return new PartyMember(0,0,""); }
+            if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList, out var res)) { return new PartyMember(0,0,"",0); }
             var list = (List<PartyMember>)res.Item2;
-            if (!list.Any(x => x.ServerId == serverId && x.PlayerId == playerId)) { return new PartyMember(0,0,""); }
+            if (!list.Any(x => x.ServerId == serverId && x.PlayerId == playerId)) { return new PartyMember(0,0,"",0); }
             return  list.FirstOrDefault(x => x.ServerId == serverId && x.PlayerId == playerId);
         }
     }

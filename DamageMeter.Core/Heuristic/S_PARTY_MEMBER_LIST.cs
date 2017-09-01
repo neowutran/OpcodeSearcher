@@ -57,14 +57,16 @@ namespace DamageMeter.Heuristic
                 if (level > 65) return;
                 var cl = Reader.ReadUInt32();
                 if (cl > 12) return;
-                Reader.Skip(1 + 8 + 4 + 1);
+                Reader.Skip(1);
+                var cId = Reader.ReadUInt64();
+                Reader.Skip( 4 + 1);
                 var laurel = Reader.ReadUInt32();
                 if (laurel > 5) return;
                 Reader.BaseStream.Position = nameOffset - 4;
                 var name = "";
                 try { name = Reader.ReadTeraString(); }
                 catch (Exception e) { return; }
-                var p = new PartyMember(playerId, serverId, name);
+                var p = new PartyMember(playerId, serverId, name, cId);
                 list.Add(p);
             }
 
@@ -90,11 +92,13 @@ namespace DamageMeter.Heuristic
                 var playerId = Reader.ReadUInt32();
                 var level = Reader.ReadUInt32();
                 var cl = Reader.ReadUInt32();
-                Reader.Skip(1 + 8 + 4 + 1);
+                Reader.Skip(1);
+                var cId = Reader.ReadUInt64();
+                Reader.Skip(4 + 1);
                 var laurel = Reader.ReadUInt32();
                 Reader.BaseStream.Position = nameOffset - 4;
                 var name = Reader.ReadTeraString(); 
-                var p = new PartyMember(playerId, serverId, name);
+                var p = new PartyMember(playerId, serverId, name, cId);
                 list.Add(p);
             }
 
@@ -115,15 +119,17 @@ namespace DamageMeter.Heuristic
         public string Name;
         public uint PlayerId;
         public uint ServerId;
+        public ulong Cid;
         public uint MaxHp;
         public uint MaxMp;
         public uint MaxRe;
         public List<uint> Abnormals;
-        public PartyMember(uint playerId, uint serverId, string name)
+        public PartyMember(uint playerId, uint serverId, string name, ulong cid)
         {
             Name = name;
             PlayerId = playerId;
             ServerId = serverId;
+            Cid = cid;
             Abnormals = new List<uint>();
             MaxHp = 0;
             MaxMp = 0;
