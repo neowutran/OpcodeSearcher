@@ -90,6 +90,10 @@ namespace DamageMeter.Heuristic
                 return;
             }
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
+            if (C_WHISPER.PossibleOpcode != 0)
+            {
+                if(messageTxt == C_WHISPER.LastWhisperText && authorName == C_WHISPER.LastWhisperAuthor) OpcodeFinder.Instance.SetOpcode(C_WHISPER.PossibleOpcode, OpcodeEnum.C_WHISPER);
+            }
         }
 
     }

@@ -10,6 +10,9 @@ namespace DamageMeter.Heuristic
   
     public class C_WHISPER : AbstractPacketHeuristic
     {
+        public static string LastWhisperAuthor;
+        public static string LastWhisperText;
+        public static ushort PossibleOpcode;
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -53,7 +56,10 @@ namespace DamageMeter.Heuristic
             {
                 return;
             }
-            OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
+            //OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE); (it gets confused with add friend)
+            PossibleOpcode = message.OpCode;
+            LastWhisperAuthor = authorName;
+            LastWhisperText = messageTxt;
         }
 
     }
