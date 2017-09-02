@@ -39,8 +39,9 @@ namespace DamageMeter.Heuristic
             }
             catch (Exception e) { return; }
 
-
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
+            OpcodeFinder.Instance.SetOpcode(OpcodeFinder.Instance.GetMessage(OpcodeFinder.Instance.PacketCount - 1).OpCode, OpcodeEnum.C_ASK_INTERACTIVE);
+            //if (OpcodeFinder.Instance.GetMessage(OpcodeFinder.Instance.PacketCount - 1).OpCode == C_ASK_INTERACTIVE.PossibleOpcode) { C_ASK_INTERACTIVE.Confirm(); }
         }
     }
 }
