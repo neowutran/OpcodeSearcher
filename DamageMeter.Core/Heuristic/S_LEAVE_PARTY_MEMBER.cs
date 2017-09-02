@@ -23,7 +23,7 @@ namespace DamageMeter.Heuristic
             if (message.Payload.Count < 2 + 4 + 4 + 4) return;
             if (!OpcodeFinder.Instance.IsKnown(OpcodeEnum.S_PARTY_MEMBER_LIST)) return;
             if (!OpcodeFinder.Instance.IsKnown(OpcodeEnum.S_CHANGE_PARTY_MANAGER)) return; //avoid parsing that as it has the same structure
-            if(!OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList)) return;
+            if(!DbUtils.IsPartyFormed()) return;
             var nameOffset = Reader.ReadUInt16();
             if (nameOffset != 14) return;
 

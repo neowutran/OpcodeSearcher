@@ -150,6 +150,11 @@ namespace DamageMeter
             if (!list.Any(x => x.ServerId == serverId && x.PlayerId == playerId)) { return new PartyMember(0,0,"",0); }
             return  list.FirstOrDefault(x => x.ServerId == serverId && x.PlayerId == playerId);
         }
+
+        public static bool IsPartyFormed()
+        {
+            return OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList);
+        }
     }
 
 }
