@@ -115,12 +115,16 @@
     <Compile Include="Heuristic\S_ACCOUNT_PACKAGE_LIST.cs" />
     <Compile Include="Heuristic\S_ANSWER_INTERACTIVE.cs" />
     <Compile Include="Heuristic\S_ASK_BIDDING_RARE_ITEM.cs" />
+    <Compile Include="Heuristic\S_AVAILABLE_SOCIAL_LIST.cs" />
     <Compile Include="Heuristic\S_BOSS_GAGE_INFO.cs" />
     <Compile Include="Heuristic\S_BROCAST_GUILD_FLAG.cs" />
     <Compile Include="Heuristic\S_CHANGE_PARTY_MANAGER.cs" />
     <Compile Include="Heuristic\S_CHAT.cs" />
+    <Compile Include="Heuristic\S_CLEAR_QUEST_INFO.cs" />
     <Compile Include="Heuristic\S_CONFIRM_INVITE_CODE_BUTTON.cs" />
     <Compile Include="Heuristic\S_CREATURE_CHANGE_HP.cs" />
+    <Compile Include="Heuristic\S_DAILY_QUEST_COMPLETE_COUNT.cs" />
+    <Compile Include="Heuristic\S_EVENT_QUEST_SUMMARY.cs" />
     <Compile Include="Heuristic\S_FIN_INTER_PARTY_MATCH .cs" />
     <Compile Include="Heuristic\S_INVEN.cs" />
     <Compile Include="Heuristic\S_OTHER_USER_APPLY_PARTY.cs" />
@@ -152,6 +156,7 @@
     <Compile Include="Heuristic\S_PLAYER_CHANGE_MP.cs" />
     <Compile Include="Heuristic\S_PLAYER_CHANGE_STAMINA.cs" />
     <Compile Include="Heuristic\S_PLAYER_STAT_UPDATE.cs" />
+    <Compile Include="Heuristic\S_QUEST_INFO.cs" />
     <Compile Include="Heuristic\S_REMAIN_PLAY_TIME.cs" />
     <Compile Include="Heuristic\S_REQUEST_SECOND_PASSWORD_AUTH.cs" />
     <Compile Include="Heuristic\S_RESULT_BIDDING_DICE_THROW.cs" />
