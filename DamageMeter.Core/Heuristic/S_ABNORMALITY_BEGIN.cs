@@ -48,8 +48,9 @@ namespace DamageMeter.Heuristic
             {
                 var ch = (LoggedCharacter) result;
                 if (ch.Cid != target) return;
+                AddAbnormToDb(id);
+                OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
             }
-            OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
         }
 
         private void AddAbnormToDb(uint abId)
