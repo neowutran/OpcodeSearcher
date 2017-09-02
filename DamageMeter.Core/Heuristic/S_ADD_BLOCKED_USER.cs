@@ -36,6 +36,7 @@ namespace DamageMeter.Heuristic
             if(C_BLOCK_USER.PossibleOpcode == 0) return;
             if (C_BLOCK_USER.LastBlockedUser.Equals(name, StringComparison.OrdinalIgnoreCase))
             {
+                if(OpcodeFinder.Instance.GetMessage(OpcodeFinder.Instance.PacketCount - 1).OpCode != C_BLOCK_USER.PossibleOpcode) return;
                 OpcodeFinder.Instance.SetOpcode(C_BLOCK_USER.PossibleOpcode, OpcodeEnum.C_BLOCK_USER);
                 OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
                 S_USER_BLOCK_LIST.BlockedUsers.Add(playerId, name);
