@@ -17,7 +17,7 @@ namespace DamageMeter.Heuristic
             if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) return;
             if (!OpcodeFinder.Instance.IsKnown(OpcodeEnum.S_PARTY_MEMBER_LIST)) return;
             if(message.Payload.Count != 4+4+1)return;
-            if(!OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList)) return;
+            if(!DbUtils.IsPartyFormed()) return;
             var serverId = Reader.ReadUInt32();
             if(BasicTeraData.Instance.Servers.GetServer(serverId) == null) return;
             var playerId = Reader.ReadUInt32();

@@ -14,12 +14,12 @@ namespace DamageMeter.Heuristic
             base.Process(message);
             if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) return;
             if (message.Payload.Count != 8+4) return;
-            if(!OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList))return;
+            if(!DbUtils.IsPartyFormed())return;
 
             var cid = Reader.ReadUInt64();
             var roll = Reader.ReadUInt32();
 
-            if(roll > 100 && roll != UInt32.MaxValue) return;
+            if(roll > 100 && roll != UInt32.MaxValue && roll != 0) return;
             if(!DbUtils.IsPartyMember(cid) && DbUtils.GetPlayercId() != cid) return;
 
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);

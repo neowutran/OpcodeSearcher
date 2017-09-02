@@ -15,7 +15,7 @@ namespace DamageMeter.Heuristic
             if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) return;
 
             if (message.Payload.Count < 2 + 2 + 4 + 4 + 4 + 4 + 4 + 1 + 4 + 1 + 4) return;
-            if(!OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList)) return;
+            if(!DbUtils.IsPartyFormed()) return;
             var count = Reader.ReadUInt16();
             var offset = Reader.ReadUInt16();
             var index = Reader.ReadUInt32();
