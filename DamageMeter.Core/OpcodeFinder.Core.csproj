@@ -102,11 +102,13 @@
     <Compile Include="Heuristic\C_PLAYER_FLYING_LOCATION.cs" />
     <Compile Include="Heuristic\C_PLAYER_LOCATION.cs" />
     <Compile Include="Heuristic\C_PONG.cs" />
+    <Compile Include="Heuristic\C_REQUEST_NONDB_ITEM_INFO.cs" />
     <Compile Include="Heuristic\C_REQUEST_USER_ITEMLEVEL_INFO.cs" />
     <Compile Include="Heuristic\C_REQUEST_USER_PAPERDOLL_INFO.cs" />
     <Compile Include="Heuristic\C_SECOND_PASSWORD_AUTH.cs" />
     <Compile Include="Heuristic\C_SELECT_USER.cs" />
     <Compile Include="Heuristic\C_SET_VISIBLE_RANGE.cs" />
+    <Compile Include="Heuristic\C_SHOW_ITEM_TOOLTIP_EX.cs" />
     <Compile Include="Heuristic\C_START_SKILL.cs" />
     <Compile Include="Heuristic\C_USE_ITEM.cs" />
     <Compile Include="Heuristic\C_WHISPER.cs" />
