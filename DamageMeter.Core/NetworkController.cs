@@ -88,8 +88,8 @@ namespace DamageMeter
             MessageFactory = new MessageFactory();
             Connected?.Invoke(server.Name);
         }
-        public Dictionary<OpcodeId, OpcodeEnum> UiUpdateKnownOpcode = new Dictionary<OpcodeId, OpcodeEnum>();
-        public List<ParsedMessage> UiUpdateData = new List<ParsedMessage>();
+        public Dictionary<OpcodeId, OpcodeEnum> UiUpdateKnownOpcode;
+        public List<ParsedMessage> UiUpdateData;
         private void UpdateUi()
         {
             var currentLastPacket = OpcodeFinder.Instance.PacketCount;
@@ -177,6 +177,8 @@ namespace DamageMeter
                 if(message is C_CHECK_VERSION)
                 {
                     Version = (message as C_CHECK_VERSION).Versions[0];
+                    // TODO reset backend & UI
+
                 }
                 OpcodeFinder.Instance.Find(message);
             }

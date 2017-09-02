@@ -4,3 +4,6 @@
 [submodule "resources/data"]
 	path = resources/data
 	url = https://github.com/neowutran/TeraDpsMeterData
+[submodule "TeraLogs"]
+	path = TeraLogs
+	url = https://github.com/neowutran/TeraLogs

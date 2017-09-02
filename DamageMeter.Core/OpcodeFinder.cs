@@ -23,8 +23,12 @@ namespace DamageMeter
         private static OpcodeFinder _instance;
 
         private OpcodeFinder() {
-            NetworkController.Instance.UiUpdateKnownOpcode.Add(19900, OpcodeEnum.C_CHECK_VERSION);
-            NetworkController.Instance.UiUpdateKnownOpcode.Add(19901, OpcodeEnum.S_CHECK_VERSION);
+            NetworkController.Instance.UiUpdateKnownOpcode = new Dictionary<OpcodeId, OpcodeEnum>
+            {
+                { 19900, OpcodeEnum.C_CHECK_VERSION },
+                { 19901, OpcodeEnum.S_CHECK_VERSION }
+            };
+            NetworkController.Instance.UiUpdateData = new List<ParsedMessage>();
             var mainMethod = "Process";
             var classes = AppDomain.CurrentDomain.GetAssemblies()
             .Select(x => x.GetTypes())
