@@ -448,6 +448,7 @@ namespace DamageMeter.UI
                     {
                         var container = AllItemsControl.ItemContainerGenerator.ContainerFromItem(All[i]) as FrameworkElement;
                         container.BringIntoView();
+                        PacketDetails = All[i];
                     }
                     foreach (var packetViewModel in All) { packetViewModel.IsSelected = packetViewModel == All[i]; }
 
@@ -477,6 +478,7 @@ namespace DamageMeter.UI
                     {
                         var container = AllItemsControl.ItemContainerGenerator.ContainerFromItem(All[i]) as FrameworkElement;
                         container.BringIntoView();
+                        PacketDetails = All[i];
                     }
                     foreach (var packetViewModel in All) { packetViewModel.IsSelected = packetViewModel == All[i]; }
 
@@ -495,6 +497,7 @@ namespace DamageMeter.UI
             var i = All.IndexOf(SearchList[_currentSelectedItemIndex]);
             var container = AllItemsControl.ItemContainerGenerator.ContainerFromItem(All[i]) as FrameworkElement;
             container.BringIntoView();
+            PacketDetails = All[i];
             foreach (var packetViewModel in All) { packetViewModel.IsSelected = packetViewModel == All[i]; }
 
         }
@@ -506,6 +509,7 @@ namespace DamageMeter.UI
             var i = All.IndexOf(SearchList[_currentSelectedItemIndex]);
             var container = AllItemsControl.ItemContainerGenerator.ContainerFromItem(All[i]) as FrameworkElement;
             container.BringIntoView();
+            PacketDetails = All[i];
             foreach (var packetViewModel in All) { packetViewModel.IsSelected = packetViewModel == All[i]; }
 
         }
