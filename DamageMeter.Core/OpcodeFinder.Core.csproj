@@ -118,6 +118,7 @@
     <Compile Include="Heuristic\S_AVAILABLE_SOCIAL_LIST.cs" />
     <Compile Include="Heuristic\S_BOSS_GAGE_INFO.cs" />
     <Compile Include="Heuristic\S_BROCAST_GUILD_FLAG.cs" />
+    <Compile Include="Heuristic\S_CANT_FLY_ANYMORE.cs" />
     <Compile Include="Heuristic\S_CHANGE_PARTY_MANAGER.cs" />
     <Compile Include="Heuristic\S_CHAT.cs" />
     <Compile Include="Heuristic\S_CLEAR_QUEST_INFO.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="Heuristic\S_FIN_INTER_PARTY_MATCH .cs" />
     <Compile Include="Heuristic\S_INVEN.cs" />
     <Compile Include="Heuristic\S_OTHER_USER_APPLY_PARTY.cs" />
+    <Compile Include="Heuristic\S_PLAYER_CHANGE_FLIGHT_ENERGY.cs" />
     <Compile Include="Heuristic\S_PREPARE_RETURN_TO_LOBBY.cs" />
     <Compile Include="Heuristic\S_DECREASE_COOLTIME_SKILL.cs" />
     <Compile Include="Heuristic\S_DESPAWN_NPC.cs" />
@@ -183,6 +185,7 @@
     <Compile Include="Heuristic\S_WEAK_POINT.cs" />
     <Compile Include="Heuristic\S_WHISPER.cs" />
     <Compile Include="DbUtils.cs" />
+    <Compile Include="Heuristic\S_WORLD_QUEST_VILLAGER_INFO.cs" />
     <Compile Include="LogReader.cs" />
     <Compile Include="OpcodeEnum.cs" />
     <Compile Include="OpcodeFinder.cs" />
