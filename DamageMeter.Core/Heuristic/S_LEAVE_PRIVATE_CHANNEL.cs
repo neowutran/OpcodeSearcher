@@ -12,13 +12,24 @@ namespace DamageMeter.Heuristic
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
-            if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) return;
+            if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode))
+            {
+                if (OpcodeFinder.Instance.GetOpcode(OPCODE) == message.OpCode) { Parse(); }
+                return;
+            }
             if (message.Payload.Count != 4) return;
             if (!OpcodeFinder.Instance.IsKnown(OpcodeEnum.S_LOGIN)) return;
             if (!OpcodeFinder.Instance.IsKnown(OpcodeEnum.S_JOIN_PRIVATE_CHANNEL)) return;
-            if(Reader.ReadUInt32() != S_JOIN_PRIVATE_CHANNEL.LastJoinedChannelId) return;
+            var id = Reader.ReadUInt32();
+            if (!S_JOIN_PRIVATE_CHANNEL.JoinedChannelId.Contains(id)) return;
             //need check on client packet?
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
+        }
+
+        private void Parse()
+        {
+            var id = Reader.ReadUInt32();
+            S_JOIN_PRIVATE_CHANNEL.JoinedChannelId.Remove(id);
         }
     }
 }

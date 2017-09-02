@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,11 @@ namespace DamageMeter.Heuristic
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
-            if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) return;
+            if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode))
+            {
+                if (OpcodeFinder.Instance.GetOpcode(OPCODE) == message.OpCode) { Parse(); }
+                return;
+            }
             if (message.Payload.Count < 2) return;
             var offset = Reader.ReadUInt16();
             try
@@ -29,6 +34,14 @@ namespace DamageMeter.Heuristic
             }
             catch (Exception e) { return; }
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
+        }
+
+        private void Parse()
+        {
+            Reader.Skip(2);
+            var msg = Reader.ReadTeraString();
+            if (msg.StartsWith("@970") && msg.Contains("ChannelName")) S_JOIN_PRIVATE_CHANNEL.Confirm();
+
         }
     }
 }
