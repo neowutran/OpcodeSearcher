@@ -38,9 +38,12 @@ namespace DamageMeter.Heuristic
 
         private void Parse()
         {
+            //we parse sysMsgs to confirm some packets, since they are usually followed by system messages
             Reader.Skip(2);
             var msg = Reader.ReadTeraString();
             if (msg.StartsWith("@970") && msg.Contains("ChannelName")) S_JOIN_PRIVATE_CHANNEL.Confirm();
+            if (msg.StartsWith("@3459") && msg.Contains("UserName")) C_ADD_FRIEND.Confirm();
+            if (msg.StartsWith("@436") && msg.Contains("UserName")) C_DELETE_FRIEND.Confirm();
 
         }
     }
