@@ -138,7 +138,9 @@
     <Compile Include="Heuristic\S_FRIEND_LIST.cs" />
     <Compile Include="Heuristic\S_INVEN.cs" />
     <Compile Include="Heuristic\S_LEAVE_PARTY.cs" />
+    <Compile Include="Heuristic\S_NOTIFY_TO_FRIENDS_WALK_INTO_SAME_AREA.cs" />
     <Compile Include="Heuristic\S_OTHER_USER_APPLY_PARTY.cs" />
+    <Compile Include="Heuristic\S_PARTY_MATCH_LINK.cs" />
     <Compile Include="Heuristic\S_PLAYER_CHANGE_FLIGHT_ENERGY.cs" />
     <Compile Include="Heuristic\S_PREPARE_RETURN_TO_LOBBY.cs" />
     <Compile Include="Heuristic\S_DECREASE_COOLTIME_SKILL.cs" />
