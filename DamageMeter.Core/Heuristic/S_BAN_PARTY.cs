@@ -10,10 +10,6 @@ namespace DamageMeter.Heuristic
 {
     class S_BAN_PARTY : AbstractPacketHeuristic
     {
-        public static S_BAN_PARTY Instance => _instance ?? (_instance = new S_BAN_PARTY());
-        private static S_BAN_PARTY _instance;
-
-        public S_BAN_PARTY() : base(OpcodeEnum.S_BAN_PARTY) { }
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

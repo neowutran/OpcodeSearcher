@@ -10,11 +10,6 @@ namespace DamageMeter.Heuristic
 {
     class S_LEAVE_PARTY : AbstractPacketHeuristic
     {
-        public static S_LEAVE_PARTY Instance => _instance ?? (_instance = new S_LEAVE_PARTY());
-        private static S_LEAVE_PARTY _instance;
-
-        public S_LEAVE_PARTY() : base(OpcodeEnum.S_LEAVE_PARTY) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

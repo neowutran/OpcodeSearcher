@@ -9,11 +9,7 @@ namespace DamageMeter.Heuristic
 {
     class S_PLAYER_CHANGE_FLIGHT_ENERGY : AbstractPacketHeuristic
     {
-        public static S_PLAYER_CHANGE_FLIGHT_ENERGY Instance => _instance ?? (_instance = new S_PLAYER_CHANGE_FLIGHT_ENERGY());
-        private static S_PLAYER_CHANGE_FLIGHT_ENERGY _instance;
-
-        public S_PLAYER_CHANGE_FLIGHT_ENERGY() : base(OpcodeEnum.S_PLAYER_CHANGE_FLIGHT_ENERGY) { }
-        public float LastEnergy;
+        public static float LastEnergy;
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

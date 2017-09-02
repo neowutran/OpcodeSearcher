@@ -9,12 +9,9 @@ namespace DamageMeter.Heuristic
 {
     class S_CLEAR_QUEST_INFO : AbstractPacketHeuristic
     {
-        public static S_CLEAR_QUEST_INFO Instance => _instance ?? (_instance = new S_CLEAR_QUEST_INFO());
-        private static S_CLEAR_QUEST_INFO _instance;
 
-        public S_CLEAR_QUEST_INFO() : base(OpcodeEnum.S_CLEAR_QUEST_INFO) { }
-        private bool first = true;
-        private ushort PossibleOpcode;
+        private static bool first = true;
+        private static ushort PossibleOpcode;
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

@@ -10,11 +10,6 @@ namespace DamageMeter.Heuristic
 {
     class S_WORLD_QUEST_VILLAGER_INFO : AbstractPacketHeuristic
     {
-        public static S_WORLD_QUEST_VILLAGER_INFO Instance => _instance ?? (_instance = new S_WORLD_QUEST_VILLAGER_INFO());
-        private static S_WORLD_QUEST_VILLAGER_INFO _instance;
-
-        public S_WORLD_QUEST_VILLAGER_INFO() : base(OpcodeEnum.S_WORLD_QUEST_VILLAGER_INFO) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

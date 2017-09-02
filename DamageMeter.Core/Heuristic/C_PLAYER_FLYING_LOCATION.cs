@@ -10,11 +10,7 @@ namespace DamageMeter.Heuristic
 {
     class C_PLAYER_FLYING_LOCATION : AbstractPacketHeuristic
     {
-        public static C_PLAYER_FLYING_LOCATION Instance => _instance ?? (_instance = new C_PLAYER_FLYING_LOCATION());
-        private static C_PLAYER_FLYING_LOCATION _instance;
-
-        public C_PLAYER_FLYING_LOCATION() : base(OpcodeEnum.C_PLAYER_FLYING_LOCATION) { }
-        public uint LastType;
+        public static uint LastType;
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
