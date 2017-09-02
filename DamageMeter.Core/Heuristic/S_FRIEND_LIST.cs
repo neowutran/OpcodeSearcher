@@ -24,6 +24,7 @@ namespace DamageMeter.Heuristic
             if(Reader.BaseStream.Position != personalNoteOffset - 4) return;
             try { var personalNote = Reader.ReadTeraString(); }
             catch (Exception e) { return; }
+            var list = new List<uint>();
             for (int i = 0; i < count; i++)
             {
                 if (offset != Reader.BaseStream.Position + 4) return;
@@ -60,8 +61,10 @@ namespace DamageMeter.Heuristic
                 try { var theirNote = Reader.ReadTeraString(); }
                 catch (Exception e) { return; }
                 offset = nextOffset;
+                list.Add(playerId);
             }
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
+            OpcodeFinder.Instance.KnowledgeDatabase.TryAdd(OpcodeFinder.KnowledgeDatabaseItem.FriendList, list);
         }
     }
 }

@@ -155,6 +155,13 @@ namespace DamageMeter
         {
             return OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList);
         }
+
+        public static bool IsFriend(uint playerId)
+        {
+            if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.FriendList, out var res)) { return false; }
+            var list = (List<uint>)res;
+            return list.Any(x => x == playerId);
+        }
     }
 
 }

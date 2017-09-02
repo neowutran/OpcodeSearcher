@@ -61,7 +61,8 @@ namespace DamageMeter
             SpawnedNpcs = 4,
             LoggedCharacterAbnormalities = 5,
             CharacterSpawnedSuccesfully = 6,
-            PartyMemberList
+            PartyMemberList = 7,
+            FriendList = 8
         }
 
         public bool OpcodePartialMatch()
