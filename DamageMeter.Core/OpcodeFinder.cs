@@ -161,6 +161,15 @@ namespace DamageMeter
 
         // For the kind of heuristic "this opcode only appear less than 1 second after this other opcode"
         public Dictionary<long, ParsedMessage> AllPackets = new Dictionary<long, ParsedMessage>();
+        public KeyValuePair<long, ParsedMessage>? LastOccurrence(OpcodeEnum opcode) {
+            if (!IsKnown(opcode))
+            {
+                return null;
+            }
+
+            return AllPackets.Where(x => x.Value.OpCode == ReverseKnownOpcode[opcode]).Last();
+
+        }
 
         public long TotalOccurrenceOpcode(OpcodeId opcode) => AllPackets.Where(x => x.Value.OpCode == opcode).Count();
 

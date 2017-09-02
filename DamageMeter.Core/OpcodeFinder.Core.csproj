@@ -122,6 +122,7 @@
     <Compile Include="Heuristic\S_CONFIRM_INVITE_CODE_BUTTON.cs" />
     <Compile Include="Heuristic\S_CREATURE_CHANGE_HP.cs" />
     <Compile Include="Heuristic\S_FIN_INTER_PARTY_MATCH .cs" />
+    <Compile Include="Heuristic\S_INVEN.cs" />
     <Compile Include="Heuristic\S_OTHER_USER_APPLY_PARTY.cs" />
     <Compile Include="Heuristic\S_PREPARE_RETURN_TO_LOBBY.cs" />
     <Compile Include="Heuristic\S_DECREASE_COOLTIME_SKILL.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="Heuristic\S_SECOND_PASSWORD_AUTH_RESULT.cs" />
     <Compile Include="Heuristic\S_SELECT_USER.cs" />
     <Compile Include="Heuristic\S_SHOW_NPC_TO_MAP.cs" />
+    <Compile Include="Heuristic\S_SKILL_LIST.cs" />
     <Compile Include="Heuristic\S_SPAWN_ME.cs" />
     <Compile Include="Heuristic\S_SPAWN_NPC.cs" />
     <Compile Include="Heuristic\S_SPAWN_PROJECTILE.cs" />

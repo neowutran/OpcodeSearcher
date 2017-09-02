@@ -14,6 +14,7 @@ namespace DamageMeter.Heuristic
             base.Process(message);
 
             if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) { return; }
+            if (!OpcodeFinder.Instance.IsKnown(OpcodeEnum.S_LOGIN_ARBITER)) { return; }
 
             if (OpcodeFinder.Instance.PacketCount > 6 && OpcodeFinder.Instance.PacketCount < 13 && message.Payload.Count > 18)
             {
