@@ -88,11 +88,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractPacketHeuristic.cs" />
+    <Compile Include="Heuristic\C_ADD_FRIEND.cs" />
+    <Compile Include="Heuristic\C_ASK_INTERACTIVE.cs" />
     <Compile Include="Heuristic\C_BLOCK_USER.cs" />
     <Compile Include="Heuristic\C_CHANGE_PARTY_MANAGER.cs" />
     <Compile Include="Heuristic\C_CHANGE_PARTY_MEMBER_AUTHORITY.cs" />
     <Compile Include="Heuristic\C_CHAT.cs" />
     <Compile Include="Heuristic\C_CHECK_VERSION.cs" />
+    <Compile Include="Heuristic\C_DELETE_FRIEND.cs" />
     <Compile Include="Heuristic\C_DUNGEON_CLEAR_COUNT_LIST.cs" />
     <Compile Include="Heuristic\C_JOIN_PRIVATE_CHANNEL.cs" />
     <Compile Include="Heuristic\C_NPCGUILD_LIST.cs" />
@@ -105,6 +108,7 @@
     <Compile Include="Heuristic\C_PLAYER_LOCATION.cs" />
     <Compile Include="Heuristic\C_PONG.cs" />
     <Compile Include="Heuristic\C_REMOVE_BLOCKED_USER.cs" />
+    <Compile Include="Heuristic\C_REQUEST_CONTRACT.cs" />
     <Compile Include="Heuristic\C_REQUEST_NONDB_ITEM_INFO.cs" />
     <Compile Include="Heuristic\C_REQUEST_USER_ITEMLEVEL_INFO.cs" />
     <Compile Include="Heuristic\C_REQUEST_USER_PAPERDOLL_INFO.cs" />
@@ -137,6 +141,7 @@
     <Compile Include="Heuristic\S_CONFIRM_INVITE_CODE_BUTTON.cs" />
     <Compile Include="Heuristic\S_CREATURE_CHANGE_HP.cs" />
     <Compile Include="Heuristic\S_DAILY_QUEST_COMPLETE_COUNT.cs" />
+    <Compile Include="Heuristic\S_DELETE_FRIEND.cs" />
     <Compile Include="Heuristic\S_EVENT_QUEST_SUMMARY.cs" />
     <Compile Include="Heuristic\S_FIN_INTER_PARTY_MATCH .cs" />
     <Compile Include="Heuristic\S_FRIEND_LIST.cs" />
