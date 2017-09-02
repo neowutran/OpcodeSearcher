@@ -93,6 +93,7 @@
     <Compile Include="Heuristic\C_CHAT.cs" />
     <Compile Include="Heuristic\C_CHECK_VERSION.cs" />
     <Compile Include="Heuristic\C_DUNGEON_CLEAR_COUNT_LIST.cs" />
+    <Compile Include="Heuristic\C_JOIN_PRIVATE_CHANNEL.cs" />
     <Compile Include="Heuristic\C_NPCGUILD_LIST.cs" />
     <Compile Include="Heuristic\C_DUNGEON_COOL_TIME_LIST.cs" />
     <Compile Include="Heuristic\C_GET_USER_GUILD_LOGO.cs" />
@@ -137,7 +138,9 @@
     <Compile Include="Heuristic\S_FIN_INTER_PARTY_MATCH .cs" />
     <Compile Include="Heuristic\S_FRIEND_LIST.cs" />
     <Compile Include="Heuristic\S_INVEN.cs" />
+    <Compile Include="Heuristic\S_JOIN_PRIVATE_CHANNEL.cs" />
     <Compile Include="Heuristic\S_LEAVE_PARTY.cs" />
+    <Compile Include="Heuristic\S_LEAVE_PRIVATE_CHANNEL.cs" />
     <Compile Include="Heuristic\S_NOTIFY_TO_FRIENDS_WALK_INTO_SAME_AREA.cs" />
     <Compile Include="Heuristic\S_OTHER_USER_APPLY_PARTY.cs" />
     <Compile Include="Heuristic\S_PARTY_MATCH_LINK.cs" />
@@ -172,6 +175,7 @@
     <Compile Include="Heuristic\S_PLAYER_STAT_UPDATE.cs" />
     <Compile Include="Heuristic\S_QUEST_INFO.cs" />
     <Compile Include="Heuristic\S_REMAIN_PLAY_TIME.cs" />
+    <Compile Include="Heuristic\S_REPLY_NONDB_ITEM_INFO.cs" />
     <Compile Include="Heuristic\S_REQUEST_SECOND_PASSWORD_AUTH.cs" />
     <Compile Include="Heuristic\S_RESULT_BIDDING_DICE_THROW.cs" />
     <Compile Include="Heuristic\S_RESULT_ITEM_BIDDING.cs" />
