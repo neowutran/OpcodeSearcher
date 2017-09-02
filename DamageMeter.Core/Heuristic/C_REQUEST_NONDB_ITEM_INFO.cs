@@ -9,6 +9,8 @@ namespace DamageMeter.Heuristic
 {
     class C_REQUEST_NONDB_ITEM_INFO : AbstractPacketHeuristic
     {
+        public static ushort PossibleOpcode;
+        public static uint LastItemId;
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -22,8 +24,10 @@ namespace DamageMeter.Heuristic
             if(unk1 != 0) return;
             if(unk2 != 0) return;
 
+            PossibleOpcode = message.OpCode;
+            LastItemId = item;
 
-            OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
+            //OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
         }
     }
 }
