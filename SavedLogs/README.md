@@ -1,4 +1,4 @@
-Logfile: log_{TeraVersion}_{UniqueId}.txt
+Logfile: log_{TeraVersion}_{UniqueId}.TeraLog
 
 Opcode: opcodes_{TeraVersion}_{UniqueId}.txt
 
