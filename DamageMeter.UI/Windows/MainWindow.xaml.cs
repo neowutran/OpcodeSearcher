@@ -61,6 +61,12 @@ namespace DamageMeter.UI
             Title = "Opcode finder V0";
             SystemEvents.SessionEnding += new SessionEndingEventHandler(SystemEvents_SessionEnding);
             NetworkController.Instance.TickUpdated += (msg) => Dispatcher.BeginInvoke(new Action(() => HandleNewMessage(msg)), DispatcherPriority.Background);
+            NetworkController.Instance.ResetUi += () => Dispatcher.Invoke(() =>
+            {
+                All.Clear();
+                Known.Clear();
+                OpcodeNameConv.Instance.Clear();
+            });
             All.CollectionChanged += All_CollectionChanged;
             AllSw.ScrollChanged += AllSw_ScrollChanged;
             DataContext = this;
@@ -561,6 +567,11 @@ namespace DamageMeter.UI
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+
+        public void Clear()
+        {
+            Known.Clear();
         }
     }
     public class HexPayloadConverter : IValueConverter

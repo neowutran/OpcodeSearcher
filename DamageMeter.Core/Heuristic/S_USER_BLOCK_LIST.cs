@@ -47,6 +47,8 @@ namespace DamageMeter.Heuristic
                 list.Add(playerId, name);
             }
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
+            BlockedUsers.Clear();
+            
             foreach (var u in list)
             {
                 BlockedUsers.Add(u.Key, u.Value);

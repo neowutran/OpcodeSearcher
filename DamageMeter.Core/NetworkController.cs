@@ -24,6 +24,7 @@ namespace DamageMeter
         public delegate void GuildIconEvent(Bitmap icon);
         public delegate void UpdateUiHandler(Tuple<List<ParsedMessage>, Dictionary<OpcodeId, OpcodeEnum>, int> message);
         public event UpdateUiHandler TickUpdated;
+        public event Action ResetUi;
         private static NetworkController _instance;
 
         private bool _keepAlive = true;
@@ -194,8 +195,10 @@ namespace DamageMeter
         void LoadFile()
         {
             if (LoadFileName == null) { return; }
-            if(AnalysisType != AnalysisTypeEnum.Unknown) { throw new Exception("Not allowed to load a log file while recording in the network"); }
+            if(AnalysisType == AnalysisTypeEnum.Network) { throw new Exception("Not allowed to load a log file while recording in the network"); }
             AnalysisType = AnalysisTypeEnum.LogFile;
+            OpcodeFinder.Instance.Reset();
+            ResetUi?.Invoke();
             LogReader.LoadLogFromFile(LoadFileName).ForEach(x => TeraSniffer.Instance.Packets.Enqueue(x));
             LoadFileName = null;
 
