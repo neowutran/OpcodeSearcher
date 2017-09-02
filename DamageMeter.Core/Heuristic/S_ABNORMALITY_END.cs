@@ -28,10 +28,9 @@ namespace DamageMeter.Heuristic
                     var abs = (List<uint>) result2;
                     if (!abs.Contains(id)) return;
                 }
+                OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
+                OpcodeFinder.Instance.KnowledgeDatabase.TryRemove(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacterAbnormalities, out var garbage);
             }
-            OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
-            OpcodeFinder.Instance.KnowledgeDatabase.TryRemove(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacterAbnormalities, out var garbage);
-            
         }
     }
 }

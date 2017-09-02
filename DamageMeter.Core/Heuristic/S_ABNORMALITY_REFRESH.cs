@@ -30,8 +30,8 @@ namespace DamageMeter.Heuristic
             {
                 var ch = (LoggedCharacter)result;
                 if (ch.Cid != target) return;
+                OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
             }
-            OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
         }
     }
 
