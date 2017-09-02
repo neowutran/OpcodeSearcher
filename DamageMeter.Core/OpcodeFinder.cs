@@ -171,6 +171,22 @@ namespace DamageMeter
 
         }
 
+        // NOT TESTED
+        public bool PacketSeenInTheLastXms(OpcodeEnum opcode, DateTime now, long ms)
+        {
+            if (!ReverseKnownOpcode.ContainsKey(opcode)) { return false; }
+            for(var i = PacketCount; i > 0; --i)
+            {
+                var packet = AllPackets[i];
+                if(packet.Time.Ticks < now.Ticks - TimeSpan.TicksPerMillisecond * ms)
+                {
+                    return false;
+                }
+                if(packet.OpCode == ReverseKnownOpcode[opcode]) { return true; }
+            }
+            return false;
+        }
+
         public long TotalOccurrenceOpcode(OpcodeId opcode) => AllPackets.Where(x => x.Value.OpCode == opcode).Count();
 
         public ParsedMessage GetMessage(long messageNumber) => AllPackets[messageNumber];
