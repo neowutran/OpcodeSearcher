@@ -383,6 +383,7 @@ namespace DamageMeter.UI
         {
             var openFileDialog = new Microsoft.Win32.OpenFileDialog { Filter = "Supported Formats, with / without '=' separator (*.txt)|*.txt" };
             if (openFileDialog.ShowDialog() == false) return;
+            NetworkController.Instance.StrictCheck = false;
             NetworkController.Instance.LoadOpcodeCheck = openFileDialog.FileName;
         }
 
@@ -509,6 +510,13 @@ namespace DamageMeter.UI
 
         }
 
+        private void LoadOpcodeStrict(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog { Filter = "Supported Formats, with / without '=' separator (*.txt)|*.txt" };
+            if (openFileDialog.ShowDialog() == false) return;
+            NetworkController.Instance.StrictCheck = true;
+            NetworkController.Instance.LoadOpcodeCheck = openFileDialog.FileName;
+        }
     }
     public class DirectionToColor : IValueConverter
     {

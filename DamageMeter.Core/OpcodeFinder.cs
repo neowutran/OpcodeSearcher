@@ -88,8 +88,14 @@ namespace DamageMeter
                     matched = false;
                 }else if(!ReverseKnownOpcode.ContainsKey(opcodeName) && !KnownOpcode.ContainsKey(opcodeId))
                 {
+
                     // Stay silent if the parser didn't found every opcode. 
                     // TODO: add option for strict match: aka -> this case generate error 
+                    if (NetworkController.Instance.StrictCheck)
+                    {
+                        Console.WriteLine("Missing match for " + opcodeName + " : " + opcodeId);
+                        matched = false;
+                    }
                 }
                 else
                 {

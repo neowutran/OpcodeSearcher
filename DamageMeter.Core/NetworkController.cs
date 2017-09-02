@@ -126,7 +126,7 @@ namespace DamageMeter
             LogFile = 2
         }
 
-
+        public bool StrictCheck = false;
         private AnalysisTypeEnum AnalysisType = 0;
         private void PacketAnalysisLoop()
         {
