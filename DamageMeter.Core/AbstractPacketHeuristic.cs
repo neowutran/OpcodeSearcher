@@ -12,13 +12,6 @@ namespace DamageMeter
 {
     public abstract class AbstractPacketHeuristic
     {
-        // Used for "This packet can only be seen in the first X packets"
-        public long Count()
-        {
-            var opcodeId = KnownOpcode;
-            if (!opcodeId.HasValue) { return 0; }
-            return OpcodeFinder.Instance.TotalOccurrenceOpcode(opcodeId.Value);
-        }
         protected OpcodeEnum OPCODE => (OpcodeEnum)Enum.Parse(typeof(OpcodeEnum), GetType().Name);
         public bool IsKnown => OpcodeFinder.Instance.IsKnown(OPCODE);
         public OpcodeId? KnownOpcode => OpcodeFinder.Instance.GetOpcode(OPCODE);
