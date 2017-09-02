@@ -10,11 +10,6 @@ namespace DamageMeter.Heuristic
 {
     class S_ANSWER_INTERACTIVE : AbstractPacketHeuristic
     {
-        public static S_ANSWER_INTERACTIVE Instance => _instance ?? (_instance = new S_ANSWER_INTERACTIVE());
-        private static S_ANSWER_INTERACTIVE _instance;
-
-        public S_ANSWER_INTERACTIVE() : base(OpcodeEnum.S_ANSWER_INTERACTIVE) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

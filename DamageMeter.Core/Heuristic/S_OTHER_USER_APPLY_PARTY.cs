@@ -10,11 +10,7 @@ namespace DamageMeter.Heuristic
 {
     class S_OTHER_USER_APPLY_PARTY : AbstractPacketHeuristic
     {
-        public static S_OTHER_USER_APPLY_PARTY Instance => _instance ?? (_instance = new S_OTHER_USER_APPLY_PARTY());
-        private static S_OTHER_USER_APPLY_PARTY _instance;
-
-        public S_OTHER_USER_APPLY_PARTY() : base(OpcodeEnum.S_OTHER_USER_APPLY_PARTY) { }
-        public uint LastApply;
+        public static uint LastApply;
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

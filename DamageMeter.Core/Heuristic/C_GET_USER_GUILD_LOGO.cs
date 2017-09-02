@@ -9,10 +9,6 @@ namespace DamageMeter.Heuristic
 {
     public class C_GET_USER_GUILD_LOGO : AbstractPacketHeuristic
     {
-        public static C_GET_USER_GUILD_LOGO Instance => _instance ?? (_instance = new C_GET_USER_GUILD_LOGO());
-        private static C_GET_USER_GUILD_LOGO _instance;
-        private C_GET_USER_GUILD_LOGO() : base(OpcodeEnum.C_GET_USER_GUILD_LOGO) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -24,11 +20,11 @@ namespace DamageMeter.Heuristic
             var guildId = Reader.ReadUInt32();
 
             if (!OpcodeFinder.Instance.IsKnown(OpcodeEnum.S_GET_USER_LIST)) { return; }
-            if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.Characters, out Tuple<Type, object> currChar))
+            if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.Characters, out var currChar))
             {
                 throw new Exception("Characters should be available");
             }
-            var chList = (Dictionary<uint, Character>)currChar.Item2;
+            var chList = (Dictionary<uint, Character>)currChar;
             if (!chList.TryGetValue(playerId, out var character)) return;
             if (character.GuildId != guildId) return;
 

@@ -98,7 +98,7 @@ namespace DamageMeter
             UiUpdateKnownOpcode = new Dictionary<OpcodeId, OpcodeEnum>();
         }
 
-        private uint Version;
+        public uint Version { get; private set; }
 
         private void SaveLog()
         {

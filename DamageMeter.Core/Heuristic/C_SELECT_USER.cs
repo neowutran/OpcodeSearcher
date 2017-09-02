@@ -10,18 +10,15 @@ namespace DamageMeter.Heuristic
  
     public class C_SELECT_USER : AbstractPacketHeuristic
     {
-        public static C_SELECT_USER Instance => _instance ?? (_instance = new C_SELECT_USER());
-        private static C_SELECT_USER _instance;
-        private C_SELECT_USER() : base(OpcodeEnum.C_SELECT_USER) { }
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
             if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) { return; }
             if (message.Payload.Count != 5) return;
             var id = Reader.ReadUInt32();
-            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.Characters, out Tuple<Type, object> chars))
+            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.Characters, out var chars))
             {
-                var list = chars.Item2 as Dictionary<uint, Character>;
+                var list = chars as Dictionary<uint, Character>;
                 if (!list.ContainsKey(id)) { return; }
             }
             else

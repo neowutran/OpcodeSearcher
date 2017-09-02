@@ -9,13 +9,9 @@ namespace DamageMeter.Heuristic
 {
     class C_CHANGE_PARTY_MANAGER : AbstractPacketHeuristic
     {
-        public static C_CHANGE_PARTY_MANAGER Instance => _instance ?? (_instance = new C_CHANGE_PARTY_MANAGER());
-        private static C_CHANGE_PARTY_MANAGER _instance;
-
-        public C_CHANGE_PARTY_MANAGER() : base(OpcodeEnum.C_CHANGE_PARTY_MANAGER) { }
-        public ushort PossibleOpcode;
-        public uint LastPlayerId;
-        public uint LastServerId;
+        public static ushort PossibleOpcode;
+        public static uint LastPlayerId;
+        public static uint LastServerId;
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -31,9 +27,9 @@ namespace DamageMeter.Heuristic
             LastPlayerId = playerId;
         }
 
-        public void Confirm()
+        public static void Confirm()
         {
-            OpcodeFinder.Instance.SetOpcode(PossibleOpcode, OPCODE);
+            OpcodeFinder.Instance.SetOpcode(PossibleOpcode, OpcodeEnum.C_CHANGE_PARTY_MANAGER);
         }
     }
 }

@@ -10,12 +10,6 @@ namespace DamageMeter.Heuristic
   
     public class C_WHISPER : AbstractPacketHeuristic
     {
-
-        public static C_WHISPER Instance => _instance ?? (_instance = new C_WHISPER());
-        private static C_WHISPER _instance;
-
-        public bool Initialized = false;
-        private C_WHISPER() : base(OpcodeEnum.C_WHISPER) { }
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

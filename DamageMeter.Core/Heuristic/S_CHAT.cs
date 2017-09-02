@@ -10,12 +10,6 @@ namespace DamageMeter.Heuristic
 
     public class S_CHAT : AbstractPacketHeuristic
     {
-
-        public static S_CHAT Instance => _instance ?? (_instance = new S_CHAT());
-        private static S_CHAT _instance;
-
-        public bool Initialized = false;
-        private S_CHAT() : base(OpcodeEnum.S_CHAT) { }
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

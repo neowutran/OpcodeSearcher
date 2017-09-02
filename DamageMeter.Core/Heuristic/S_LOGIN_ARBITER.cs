@@ -9,11 +9,6 @@ namespace DamageMeter.Heuristic
 {
     public class S_LOGIN_ARBITER : AbstractPacketHeuristic
     {
-        public static S_LOGIN_ARBITER Instance => _instance ?? (_instance = new S_LOGIN_ARBITER());
-        private static S_LOGIN_ARBITER _instance;
-
-        public bool Initialized = false;
-        private S_LOGIN_ARBITER() : base(OpcodeEnum.S_LOGIN_ARBITER) { }
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

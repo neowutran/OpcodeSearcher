@@ -9,10 +9,6 @@ namespace DamageMeter.Heuristic
 {
     class S_ABNORMALITY_BEGIN : AbstractPacketHeuristic
     {
-        public static S_ABNORMALITY_BEGIN Instance => _instance ?? (_instance = new S_ABNORMALITY_BEGIN());
-        private static S_ABNORMALITY_BEGIN _instance;
-        private S_ABNORMALITY_BEGIN() : base(OpcodeEnum.S_ABNORMALITY_BEGIN) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -24,9 +20,9 @@ namespace DamageMeter.Heuristic
                     var targetId = Reader.ReadUInt64();
                     Reader.Skip(8);
                     var abId = Reader.ReadUInt32();
-                    if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, out Tuple<Type, object> result0))
+                    if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, out var result0))
                     {
-                        var ch = (LoggedCharacter)result0.Item2;
+                        var ch = (LoggedCharacter)result0;
                         if (ch.Cid != targetId) return;
                         AddAbnormToDb(abId);
                     }
@@ -48,9 +44,9 @@ namespace DamageMeter.Heuristic
             if (id != 99020000) return;
             if(stacks != 1) return;
             if (duration != int.MaxValue) return;
-            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, out Tuple<Type, object> result))
+            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, out var result))
             {
-                var ch = (LoggedCharacter) result.Item2;
+                var ch = (LoggedCharacter) result;
                 if (ch.Cid != target) return;
             }
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
@@ -59,12 +55,12 @@ namespace DamageMeter.Heuristic
         private void AddAbnormToDb(uint abId)
         {
             List<uint> list = new List<uint>();
-            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacterAbnormalities, out Tuple<Type, object> result))
+            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacterAbnormalities, out var result))
             {
-                list = (List<uint>)result.Item2;
+                list = (List<uint>)result;
             }
             if (!list.Contains(abId)) list.Add(abId);
-            OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacterAbnormalities] = new Tuple<Type, object>(typeof(List<ulong>), list);
+            OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacterAbnormalities] = list;
 
         }
     }

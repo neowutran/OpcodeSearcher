@@ -11,11 +11,7 @@ namespace DamageMeter.Heuristic
 {
     class S_LOAD_TOPO : AbstractPacketHeuristic
     {
-        public static S_LOAD_TOPO Instance => _instance ?? (_instance = new S_LOAD_TOPO());
-        private static S_LOAD_TOPO _instance;
-
-        public S_LOAD_TOPO() : base(OpcodeEnum.S_LOAD_TOPO) { }
-        private Dictionary<ushort, Vector3f> PossibleMessages = new Dictionary<ushort, Vector3f>();
+        private static Dictionary<ushort, Vector3f> PossibleMessages = new Dictionary<ushort, Vector3f>();
 
         public new void Process(ParsedMessage message)
         {
@@ -29,16 +25,16 @@ namespace DamageMeter.Heuristic
             {
                 var quick = Reader.ReadBoolean();
             }
-            catch (Exception e) { return; }
+            catch { return; }
             if(!PossibleMessages.ContainsKey(message.OpCode)) PossibleMessages.Add(message.OpCode, pos);
         }
 
-        public void Confirm(Vector3f pos)
+        public static void Confirm(Vector3f pos)
         {
             if (PossibleMessages.ContainsValue(pos))
             {
                 var opc = PossibleMessages.FirstOrDefault(x => x.Value.Equals(pos)).Key;
-                OpcodeFinder.Instance.SetOpcode(opc, OPCODE);
+                OpcodeFinder.Instance.SetOpcode(opc, OpcodeEnum.S_LOAD_TOPO);
             }
         }
     }

@@ -7,14 +7,8 @@ using Tera.Game.Messages;
 
 namespace DamageMeter.Heuristic
 {
-
     public class C_SET_VISIBLE_RANGE : AbstractPacketHeuristic
     {
-        public static C_SET_VISIBLE_RANGE Instance => _instance ?? (_instance = new C_SET_VISIBLE_RANGE());
-        private static C_SET_VISIBLE_RANGE _instance;
-
-        public bool Initialized = false;
-        private C_SET_VISIBLE_RANGE() : base(OpcodeEnum.C_SET_VISIBLE_RANGE) { }
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

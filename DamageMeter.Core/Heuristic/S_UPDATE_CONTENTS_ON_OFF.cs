@@ -9,12 +9,6 @@ namespace DamageMeter.Heuristic
 {
     public class S_UPDATE_CONTENTS_ON_OFF : AbstractPacketHeuristic
     {
-
-        public static S_UPDATE_CONTENTS_ON_OFF Instance => _instance ?? (_instance = new S_UPDATE_CONTENTS_ON_OFF());
-        private static S_UPDATE_CONTENTS_ON_OFF _instance;
-
-        public bool Initialized = false;
-        private S_UPDATE_CONTENTS_ON_OFF() : base(OpcodeEnum.S_UPDATE_CONTENTS_ON_OFF) { }
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

@@ -9,15 +9,11 @@ namespace DamageMeter.Heuristic
 {
     class S_PARTY_MEMBER_ABNORMAL_CLEAR : AbstractPacketHeuristic
     {
-        public static S_PARTY_MEMBER_ABNORMAL_CLEAR Instance => _instance ?? (_instance = new S_PARTY_MEMBER_ABNORMAL_CLEAR());
-        public ushort PossibleOpcode;
+        public static ushort PossibleOpcode;
 
-        private static S_PARTY_MEMBER_ABNORMAL_CLEAR _instance;
-        public uint LastServerId;
-        public uint LastPlayerId;
-
-        public S_PARTY_MEMBER_ABNORMAL_CLEAR() : base(OpcodeEnum.S_PARTY_MEMBER_ABNORMAL_CLEAR) { }
-
+        public static uint LastServerId;
+        public static uint LastPlayerId;
+        
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -37,9 +33,9 @@ namespace DamageMeter.Heuristic
             LastPlayerId = playerId;
         }
 
-        public void Confirm()
+        public static void Confirm()
         {
-            OpcodeFinder.Instance.SetOpcode(PossibleOpcode, OPCODE);
+            OpcodeFinder.Instance.SetOpcode(PossibleOpcode, OpcodeEnum.S_PARTY_MEMBER_ABNORMAL_CLEAR);
         }
 
     }

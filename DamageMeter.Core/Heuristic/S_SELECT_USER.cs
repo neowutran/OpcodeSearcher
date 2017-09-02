@@ -9,11 +9,6 @@ namespace DamageMeter.Heuristic
 {
     public class S_SELECT_USER : AbstractPacketHeuristic
     {
-        public static S_SELECT_USER Instance => _instance ?? (_instance = new S_SELECT_USER());
-        private static S_SELECT_USER _instance;
-
-        public bool Initialized = false;
-        private S_SELECT_USER() : base(OpcodeEnum.S_SELECT_USER) { }
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

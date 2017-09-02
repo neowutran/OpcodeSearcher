@@ -9,12 +9,6 @@ namespace DamageMeter.Heuristic
 {
     class S_START_COOLTIME_ITEM : AbstractPacketHeuristic
     {
-        public static S_START_COOLTIME_ITEM Instance => _instance ?? (_instance = new S_START_COOLTIME_ITEM());
-        private static S_START_COOLTIME_ITEM _instance;
-
-        public S_START_COOLTIME_ITEM() : base(OpcodeEnum.S_START_COOLTIME_ITEM) { }
-
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -27,9 +21,9 @@ namespace DamageMeter.Heuristic
              * // we could also check on minor battle solution, since we use it for sAbnormalityRefresh already
              * if (item != 200997 && cd != 5) return; 
              */
-            if (C_USE_ITEM.Instance.IsKnown)
+            if (OpcodeFinder.Instance.IsKnown(OpcodeEnum.C_USE_ITEM))
             {
-                if (C_USE_ITEM.Instance.LatestItem == item)
+                if (C_USE_ITEM.LatestItem == item)
                 {
                     OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
                 }

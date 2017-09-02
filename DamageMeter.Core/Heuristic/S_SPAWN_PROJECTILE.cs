@@ -9,15 +9,6 @@ namespace DamageMeter.Heuristic
 {
     public class S_SPAWN_PROJECTILE : AbstractPacketHeuristic
     {
-        public static S_SPAWN_PROJECTILE Instance => _instance ?? (_instance = new S_SPAWN_PROJECTILE());
-        private static S_SPAWN_PROJECTILE _instance;
-
-        public bool Initialized = false;
-
-        private S_SPAWN_PROJECTILE() : base(OpcodeEnum.S_SPAWN_PROJECTILE)
-        {
-        }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -39,10 +30,10 @@ namespace DamageMeter.Heuristic
             var unk4 = Reader.ReadInt32();
             var unk5 = Reader.ReadInt32();
 
-            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, out Tuple<Type, object> currChar))
+            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, out var currChar))
             {
                 //throw new Exception("Logger character should be know at this point."); //you could still receive packet matching this size before login, no need to crash it
-                var ch = (LoggedCharacter) currChar.Item2;
+                var ch = (LoggedCharacter) currChar;
                 if (ch.Cid != source) { return; }
                 if (ch.Model != model) { return; }
             }

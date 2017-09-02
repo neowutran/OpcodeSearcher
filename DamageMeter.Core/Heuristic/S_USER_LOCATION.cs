@@ -9,14 +9,6 @@ namespace DamageMeter.Heuristic
 {
     public class S_USER_LOCATION : AbstractPacketHeuristic
     {
-        public static S_USER_LOCATION Instance => _instance ?? (_instance = new S_USER_LOCATION());
-        private static S_USER_LOCATION _instance;
-
-        public bool Initialized = false;
-
-        private S_USER_LOCATION() : base(OpcodeEnum.S_USER_LOCATION)
-        {
-        }
 
         public new void Process(ParsedMessage message)
         {
@@ -33,7 +25,7 @@ namespace DamageMeter.Heuristic
             if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode))
             {
                 // For the moment, only update our own location. If later it will become required, add other users location
-                var self = (LoggedCharacter)OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter].Item2;
+                var self = (LoggedCharacter)OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter];
                 if (self.Cid == target)
                 {
                     UpdateLocationInDictionary(OpcodeFinder.KnowledgeDatabaseItem.PlayerLocation, destination);
@@ -48,11 +40,11 @@ namespace DamageMeter.Heuristic
             {
                 return;
             }
-            var users = (List<ulong>)OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.SpawnedUsers].Item2;
+            var users = (List<ulong>)OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.SpawnedUsers];
             if (!users.Contains(target)) { return; }
             if (unknown1 == 0 && AcceptedTypeValue.Contains(type) && distance < 200 && distance >= 0 && unknown2 == 0)
             {
-                var self = (LoggedCharacter)OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter].Item2;
+                var self = (LoggedCharacter)OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter];
                 if (self.Cid == target)
                 {
                     UpdateLocationInDictionary(OpcodeFinder.KnowledgeDatabaseItem.PlayerLocation, destination);
@@ -84,7 +76,7 @@ namespace DamageMeter.Heuristic
 
         private static void UpdateLocationInDictionary(OpcodeFinder.KnowledgeDatabaseItem knowledgeDatabaseKey, Tera.Game.Vector3f destination)
         {
-            OpcodeFinder.Instance.KnowledgeDatabase[knowledgeDatabaseKey] = new Tuple<Type, object>(typeof(PlayerLocation), destination);
+            OpcodeFinder.Instance.KnowledgeDatabase[knowledgeDatabaseKey] = destination;
         }
     }
 }

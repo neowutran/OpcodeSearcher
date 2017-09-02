@@ -9,11 +9,7 @@ namespace DamageMeter.Heuristic
 {
     class C_START_SKILL : AbstractPacketHeuristic
     {
-        public static C_START_SKILL Instance => _instance ?? (_instance = new C_START_SKILL());
-        private static C_START_SKILL _instance;
-
-        public C_START_SKILL() : base(OpcodeEnum.C_START_SKILL) { }
-        public uint LatestSkill;
+        public static uint LatestSkill;
 
         public void Parse()
         {

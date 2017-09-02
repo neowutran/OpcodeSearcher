@@ -9,11 +9,6 @@ namespace DamageMeter.Heuristic
 {
     class S_PARTY_MEMBER_ABNORMAL_REFRESH : AbstractPacketHeuristic
     {
-        public static S_PARTY_MEMBER_ABNORMAL_REFRESH Instance => _instance ?? (_instance = new S_PARTY_MEMBER_ABNORMAL_REFRESH());
-        private static S_PARTY_MEMBER_ABNORMAL_REFRESH _instance;
-
-        public S_PARTY_MEMBER_ABNORMAL_REFRESH() : base(OpcodeEnum.S_PARTY_MEMBER_ABNORMAL_REFRESH) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

@@ -9,11 +9,6 @@ namespace DamageMeter.Heuristic
 {
     class S_NPC_STATUS : AbstractPacketHeuristic
     {
-        public static S_NPC_STATUS Instance => _instance ?? (_instance = new S_NPC_STATUS());
-        private static S_NPC_STATUS _instance;
-
-        public S_NPC_STATUS() : base(OpcodeEnum.S_NPC_STATUS) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

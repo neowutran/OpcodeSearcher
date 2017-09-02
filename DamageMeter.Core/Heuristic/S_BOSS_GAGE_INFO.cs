@@ -9,11 +9,6 @@ namespace DamageMeter.Heuristic
 {
     class S_BOSS_GAGE_INFO : AbstractPacketHeuristic
     {
-        private static S_BOSS_GAGE_INFO _instance;
-        public static S_BOSS_GAGE_INFO Instance => _instance ?? (_instance = new S_BOSS_GAGE_INFO());
-
-        public S_BOSS_GAGE_INFO() : base(OpcodeEnum.S_BOSS_GAGE_INFO) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

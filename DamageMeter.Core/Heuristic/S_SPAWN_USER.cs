@@ -12,10 +12,6 @@ namespace DamageMeter.Heuristic
 {
     class S_SPAWN_USER:AbstractPacketHeuristic
     {
-        public static S_SPAWN_USER Instance => _instance ?? (_instance = new S_SPAWN_USER());
-        private static S_SPAWN_USER _instance;
-
-        public S_SPAWN_USER() : base(OpcodeEnum.S_SPAWN_USER) { }
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -88,12 +84,12 @@ namespace DamageMeter.Heuristic
         private void AddUserToDatabase(ulong id)
         {
             List<ulong> list = new List<ulong>();
-            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.SpawnedUsers, out Tuple<Type, object> result))
+            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.SpawnedUsers, out var result))
             {
-                list = (List<ulong>)result.Item2;
+                list = (List<ulong>)result;
             }
             if (!list.Contains(id)) list.Add(id);
-            OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.SpawnedUsers] = new Tuple<Type, object>(typeof(List<ulong>), list); 
+            OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.SpawnedUsers] = list; 
         }
     }
 }

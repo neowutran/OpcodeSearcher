@@ -28,11 +28,6 @@ namespace DamageMeter.Heuristic
     }
     public class S_GET_USER_LIST : AbstractPacketHeuristic
     {
-        public static S_GET_USER_LIST Instance => _instance ?? (_instance = new S_GET_USER_LIST());
-        private static S_GET_USER_LIST _instance;
-
-        public bool Initialized = false;
-        private S_GET_USER_LIST() : base(OpcodeEnum.S_GET_USER_LIST) { }
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -65,7 +60,13 @@ namespace DamageMeter.Heuristic
                     var worldMapWorldId = Reader.ReadUInt32();
                     var worldMapGuardId = Reader.ReadUInt32();
                     var areaNameId = Reader.ReadUInt32();
-                    Reader.Skip(8 + 1 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 8 + 4 + 4 + 4 + 2 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 2 + 4 + 1 + 4 + 8);
+                    Reader.Skip(8 + 1 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 8 + 4 + 4 + 4 + 2 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 2 + 4 + 1 + 4);
+
+                    // KR latest change
+                    if (NetworkController.Instance.Version < 319977)
+                    {
+                        Reader.Skip(8);
+                    }
                     var achievementPoints = Reader.ReadInt32();
                     var laurel = Reader.ReadUInt32();
                     var position = Reader.ReadInt32();
@@ -81,7 +82,7 @@ namespace DamageMeter.Heuristic
                     var ch = new Character(id, new RaceGenderClass((Race)race,(Gender)gender -1,(PlayerClass)cl+1), level, name, guildId);
                     chars.Add(id, ch);
                 }
-                OpcodeFinder.Instance.KnowledgeDatabase.TryAdd(OpcodeFinder.KnowledgeDatabaseItem.Characters, new Tuple<Type, object>(typeof(Dictionary<uint, Character>), chars));
+                OpcodeFinder.Instance.KnowledgeDatabase.TryAdd(OpcodeFinder.KnowledgeDatabaseItem.Characters, chars);
             }
 
         }

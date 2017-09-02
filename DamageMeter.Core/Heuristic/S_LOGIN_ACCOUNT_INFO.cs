@@ -7,15 +7,8 @@ using Tera.Game.Messages;
 
 namespace DamageMeter.Heuristic
 {
-
-
     public class S_LOGIN_ACCOUNT_INFO : AbstractPacketHeuristic
     {
-        public static S_LOGIN_ACCOUNT_INFO Instance => _instance ?? (_instance = new S_LOGIN_ACCOUNT_INFO());
-        private static S_LOGIN_ACCOUNT_INFO _instance;
-
-        public bool Initialized = false;
-        private S_LOGIN_ACCOUNT_INFO() : base(OpcodeEnum.S_LOGIN_ACCOUNT_INFO) { }
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

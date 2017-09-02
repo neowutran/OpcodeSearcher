@@ -10,11 +10,6 @@ namespace DamageMeter.Heuristic
 {
     class S_CHANGE_PARTY_MANAGER : AbstractPacketHeuristic
     {
-        public static S_CHANGE_PARTY_MANAGER Instance => _instance ?? (_instance = new S_CHANGE_PARTY_MANAGER());
-        private static S_CHANGE_PARTY_MANAGER _instance;
-
-        public S_CHANGE_PARTY_MANAGER() : base(OpcodeEnum.S_CHANGE_PARTY_MANAGER) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -40,15 +35,15 @@ namespace DamageMeter.Heuristic
             catch (Exception e) { return; }
             if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList, out var res))
             {
-                var list = (List<PartyMember>)res.Item2;
+                var list = (List<PartyMember>)res;
                 if (!list.Any(x => x.PlayerId == playerId && x.ServerId == serverId && x.Name == name)) return;
             }
             else return;
-            if (OpcodeFinder.Instance.GetMessage(OpcodeFinder.Instance.PacketCount - 1).OpCode == C_CHANGE_PARTY_MANAGER.Instance.PossibleOpcode)
+            if (OpcodeFinder.Instance.GetMessage(OpcodeFinder.Instance.PacketCount - 1).OpCode == C_CHANGE_PARTY_MANAGER.PossibleOpcode)
             {
-                if (C_CHANGE_PARTY_MANAGER.Instance.LastPlayerId == playerId && C_CHANGE_PARTY_MANAGER.Instance.LastServerId == serverId)
+                if (C_CHANGE_PARTY_MANAGER.LastPlayerId == playerId && C_CHANGE_PARTY_MANAGER.LastServerId == serverId)
                 {
-                    C_CHANGE_PARTY_MANAGER.Instance.Confirm();
+                    C_CHANGE_PARTY_MANAGER.Confirm();
                     OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
                 }
             }

@@ -9,11 +9,7 @@ namespace DamageMeter.Heuristic
 {
     class C_DUNGEON_CLEAR_COUNT_LIST : AbstractPacketHeuristic //   #3
     {
-        public static C_DUNGEON_CLEAR_COUNT_LIST Instance => _instance ?? (_instance = new C_DUNGEON_CLEAR_COUNT_LIST());
-        private static C_DUNGEON_CLEAR_COUNT_LIST _instance;
-
-        public C_DUNGEON_CLEAR_COUNT_LIST() : base(OpcodeEnum.C_DUNGEON_CLEAR_COUNT_LIST) { }
-        public ushort PossibleOpcode;
+        public static ushort PossibleOpcode;
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -26,17 +22,17 @@ namespace DamageMeter.Heuristic
                 var name = Reader.ReadTeraString();
                 if (OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter))
                 {
-                    if (((LoggedCharacter)OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter].Item2).Name != name) return;
+                    if (((LoggedCharacter)OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter]).Name != name) return;
                 }
             }
-            catch (Exception e) { return; }
+            catch { return; }
 
             PossibleOpcode = message.OpCode;
 
         }
-        public void Confirm()
+        public static void Confirm()
         {
-            OpcodeFinder.Instance.SetOpcode(PossibleOpcode, OPCODE);
+            OpcodeFinder.Instance.SetOpcode(PossibleOpcode, OpcodeEnum.C_DUNGEON_CLEAR_COUNT_LIST);
         }
     }
 }

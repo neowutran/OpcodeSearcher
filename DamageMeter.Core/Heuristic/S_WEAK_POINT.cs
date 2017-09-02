@@ -9,11 +9,6 @@ namespace DamageMeter.Heuristic
 {
     class S_WEAK_POINT : AbstractPacketHeuristic
     {
-        public static S_WEAK_POINT Instance => _instance ?? (_instance = new S_WEAK_POINT());
-        private static S_WEAK_POINT _instance;
-
-        public S_WEAK_POINT() : base(OpcodeEnum.S_WEAK_POINT) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -31,7 +26,7 @@ namespace DamageMeter.Heuristic
             if(prevVal > 7) return;
             if(newVal > 7) return;
 
-            if(C_START_SKILL.Instance.LatestSkill != skill) return;
+            if(C_START_SKILL.LatestSkill != skill) return;
             if(DbUtils.GetPlayercId() != target && !DbUtils.IsNpcSpawned(target)) return;
 
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);

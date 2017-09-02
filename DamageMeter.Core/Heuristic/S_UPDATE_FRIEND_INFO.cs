@@ -10,11 +10,6 @@ namespace DamageMeter.Heuristic
 {
     class S_UPDATE_FRIEND_INFO : AbstractPacketHeuristic
     {
-        public static S_UPDATE_FRIEND_INFO Instance => _instance ?? (_instance = new S_UPDATE_FRIEND_INFO());
-        private static S_UPDATE_FRIEND_INFO _instance;
-
-        public S_UPDATE_FRIEND_INFO() : base(OpcodeEnum.S_UPDATE_FRIEND_INFO) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

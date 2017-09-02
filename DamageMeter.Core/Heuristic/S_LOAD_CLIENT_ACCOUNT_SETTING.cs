@@ -9,11 +9,6 @@ namespace DamageMeter.Heuristic
 {
     public class S_LOAD_CLIENT_ACCOUNT_SETTING : AbstractPacketHeuristic
     {
-        public static S_LOAD_CLIENT_ACCOUNT_SETTING Instance => _instance ?? (_instance = new S_LOAD_CLIENT_ACCOUNT_SETTING());
-        private static S_LOAD_CLIENT_ACCOUNT_SETTING _instance;
-
-        public bool Initialized = false;
-        private S_LOAD_CLIENT_ACCOUNT_SETTING() : base(OpcodeEnum.S_LOAD_CLIENT_ACCOUNT_SETTING) { }
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

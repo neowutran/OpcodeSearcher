@@ -9,11 +9,6 @@ namespace DamageMeter.Heuristic
 {
     class S_RESULT_ITEM_BIDDING : AbstractPacketHeuristic
     {
-        public static S_RESULT_ITEM_BIDDING Instance => _instance ?? (_instance = new S_RESULT_ITEM_BIDDING());
-        private static S_RESULT_ITEM_BIDDING _instance;
-
-        public S_RESULT_ITEM_BIDDING() : base(OpcodeEnum.S_RESULT_ITEM_BIDDING) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

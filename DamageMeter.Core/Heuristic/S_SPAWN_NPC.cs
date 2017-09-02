@@ -11,11 +11,6 @@ namespace DamageMeter.Heuristic
 {
     class S_SPAWN_NPC : AbstractPacketHeuristic
     {
-        public static S_SPAWN_NPC Instance => _instance ?? (_instance = new S_SPAWN_NPC());
-        private static S_SPAWN_NPC _instance;
-
-        public S_SPAWN_NPC() : base(OpcodeEnum.S_SPAWN_NPC) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -25,7 +20,7 @@ namespace DamageMeter.Heuristic
                 {
                     Reader.Skip(10);
                     var id = Reader.ReadUInt64();
-                    Reader.Skip(8+4+4+4+2+4);
+                    Reader.Skip(8+4+4+4+2+4); 
                     var templateId0 = Reader.ReadUInt32();
                     var zoneId0 = Reader.ReadUInt16();
 
@@ -64,13 +59,13 @@ namespace DamageMeter.Heuristic
         {
             var newNpc = new Npc(id, zoneId, templId);
             List<Npc> list = new List<Npc>();
-            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.SpawnedNpcs, out Tuple<Type, object> result))
+            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.SpawnedNpcs, out var result))
             {
                 OpcodeFinder.Instance.KnowledgeDatabase.TryRemove(OpcodeFinder.KnowledgeDatabaseItem.SpawnedNpcs, out var garbage);
-                list = (List<Npc>)result.Item2;
+                list = (List<Npc>)result;
             }
             if (!list.Contains(newNpc)) list.Add(newNpc);
-            OpcodeFinder.Instance.KnowledgeDatabase.TryAdd(OpcodeFinder.KnowledgeDatabaseItem.SpawnedNpcs, new Tuple<Type, object>(typeof(List<Npc>), list));
+            OpcodeFinder.Instance.KnowledgeDatabase.TryAdd(OpcodeFinder.KnowledgeDatabaseItem.SpawnedNpcs, list);
         }
 
     }

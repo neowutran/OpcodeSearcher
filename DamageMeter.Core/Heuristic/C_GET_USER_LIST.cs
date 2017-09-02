@@ -9,11 +9,6 @@ namespace DamageMeter.Heuristic
 {
     public class C_GET_USER_LIST : AbstractPacketHeuristic
     {
-        public static C_GET_USER_LIST Instance => _instance ?? (_instance = new C_GET_USER_LIST());
-        private static C_GET_USER_LIST _instance;
-
-        public bool Initialized = false;
-        private C_GET_USER_LIST() : base(OpcodeEnum.C_GET_USER_LIST) { }
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

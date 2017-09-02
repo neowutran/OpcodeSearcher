@@ -9,11 +9,7 @@ namespace DamageMeter.Heuristic
 {
     class C_NPCGUILD_LIST : AbstractPacketHeuristic //   #2
     {
-        public static C_NPCGUILD_LIST Instance => _instance ?? (_instance = new C_NPCGUILD_LIST());
-        private static C_NPCGUILD_LIST _instance;
-
-        public C_NPCGUILD_LIST() : base(OpcodeEnum.C_NPCGUILD_LIST) { }
-        public ushort PossibleOpcode;
+        public static ushort PossibleOpcode;
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -26,7 +22,7 @@ namespace DamageMeter.Heuristic
                 var name = Reader.ReadTeraString();
                 if (OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter))
                 {
-                    if(((LoggedCharacter)OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter].Item2).Name != name) return;
+                    if(((LoggedCharacter)OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter]).Name != name) return;
                 }
             }
             catch (Exception e) { return; }
@@ -35,9 +31,9 @@ namespace DamageMeter.Heuristic
 
         }
 
-        public void Confirm()
+        public static void Confirm()
         {
-            OpcodeFinder.Instance.SetOpcode(PossibleOpcode, OPCODE);
+            OpcodeFinder.Instance.SetOpcode(PossibleOpcode, OpcodeEnum.C_NPCGUILD_LIST);
         }
     }
 }

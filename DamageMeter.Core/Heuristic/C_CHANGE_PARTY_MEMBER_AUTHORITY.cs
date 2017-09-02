@@ -10,11 +10,7 @@ namespace DamageMeter.Heuristic
 {
     class C_CHANGE_PARTY_MEMBER_AUTHORITY : AbstractPacketHeuristic
     {
-        public static C_CHANGE_PARTY_MEMBER_AUTHORITY Instance => _instance ?? (_instance = new C_CHANGE_PARTY_MEMBER_AUTHORITY());
-        private static C_CHANGE_PARTY_MEMBER_AUTHORITY _instance;
-
-        public C_CHANGE_PARTY_MEMBER_AUTHORITY() : base(OpcodeEnum.C_CHANGE_PARTY_MEMBER_AUTHORITY) { }
-
+      
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

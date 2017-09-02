@@ -9,10 +9,6 @@ namespace DamageMeter.Heuristic
 {
     class S_ABNORMALITY_REFRESH : AbstractPacketHeuristic
     {
-        public static S_ABNORMALITY_REFRESH Instance => _instance ?? (_instance = new S_ABNORMALITY_REFRESH());
-        private static S_ABNORMALITY_REFRESH _instance;
-        private S_ABNORMALITY_REFRESH() : base(OpcodeEnum.S_ABNORMALITY_REFRESH) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -30,9 +26,9 @@ namespace DamageMeter.Heuristic
             if (id != 4000) return;
             if (stacks != 1) return;
             if (duration != 30 * 60 * 1000) return;
-            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, out Tuple<Type, object> result))
+            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, out var result))
             {
-                var ch = (LoggedCharacter)result.Item2;
+                var ch = (LoggedCharacter)result;
                 if (ch.Cid != target) return;
             }
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);

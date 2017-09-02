@@ -9,12 +9,8 @@ namespace DamageMeter.Heuristic
 {
     class C_REQUEST_USER_PAPERDOLL_INFO : AbstractPacketHeuristic
     {
-        public static C_REQUEST_USER_PAPERDOLL_INFO Instance => _instance ?? (_instance = new C_REQUEST_USER_PAPERDOLL_INFO());
-        private static C_REQUEST_USER_PAPERDOLL_INFO _instance;
-
-        public C_REQUEST_USER_PAPERDOLL_INFO() : base(OpcodeEnum.C_REQUEST_USER_PAPERDOLL_INFO) { }
-        public ushort PossibleOpcode;
-        public string Name = "";
+        public static ushort PossibleOpcode;
+        public static string Name = "";
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -26,14 +22,14 @@ namespace DamageMeter.Heuristic
             {
                 Name = Reader.ReadTeraString();
             }
-            catch (Exception e) { return; }
+            catch { return; }
 
             PossibleOpcode = message.OpCode;
         }
 
-        public void Confirm()
+        public static void Confirm()
         {
-            OpcodeFinder.Instance.SetOpcode(PossibleOpcode, OPCODE);
+            OpcodeFinder.Instance.SetOpcode(PossibleOpcode, OpcodeEnum.C_REQUEST_USER_PAPERDOLL_INFO);
         }
     }
 }

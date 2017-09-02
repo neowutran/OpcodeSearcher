@@ -9,10 +9,6 @@ namespace DamageMeter.Heuristic
 {
     class S_PLAYER_STAT_UPDATE : AbstractPacketHeuristic
     {
-        public static S_PLAYER_STAT_UPDATE Instance => _instance ?? (_instance = new S_PLAYER_STAT_UPDATE());
-        private static S_PLAYER_STAT_UPDATE _instance;
-
-        public S_PLAYER_STAT_UPDATE() : base(OpcodeEnum.S_PLAYER_STAT_UPDATE) { }
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -33,8 +29,8 @@ namespace DamageMeter.Heuristic
                 return;
             }
 
-            if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, out Tuple<Type, object> result)) return;
-            var ch = (LoggedCharacter)result.Item2;
+            if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, out var result)) return;
+            var ch = (LoggedCharacter)result;
             Reader.Skip(12);
             var maxHp2 = Reader.ReadUInt32();
             var maxMp2 = Reader.ReadUInt32();
@@ -70,12 +66,12 @@ namespace DamageMeter.Heuristic
 
         void UpdatePlayerStats(uint maxhp, uint maxmp, uint maxRe)
         {
-            var c = ((LoggedCharacter)OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter].Item2);
+            var c = ((LoggedCharacter)OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter]);
             c.MaxHp = maxhp;
             c.MaxMp = maxmp;
             c.MaxSt = maxRe;
             OpcodeFinder.Instance.KnowledgeDatabase.TryRemove(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, out var garbage);
-            OpcodeFinder.Instance.KnowledgeDatabase.TryAdd(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, new Tuple<Type, object>(typeof(LoggedCharacter), c));
+            OpcodeFinder.Instance.KnowledgeDatabase.TryAdd(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, c);
         }
     }
 }

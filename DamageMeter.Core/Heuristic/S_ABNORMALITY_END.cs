@@ -9,10 +9,6 @@ namespace DamageMeter.Heuristic
 {
     class S_ABNORMALITY_END : AbstractPacketHeuristic
     {
-        public static S_ABNORMALITY_END Instance => _instance ?? (_instance = new S_ABNORMALITY_END());
-        private static S_ABNORMALITY_END _instance;
-        private S_ABNORMALITY_END() : base(OpcodeEnum.S_ABNORMALITY_END) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -23,13 +19,13 @@ namespace DamageMeter.Heuristic
             var id = Reader.ReadUInt32();
             
             //we check it on current player
-            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, out Tuple<Type, object> result))
+            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, out var result))
             {
-                var ch = (LoggedCharacter)result.Item2;
+                var ch = (LoggedCharacter)result;
                 if (ch.Cid != target) return;
-                if(OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacterAbnormalities, out Tuple<Type, object> result2))
+                if(OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacterAbnormalities, out var result2))
                 {
-                    var abs = (List<uint>) result2.Item2;
+                    var abs = (List<uint>) result2;
                     if (!abs.Contains(id)) return;
                 }
             }

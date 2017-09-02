@@ -9,12 +9,6 @@ namespace DamageMeter.Heuristic
 {
     class S_DESPAWN_USER : AbstractPacketHeuristic
     {
-
-        public static S_DESPAWN_USER Instance => _instance ?? (_instance = new S_DESPAWN_USER());
-        private static S_DESPAWN_USER _instance;
-
-        public S_DESPAWN_USER() : base(OpcodeEnum.S_DESPAWN_USER) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -39,16 +33,16 @@ namespace DamageMeter.Heuristic
 
         private bool IsUserSpanwed(ulong id)
         {
-            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.SpawnedUsers, out Tuple<Type, object> result))
+            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.SpawnedUsers, out var result))
             {
-                var list = (List<ulong>)result.Item2;
+                var list = (List<ulong>)result;
                 if (list.Contains(id)) return true;
             }
             return false;
         }
         private void RemoveUserFromDatabase(ulong id)
         {
-            var list = (List<ulong>)OpcodeFinder.Instance.KnowledgeDatabase.Where(x => x.Key == OpcodeFinder.KnowledgeDatabaseItem.SpawnedUsers).First().Value.Item2;
+            var list = (List<ulong>)OpcodeFinder.Instance.KnowledgeDatabase.Where(x => x.Key == OpcodeFinder.KnowledgeDatabaseItem.SpawnedUsers).First().Value;
             if (list.Contains(id)) list.Remove(id);
         }
 

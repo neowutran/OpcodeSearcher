@@ -9,11 +9,6 @@ namespace DamageMeter.Heuristic
 {
     class S_GUILD_TOWER_INFO : AbstractPacketHeuristic
     {
-        public static S_GUILD_TOWER_INFO Instance => _instance ?? (_instance = new S_GUILD_TOWER_INFO());
-        private static S_GUILD_TOWER_INFO _instance;
-
-        public S_GUILD_TOWER_INFO() : base(OpcodeEnum.S_GUILD_TOWER_INFO) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

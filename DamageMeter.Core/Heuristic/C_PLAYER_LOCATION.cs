@@ -9,15 +9,6 @@ namespace DamageMeter.Heuristic
 {
     public class C_PLAYER_LOCATION : AbstractPacketHeuristic
     {
-        public static C_PLAYER_LOCATION Instance => _instance ?? (_instance = new C_PLAYER_LOCATION());
-        private static C_PLAYER_LOCATION _instance;
-
-        public bool Initialized = false;
-
-        private C_PLAYER_LOCATION() : base(OpcodeEnum.C_PLAYER_LOCATION)
-        {
-        }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -68,7 +59,7 @@ namespace DamageMeter.Heuristic
 
         private static void UpdateLocationInDictionary(OpcodeFinder.KnowledgeDatabaseItem knowledgeDatabaseKey, Tera.Game.Vector3f destination)
         {
-            OpcodeFinder.Instance.KnowledgeDatabase[knowledgeDatabaseKey]= new Tuple<Type, object>(typeof(PlayerLocation), destination);
+            OpcodeFinder.Instance.KnowledgeDatabase[knowledgeDatabaseKey]= destination;
         }
     }
 }

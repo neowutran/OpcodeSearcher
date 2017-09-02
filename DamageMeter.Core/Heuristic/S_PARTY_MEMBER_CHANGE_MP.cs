@@ -9,11 +9,6 @@ namespace DamageMeter.Heuristic
 {
     class S_PARTY_MEMBER_CHANGE_MP : AbstractPacketHeuristic
     {
-        public static S_PARTY_MEMBER_CHANGE_MP Instance => _instance ?? (_instance = new S_PARTY_MEMBER_CHANGE_MP());
-        private static S_PARTY_MEMBER_CHANGE_MP _instance;
-
-        public S_PARTY_MEMBER_CHANGE_MP() : base(OpcodeEnum.S_PARTY_MEMBER_CHANGE_MP) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

@@ -157,6 +157,7 @@
     <Compile Include="Heuristic\S_RESULT_ITEM_BIDDING.cs" />
     <Compile Include="Heuristic\S_SECOND_PASSWORD_AUTH_RESULT.cs" />
     <Compile Include="Heuristic\S_SELECT_USER.cs" />
+    <Compile Include="Heuristic\S_SHOW_NPC_TO_MAP.cs" />
     <Compile Include="Heuristic\S_SPAWN_ME.cs" />
     <Compile Include="Heuristic\S_SPAWN_NPC.cs" />
     <Compile Include="Heuristic\S_SPAWN_PROJECTILE.cs" />

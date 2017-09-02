@@ -10,11 +10,6 @@ namespace DamageMeter.Heuristic
 
     public class S_BROCAST_GUILD_FLAG : AbstractPacketHeuristic
     {
-
-        public static S_BROCAST_GUILD_FLAG Instance => _instance ?? (_instance = new S_BROCAST_GUILD_FLAG());
-        private static S_BROCAST_GUILD_FLAG _instance;
-
-        private S_BROCAST_GUILD_FLAG() : base(OpcodeEnum.S_BROCAST_GUILD_FLAG) { }
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

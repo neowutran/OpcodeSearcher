@@ -9,11 +9,6 @@ namespace DamageMeter.Heuristic
 {
     class S_FIN_INTER_PARTY_MATCH : AbstractPacketHeuristic
     {
-        public static S_FIN_INTER_PARTY_MATCH Instance => _instance ?? (_instance = new S_FIN_INTER_PARTY_MATCH());
-        private static S_FIN_INTER_PARTY_MATCH _instance;
-
-        public S_FIN_INTER_PARTY_MATCH() : base(OpcodeEnum.S_FIN_INTER_PARTY_MATCH) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

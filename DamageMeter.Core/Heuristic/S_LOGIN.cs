@@ -10,9 +10,6 @@ namespace DamageMeter.Heuristic
 {
     public class S_LOGIN : AbstractPacketHeuristic
     {
-        public static S_LOGIN Instance => _instance ?? (_instance = new S_LOGIN());
-        private static S_LOGIN _instance;
-        private S_LOGIN() : base(OpcodeEnum.S_LOGIN) { }
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -35,9 +32,9 @@ namespace DamageMeter.Heuristic
                 name = Reader.ReadTeraString();
             }
             catch (Exception) { return; }
-            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.Characters, out Tuple<Type, object> chars))
+            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.Characters, out var chars))
             {
-                var list = chars.Item2 as Dictionary<uint, Character>;
+                var list = chars as Dictionary<uint, Character>;
                 if (!list.TryGetValue(playerId, out Character c)) { return; }
                 if (model != c.RaceGenderClass.Raw) return;
                 if (c.Name != name) return;
@@ -49,7 +46,7 @@ namespace DamageMeter.Heuristic
 
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
             var ch = new LoggedCharacter(cid, model, name, playerId, level);
-            OpcodeFinder.Instance.KnowledgeDatabase.TryAdd(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, new Tuple<Type, object>(typeof(LoggedCharacter), ch));
+            OpcodeFinder.Instance.KnowledgeDatabase.TryAdd(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, ch);
             //TODO
 
 

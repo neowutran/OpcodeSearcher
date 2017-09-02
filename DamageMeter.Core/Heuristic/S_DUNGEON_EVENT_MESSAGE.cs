@@ -9,10 +9,6 @@ namespace DamageMeter.Heuristic
 {
     class S_DUNGEON_EVENT_MESSAGE : AbstractPacketHeuristic
     {
-        public static S_DUNGEON_EVENT_MESSAGE Instance => _instance ?? (_instance = new S_DUNGEON_EVENT_MESSAGE());
-        private static S_DUNGEON_EVENT_MESSAGE _instance;
-
-        public S_DUNGEON_EVENT_MESSAGE() : base(OpcodeEnum.S_DUNGEON_EVENT_MESSAGE) { }
 
         public new void Process(ParsedMessage message)
         {

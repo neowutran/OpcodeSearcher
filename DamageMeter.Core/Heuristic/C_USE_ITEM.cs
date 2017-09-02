@@ -9,11 +9,7 @@ namespace DamageMeter.Heuristic
 {
     class C_USE_ITEM : AbstractPacketHeuristic 
     {
-        public static C_USE_ITEM Instance => _instance ?? (_instance = new C_USE_ITEM());
-        private static C_USE_ITEM _instance;
-
-        public C_USE_ITEM() : base(OpcodeEnum.C_USE_ITEM) { }
-        public uint LatestItem;
+        public static uint LatestItem;
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

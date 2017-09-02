@@ -9,11 +9,6 @@ namespace DamageMeter.Heuristic
 {
     class S_TRADE_BROKER_DEAL_SUGGESTED : AbstractPacketHeuristic
     {
-        public static S_TRADE_BROKER_DEAL_SUGGESTED Instance => _instance ?? (_instance = new S_TRADE_BROKER_DEAL_SUGGESTED());
-        private static S_TRADE_BROKER_DEAL_SUGGESTED _instance;
-
-        public S_TRADE_BROKER_DEAL_SUGGESTED() : base(OpcodeEnum.S_TRADE_BROKER_DEAL_SUGGESTED) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

@@ -9,10 +9,6 @@ namespace DamageMeter.Heuristic
 {
     class S_PARTY_MEMBER_CHANGE_STAMINA : AbstractPacketHeuristic
     {
-        public static S_PARTY_MEMBER_CHANGE_STAMINA Instance => _instance ?? (_instance = new S_PARTY_MEMBER_CHANGE_STAMINA());
-        private static S_PARTY_MEMBER_CHANGE_STAMINA _instance;
-
-        public S_PARTY_MEMBER_CHANGE_STAMINA() : base(OpcodeEnum.S_PARTY_MEMBER_CHANGE_STAMINA) { }
 
         public new void Process(ParsedMessage message)
         {

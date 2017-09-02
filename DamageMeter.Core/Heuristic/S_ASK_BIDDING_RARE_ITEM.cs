@@ -9,11 +9,6 @@ namespace DamageMeter.Heuristic
 {
     class S_ASK_BIDDING_RARE_ITEM : AbstractPacketHeuristic
     {
-        public static S_ASK_BIDDING_RARE_ITEM Instance => _instance ?? (_instance = new S_ASK_BIDDING_RARE_ITEM());
-        private static S_ASK_BIDDING_RARE_ITEM _instance;
-
-        public S_ASK_BIDDING_RARE_ITEM() : base(OpcodeEnum.S_ASK_BIDDING_RARE_ITEM) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

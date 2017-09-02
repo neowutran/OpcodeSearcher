@@ -9,11 +9,6 @@ namespace DamageMeter.Heuristic
 {
     public class S_LOADING_SCREEN_CONTROL_INFO : AbstractPacketHeuristic
     {
-        public static S_LOADING_SCREEN_CONTROL_INFO Instance => _instance ?? (_instance = new S_LOADING_SCREEN_CONTROL_INFO());
-        private static S_LOADING_SCREEN_CONTROL_INFO _instance;
-
-        public bool Initialized = false;
-        private S_LOADING_SCREEN_CONTROL_INFO() : base(OpcodeEnum.S_LOADING_SCREEN_CONTROL_INFO) { }
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

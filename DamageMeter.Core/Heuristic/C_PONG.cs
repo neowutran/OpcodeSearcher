@@ -9,12 +9,6 @@ namespace DamageMeter.Heuristic
 {
     public class C_PONG : AbstractPacketHeuristic
     {
-
-        public static C_PONG Instance => _instance ?? (_instance = new C_PONG());
-        private static C_PONG _instance;
-
-        public bool Initialized = false;
-        private C_PONG() : base(OpcodeEnum.C_PONG) { }
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

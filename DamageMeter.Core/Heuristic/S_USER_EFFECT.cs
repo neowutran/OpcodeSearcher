@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tera.Game.Messages;
+﻿using Tera.Game.Messages;
 
 namespace DamageMeter.Heuristic
 {
     class S_USER_EFFECT : AbstractPacketHeuristic
     {
-        public static S_USER_EFFECT Instance => _instance ?? (_instance = new S_USER_EFFECT());
-        private static S_USER_EFFECT _instance;
-
-        public S_USER_EFFECT() : base(OpcodeEnum.S_USER_EFFECT) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

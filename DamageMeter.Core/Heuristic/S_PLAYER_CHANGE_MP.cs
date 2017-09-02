@@ -9,11 +9,6 @@ namespace DamageMeter.Heuristic
 {
     class S_PLAYER_CHANGE_MP : AbstractPacketHeuristic
     {
-        public static S_PLAYER_CHANGE_MP Instance => _instance ?? (_instance = new S_PLAYER_CHANGE_MP());
-        private static S_PLAYER_CHANGE_MP _instance;
-
-        public S_PLAYER_CHANGE_MP() : base(OpcodeEnum.S_PLAYER_CHANGE_MP) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -28,7 +23,7 @@ namespace DamageMeter.Heuristic
             var target = Reader.ReadUInt64();
             var source = Reader.ReadUInt64();
             if (type > 4) return;
-            var ch = (LoggedCharacter)OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter].Item2;
+            var ch = (LoggedCharacter)OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter];
             if (ch.Cid != target) { return; } //the packet applies to any entity, but we use logged player for simplicity
             if (ch.MaxMp == maxMp) { OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE); }
         }

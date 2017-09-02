@@ -10,13 +10,9 @@ namespace DamageMeter.Heuristic
 {
     class S_LOGOUT_PARTY_MEMBER : AbstractPacketHeuristic
     {
-        public static S_LOGOUT_PARTY_MEMBER Instance => _instance ?? (_instance = new S_LOGOUT_PARTY_MEMBER());
-        private static S_LOGOUT_PARTY_MEMBER _instance;
-
-        public S_LOGOUT_PARTY_MEMBER() : base(OpcodeEnum.S_LOGOUT_PARTY_MEMBER) { }
-        public ushort PossibleOpcode;
-        public uint LastPlayerId;
-        public uint LastServerId;
+        public static ushort PossibleOpcode;
+        public static uint LastPlayerId;
+        public static uint LastServerId;
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -36,9 +32,9 @@ namespace DamageMeter.Heuristic
 
         }
 
-        public void Confirm()
+        public static void Confirm()
         {
-            OpcodeFinder.Instance.SetOpcode(PossibleOpcode, OPCODE);
+            OpcodeFinder.Instance.SetOpcode(PossibleOpcode, OpcodeEnum.S_LOGOUT_PARTY_MEMBER);
 
         }
     }

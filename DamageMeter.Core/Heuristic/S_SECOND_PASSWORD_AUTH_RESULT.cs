@@ -10,13 +10,6 @@ namespace DamageMeter.Heuristic
 
     public class S_SECOND_PASSWORD_AUTH_RESULT : AbstractPacketHeuristic
     {
-        public static S_SECOND_PASSWORD_AUTH_RESULT Instance => _instance ?? (_instance = new S_SECOND_PASSWORD_AUTH_RESULT());
-        private static S_SECOND_PASSWORD_AUTH_RESULT _instance;
-
-        private S_SECOND_PASSWORD_AUTH_RESULT() : base(OpcodeEnum.S_SECOND_PASSWORD_AUTH_RESULT)
-        {
-        }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

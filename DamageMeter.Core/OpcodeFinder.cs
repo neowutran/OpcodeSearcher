@@ -13,6 +13,7 @@ using Grade = System.UInt32;
 using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using System.Reflection;
 
 namespace DamageMeter
 {
@@ -24,6 +25,31 @@ namespace DamageMeter
         private OpcodeFinder() {
             NetworkController.Instance.UiUpdateKnownOpcode.Add(19900, OpcodeEnum.C_CHECK_VERSION);
             NetworkController.Instance.UiUpdateKnownOpcode.Add(19901, OpcodeEnum.S_CHECK_VERSION);
+            var mainMethod = "Process";
+            var classes = AppDomain.CurrentDomain.GetAssemblies()
+            .Select(x => x.GetTypes())
+            .SelectMany(x => x)
+            .Where(x => x.Namespace == typeof(Heuristic.C_CHECK_VERSION).Namespace)
+            .Where(x => x.GetMethod(mainMethod) != null);
+
+            foreach (Type cl in classes)
+            {
+
+                var method = cl.GetMethod(mainMethod);
+                var obj = Activator.CreateInstance(method.DeclaringType);
+                if (cl.Name.StartsWith("C_"))
+                {
+                    ClientOpcode.Add(method, obj);
+                }
+                else if (cl.Name.StartsWith("S_"))
+                {
+                    ServerOpcode.Add(method, obj);
+                }
+                else
+                {
+                    throw new Exception("invalid class name");
+                }
+            }
         }
 
         public enum KnowledgeDatabaseItem
@@ -76,7 +102,7 @@ namespace DamageMeter
         }
 
         // Use that to set value like CID etc ...
-        public ConcurrentDictionary<KnowledgeDatabaseItem, Tuple<Type, object>> KnowledgeDatabase = new ConcurrentDictionary<KnowledgeDatabaseItem, Tuple<Type, object>>();
+        public ConcurrentDictionary<KnowledgeDatabaseItem,  object> KnowledgeDatabase = new ConcurrentDictionary<KnowledgeDatabaseItem, object>();
         private Dictionary<OpcodeId, OpcodeEnum> KnownOpcode = new Dictionary<OpcodeId, OpcodeEnum>()
         {
             { 19900, OpcodeEnum.C_CHECK_VERSION },
@@ -125,11 +151,11 @@ namespace DamageMeter
             AllPackets.Add(PacketCount, message);
             NetworkController.Instance.UiUpdateData.Add(message);
             if (message.Direction == MessageDirection.ClientToServer) {         
-                Parallel.ForEach(ClientOpcode, x => x.DynamicInvoke(message));
+                Parallel.ForEach(ClientOpcode, x => x.Key.Invoke(x.Value, new object[] { message }));
             }
             else
             {                
-                Parallel.ForEach(ServerOpcode, x => x.DynamicInvoke(message));
+                Parallel.ForEach(ServerOpcode, x => x.Key.Invoke(x.Value, new object[] { message }));
             }
         }
 
@@ -139,99 +165,7 @@ namespace DamageMeter
         public long TotalOccurrenceOpcode(OpcodeId opcode) => AllPackets.Where(x => x.Value.OpCode == opcode).Count();
 
         public ParsedMessage GetMessage(long messageNumber) => AllPackets[messageNumber];
-
-        private static readonly List<Delegate> ClientOpcode = new List<Delegate>
-        {
-            {new Action<ParsedMessage>(x => Heuristic.C_SECOND_PASSWORD_AUTH.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.C_CHECK_VERSION.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.C_LOGIN_ARBITER.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.C_SET_VISIBLE_RANGE.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.C_GET_USER_LIST.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.C_PLAYER_LOCATION.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.C_WHISPER.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.C_CHAT.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.C_SELECT_USER.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.C_GET_USER_GUILD_LOGO.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.C_PONG.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.C_USE_ITEM.Instance.Process(x))}, //needed only for S_START_COOLTIME_ITEM
-            {new Action<ParsedMessage>(x => Heuristic.C_DUNGEON_COOL_TIME_LIST.Instance.Process(x))}, 
-            {new Action<ParsedMessage>(x => Heuristic.C_NPCGUILD_LIST.Instance.Process(x))}, 
-            {new Action<ParsedMessage>(x => Heuristic.C_DUNGEON_CLEAR_COUNT_LIST.Instance.Process(x))}, 
-            {new Action<ParsedMessage>(x => Heuristic.C_REQUEST_USER_ITEMLEVEL_INFO.Instance.Process(x))}, 
-            {new Action<ParsedMessage>(x => Heuristic.C_REQUEST_USER_PAPERDOLL_INFO.Instance.Process(x))}, 
-            {new Action<ParsedMessage>(x => Heuristic.C_CHANGE_PARTY_MEMBER_AUTHORITY.Instance.Process(x))}, 
-            {new Action<ParsedMessage>(x => Heuristic.C_CHANGE_PARTY_MANAGER.Instance.Process(x))}, 
-            {new Action<ParsedMessage>(x => Heuristic.C_START_SKILL.Instance.Process(x))}, 
-            {new Action<ParsedMessage>(x => Heuristic.C_PARTY_APPLICATION_DENIED.Instance.Process(x))}, 
-        };
-
-        private static readonly List<Delegate> ServerOpcode = new List<Delegate>
-        {
-            {new Action<ParsedMessage>(x => Heuristic.S_SECOND_PASSWORD_AUTH_RESULT.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_REQUEST_SECOND_PASSWORD_AUTH.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_SELECT_USER.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_LOADING_SCREEN_CONTROL_INFO.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_REMAIN_PLAY_TIME.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_LOGIN_ARBITER.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_LOGIN_ACCOUNT_INFO.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_LOAD_CLIENT_ACCOUNT_SETTING.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_GET_USER_LIST.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_ACCOUNT_PACKAGE_LIST.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_CONFIRM_INVITE_CODE_BUTTON.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_UPDATE_CONTENTS_ON_OFF.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_EACH_SKILL_RESULT.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_CHAT.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_WHISPER.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_LOGIN.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_SPAWN_ME.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_SPAWN_NPC.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_SPAWN_USER.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_PARTY_MEMBER_LIST.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_PLAYER_STAT_UPDATE.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_CREATURE_CHANGE_HP.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_PLAYER_CHANGE_MP.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_PLAYER_CHANGE_STAMINA.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_DESPAWN_NPC.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_DESPAWN_USER.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_ABNORMALITY_BEGIN.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_ABNORMALITY_REFRESH.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_ABNORMALITY_END.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_BROCAST_GUILD_FLAG.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_USER_LOCATION.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_NPC_LOCATION.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_SPAWN_PROJECTILE.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_BOSS_GAGE_INFO.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_USER_STATUS.Instance.Process(x))},
-  			{new Action<ParsedMessage>(x => Heuristic.S_PREPARE_RETURN_TO_LOBBY.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_NPC_STATUS.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_LOAD_TOPO.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_START_COOLTIME_ITEM.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_USER_PAPERDOLL_INFO.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_TRADE_BROKER_DEAL_SUGGESTED.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_ANSWER_INTERACTIVE.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_UPDATE_FRIEND_INFO.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_LEAVE_PARTY_MEMBER.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_GUILD_TOWER_INFO.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_START_COOLTIME_SKILL.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_DECREASE_COOLTIME_SKILL.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_WEAK_POINT.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_USER_EFFECT.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_DUNGEON_EVENT_MESSAGE.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_PARTY_MEMBER_ABNORMAL_ADD.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_PARTY_MEMBER_ABNORMAL_DEL.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_PARTY_MEMBER_ABNORMAL_REFRESH.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_PARTY_MEMBER_ABNORMAL_CLEAR.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_PARTY_MEMBER_STAT_UPDATE.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_PARTY_MEMBER_CHANGE_HP.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_PARTY_MEMBER_CHANGE_MP.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_PARTY_MEMBER_CHANGE_STAMINA.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_LOGOUT_PARTY_MEMBER.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_CHANGE_PARTY_MANAGER.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_FIN_INTER_PARTY_MATCH.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_OTHER_USER_APPLY_PARTY.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_RESULT_BIDDING_DICE_THROW.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_RESULT_ITEM_BIDDING.Instance.Process(x))},
-            {new Action<ParsedMessage>(x => Heuristic.S_ASK_BIDDING_RARE_ITEM.Instance.Process(x))},
-        };
+        private static readonly Dictionary<MethodInfo, object> ClientOpcode = new Dictionary<MethodInfo, object>();
+        private static readonly Dictionary<MethodInfo, object> ServerOpcode = new Dictionary<MethodInfo, object>();
     }
 }

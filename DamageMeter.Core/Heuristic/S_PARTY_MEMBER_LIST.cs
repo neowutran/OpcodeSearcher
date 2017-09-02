@@ -11,10 +11,7 @@ namespace DamageMeter.Heuristic
 {
     class S_PARTY_MEMBER_LIST : AbstractPacketHeuristic
     {
-        public static S_PARTY_MEMBER_LIST Instance => _instance ?? (_instance = new S_PARTY_MEMBER_LIST());
-        private static S_PARTY_MEMBER_LIST _instance;
         public int LastCount;
-        public S_PARTY_MEMBER_LIST() : base(OpcodeEnum.S_PARTY_MEMBER_LIST) { }
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -65,7 +62,7 @@ namespace DamageMeter.Heuristic
                 Reader.BaseStream.Position = nameOffset - 4;
                 var name = "";
                 try { name = Reader.ReadTeraString(); }
-                catch (Exception e) { return; }
+                catch { return; }
                 var p = new PartyMember(playerId, serverId, name, cId);
                 list.Add(p);
             }
@@ -109,7 +106,7 @@ namespace DamageMeter.Heuristic
         }
         private void UpdatePartyMemberList(List<PartyMember> list)
         {
-            OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList] = new Tuple<Type, object>(typeof(List<PartyMember>), list);
+            OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList] = list;
         }
 
     }

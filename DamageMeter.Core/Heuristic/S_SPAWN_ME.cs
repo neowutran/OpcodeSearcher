@@ -11,14 +11,7 @@ namespace DamageMeter.Heuristic
 {
     internal class S_SPAWN_ME : AbstractPacketHeuristic
     {
-        public static S_SPAWN_ME Instance => _instance ?? (_instance = new S_SPAWN_ME());
-        private static S_SPAWN_ME _instance;
-
         public Vector3f LatestPos;
-
-
-        private S_SPAWN_ME() : base(OpcodeEnum.S_SPAWN_ME) { }
-
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
@@ -28,9 +21,9 @@ namespace DamageMeter.Heuristic
                 {
                     Reader.Skip(8);
                     LatestPos = Reader.ReadVector3f();
-                    if (!S_LOAD_TOPO.Instance.IsKnown)
+                    if (!OpcodeFinder.Instance.IsKnown(OpcodeEnum.S_LOAD_TOPO))
                     {
-                        S_LOAD_TOPO.Instance.Confirm(LatestPos);
+                        S_LOAD_TOPO.Confirm(LatestPos);
                     }
                 }
                 return;
@@ -43,19 +36,19 @@ namespace DamageMeter.Heuristic
             var alive = Reader.ReadBoolean();
             var unk = Reader.ReadByte();
             if (unk != 0) return;
-            if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, out Tuple<Type, object> currChar))
+            if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, out var currChar))
             {
                 UpdateLocationInDictionary(OpcodeFinder.KnowledgeDatabaseItem.CharacterSpawnedSuccesfully, false);
                 return;
             }
-            var ch = (LoggedCharacter)currChar.Item2;
+            var ch = (LoggedCharacter)currChar;
             if (target != ch.Cid) return;
 
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OpcodeEnum.S_SPAWN_ME);
-            if (!S_LOAD_TOPO.Instance.IsKnown)
+            if (!OpcodeFinder.Instance.IsKnown(OpcodeEnum.S_LOAD_TOPO))
             {
 
-                S_LOAD_TOPO.Instance.Confirm(LatestPos);
+                S_LOAD_TOPO.Confirm(LatestPos);
 
             }
             UpdateLocationInDictionary(OpcodeFinder.KnowledgeDatabaseItem.CharacterSpawnedSuccesfully, true);
@@ -63,11 +56,7 @@ namespace DamageMeter.Heuristic
 
         private static void UpdateLocationInDictionary(OpcodeFinder.KnowledgeDatabaseItem knowledgeDatabaseKey, bool state)
         {
-            if (OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(knowledgeDatabaseKey))
-            {
-                OpcodeFinder.Instance.KnowledgeDatabase.TryRemove(knowledgeDatabaseKey, out var garbage);
-            }
-            OpcodeFinder.Instance.KnowledgeDatabase.TryAdd(knowledgeDatabaseKey, new Tuple<Type, object>(typeof(Boolean), state));
+            OpcodeFinder.Instance.KnowledgeDatabase[knowledgeDatabaseKey] =  state;
         }
     }
 }
