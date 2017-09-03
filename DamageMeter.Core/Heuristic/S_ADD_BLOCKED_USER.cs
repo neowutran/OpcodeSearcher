@@ -27,13 +27,25 @@ namespace DamageMeter.Heuristic
             if(level > 65) return;
             var race = Reader.ReadUInt32();
             try { var r = (Race)race; }
-            catch (Exception e) { return; }
+            catch{ return; }
             string name;
+            if (Reader.BaseStream.Position + 4 != nameOffset)
+            {
+                return;
+            }
             try { name = Reader.ReadTeraString(); }
-            catch (Exception e) { return; }
+            catch{ return; }
+            if (Reader.BaseStream.Position + 4 != myNoteOffset)
+            {
+                return;
+            }
             try { var myNote = Reader.ReadTeraString(); }
-            catch (Exception e) { return; }
-            if(C_BLOCK_USER.PossibleOpcode == 0) return;
+            catch { return; }
+            if (Reader.BaseStream.Position != Reader.BaseStream.Length) //at this point, we must have reached the end of the stream
+            {
+                return;
+            }
+            if (C_BLOCK_USER.PossibleOpcode == 0) return;
             if (C_BLOCK_USER.LastBlockedUser.Equals(name, StringComparison.OrdinalIgnoreCase))
             {
                 if(OpcodeFinder.Instance.GetMessage(OpcodeFinder.Instance.PacketCount - 1).OpCode != C_BLOCK_USER.PossibleOpcode) return;
