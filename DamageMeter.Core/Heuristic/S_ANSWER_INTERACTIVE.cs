@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Data;
+using Tera;
+using Tera.Game;
 using Tera.Game.Messages;
 
 namespace DamageMeter.Heuristic
@@ -14,7 +16,7 @@ namespace DamageMeter.Heuristic
         {
             base.Process(message);
             if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) return;
-            if(message.Payload.Count < 2+4+4+4+1+1+4+4) return;
+            if (message.Payload.Count < 2 + 4 + 4 + 4 + 1 + 1 + 4 + 4) return;
             var nameOffset = Reader.ReadUInt16();
             var unk = Reader.ReadUInt32();
             var model = Reader.ReadUInt32();
@@ -30,17 +32,33 @@ namespace DamageMeter.Heuristic
 
             //assume it's a player from our same server
             if (BasicTeraData.Instance.Servers.GetServer(serverId) == null) return;
-
+            string name;
             try
             {
-                var name = Reader.ReadTeraString();
-                if (message.Payload.Count != 2 + 4 + 4 + 4 + 1 + 1 + 4 +2+ 2 * name.Length) return;
+                name = Reader.ReadTeraString();
+                if (message.Payload.Count != 2 + 4 + 4 + 4 + 1 + 1 + 4 + 2 + 2 * name.Length) return;
 
             }
             catch (Exception e) { return; }
 
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
-            OpcodeFinder.Instance.SetOpcode(OpcodeFinder.Instance.GetMessage(OpcodeFinder.Instance.PacketCount - 1).OpCode, OpcodeEnum.C_ASK_INTERACTIVE);
+            for (int i = 0; i < 5; i++)
+            {
+                var msg = OpcodeFinder.Instance.GetMessage(OpcodeFinder.Instance.PacketCount - 1 - i);
+                if (msg.Direction == MessageDirection.ClientToServer)
+                {
+                    var tmr = new TeraMessageReader(msg);
+                    try
+                    {
+                        tmr.Skip(2 + 4 + 4);
+                        if (tmr.ReadTeraString() == name)
+                        {
+                            OpcodeFinder.Instance.SetOpcode(msg.OpCode, OpcodeEnum.C_ASK_INTERACTIVE);
+                        }
+                    }
+                    catch (Exception e) { continue; }
+                }
+            }
             //if (OpcodeFinder.Instance.GetMessage(OpcodeFinder.Instance.PacketCount - 1).OpCode == C_ASK_INTERACTIVE.PossibleOpcode) { C_ASK_INTERACTIVE.Confirm(); }
         }
     }
