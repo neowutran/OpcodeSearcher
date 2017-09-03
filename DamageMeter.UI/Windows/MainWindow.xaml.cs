@@ -18,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using DamageMeter.Sniffing;
 using DamageMeter.UI.Annotations;
+using DamageMeter.UI.Windows;
 using Tera.Game;
 using Microsoft.Win32;
 using Tera;
@@ -94,8 +95,12 @@ namespace DamageMeter.UI
                 foreach (var opcode in update.Item2)
                 {
                     Dispatcher.Invoke(() =>
-                        Known.Add(opcode.Key, opcode.Value)
-                    );
+                    {
+                        Known.Add(opcode.Key, opcode.Value);
+                        var opc = OpcodesToFind.FirstOrDefault(x => x.OpcodeName == opcode.Value.ToString());
+                        if (opc != null) opc.Opcode = opcode.Key;
+                    });
+
                     OpcodeNameConv.Instance.Known.Add(opcode.Key, opcode.Value);
                     foreach (var packetViewModel in All.Where(x => x.Message.OpCode == opcode.Key))
                     {
@@ -160,6 +165,8 @@ namespace DamageMeter.UI
         public ObservableCollection<PacketViewModel> All { get; set; } = new ObservableCollection<PacketViewModel>();
         public ObservableCollection<ushort> BlackListedOpcodes { get; set; } = new ObservableCollection<ushort>();
         public ObservableCollection<ushort> WhiteListedOpcodes { get; set; } = new ObservableCollection<ushort>();
+        public ObservableCollection<OpcodeToFindVm> OpcodesToFind { get; set; } = new ObservableCollection<OpcodeToFindVm>();
+
         private void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
         {
             Exit();
@@ -526,6 +533,52 @@ namespace DamageMeter.UI
             if (openFileDialog.ShowDialog() == false) return;
             NetworkController.Instance.StrictCheck = true;
             NetworkController.Instance.LoadOpcodeCheck = openFileDialog.FileName;
+        }
+
+        private string _currentFile;
+        private void LoadList(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog { Filter = "Opcode names list (*.txt)|*.txt" };
+            if (openFileDialog.ShowDialog() == false) return;
+            _currentFile = openFileDialog.FileName;
+            var f = File.OpenText(_currentFile);
+            OpcodesToFind.Clear();
+            while (true)
+            {
+                uint opc = 0;               
+                var l = f.ReadLine();
+                if (string.IsNullOrEmpty(l)) break;
+                var opn = l;
+                var split = l.Split(new string[] {" = "}, StringSplitOptions.RemoveEmptyEntries);
+                if (split.Length > 1)
+                {
+                    opn = split[0];
+                    opc = Convert.ToUInt32(split[1]);
+                    OpcodesToFind.Add(new OpcodeToFindVm(opn, opc));
+                    continue;
+                }
+                split = l.Split(' ');
+                if (split.Length == 2)
+                {
+                    opn = split[0];
+                    opc = Convert.ToUInt32(split[1]);
+                    OpcodesToFind.Add(new OpcodeToFindVm(opn, opc));
+                    continue;
+                }
+                OpcodesToFind.Add(new OpcodeToFindVm(opn, opc));
+
+            }
+        }
+
+        private void SaveList(object sender, RoutedEventArgs e)
+        {
+            var lines = new List<string>();
+            foreach (var opcodeToFindVm in OpcodesToFind)
+            {
+                var line = $"{opcodeToFindVm.OpcodeName} = {opcodeToFindVm.Opcode}";
+                lines.Add(line);
+            }
+            File.WriteAllLines(_currentFile, lines);
         }
     }
     public class DirectionToColor : IValueConverter

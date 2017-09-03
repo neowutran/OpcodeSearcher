@@ -90,6 +90,7 @@
     <Compile Include="AbstractPacketHeuristic.cs" />
     <Compile Include="Heuristic\C_ADD_FRIEND.cs" />
     <Compile Include="Heuristic\C_ASK_INTERACTIVE.cs" />
+    <Compile Include="Heuristic\C_AVAILABLE_EVENT_MATCHING_LIST.cs" />
     <Compile Include="Heuristic\C_BLOCK_USER.cs" />
     <Compile Include="Heuristic\C_CHANGE_PARTY_MANAGER.cs" />
     <Compile Include="Heuristic\C_CHANGE_PARTY_MEMBER_AUTHORITY.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Heuristic\C_CHECK_VERSION.cs" />
     <Compile Include="Heuristic\C_DELETE_FRIEND.cs" />
     <Compile Include="Heuristic\C_DUNGEON_CLEAR_COUNT_LIST.cs" />
+    <Compile Include="Heuristic\C_INVITE_USER_TO_GUILD.cs" />
     <Compile Include="Heuristic\C_JOIN_PRIVATE_CHANNEL.cs" />
     <Compile Include="Heuristic\C_NPCGUILD_LIST.cs" />
     <Compile Include="Heuristic\C_DUNGEON_COOL_TIME_LIST.cs" />
@@ -110,6 +112,7 @@
     <Compile Include="Heuristic\C_REMOVE_BLOCKED_USER.cs" />
     <Compile Include="Heuristic\C_REQUEST_CONTRACT.cs" />
     <Compile Include="Heuristic\C_REQUEST_NONDB_ITEM_INFO.cs" />
+    <Compile Include="Heuristic\C_REQUEST_PARTY_INFO.cs" />
     <Compile Include="Heuristic\C_REQUEST_USER_ITEMLEVEL_INFO.cs" />
     <Compile Include="Heuristic\C_REQUEST_USER_PAPERDOLL_INFO.cs" />
     <Compile Include="Heuristic\C_SECOND_PASSWORD_AUTH.cs" />
@@ -117,6 +120,7 @@
     <Compile Include="Heuristic\C_SET_VISIBLE_RANGE.cs" />
     <Compile Include="Heuristic\C_SHOW_ITEM_TOOLTIP_EX.cs" />
     <Compile Include="Heuristic\C_START_SKILL.cs" />
+    <Compile Include="Heuristic\C_TRADE_BROKER_REJECT_SUGGEST.cs" />
     <Compile Include="Heuristic\C_USE_ITEM.cs" />
     <Compile Include="Heuristic\C_WHISPER.cs" />
     <Compile Include="Heuristic\S_ABNORMALITY_BEGIN.cs" />
@@ -126,6 +130,7 @@
     <Compile Include="Heuristic\S_ADD_BLOCKED_USER.cs" />
     <Compile Include="Heuristic\S_ANSWER_INTERACTIVE.cs" />
     <Compile Include="Heuristic\S_ASK_BIDDING_RARE_ITEM.cs" />
+    <Compile Include="Heuristic\S_AVAILABLE_EVENT_MATCHING_LIST.cs" />
     <Compile Include="Heuristic\S_AVAILABLE_SOCIAL_LIST.cs" />
     <Compile Include="Heuristic\S_BAN_PARTY.cs" />
     <Compile Include="Heuristic\S_BAN_PARTY_MEMBER.cs" />
@@ -142,6 +147,8 @@
     <Compile Include="Heuristic\S_CREATURE_CHANGE_HP.cs" />
     <Compile Include="Heuristic\S_DAILY_QUEST_COMPLETE_COUNT.cs" />
     <Compile Include="Heuristic\S_DELETE_FRIEND.cs" />
+    <Compile Include="Heuristic\S_DUNGEON_CLEAR_COUNT_LIST.cs" />
+    <Compile Include="Heuristic\S_DUNGEON_COOL_TIME_LIST.cs" />
     <Compile Include="Heuristic\S_EVENT_QUEST_SUMMARY.cs" />
     <Compile Include="Heuristic\S_FIN_INTER_PARTY_MATCH .cs" />
     <Compile Include="Heuristic\S_FRIEND_LIST.cs" />
@@ -150,7 +157,9 @@
     <Compile Include="Heuristic\S_LEAVE_PARTY.cs" />
     <Compile Include="Heuristic\S_LEAVE_PRIVATE_CHANNEL.cs" />
     <Compile Include="Heuristic\S_NOTIFY_TO_FRIENDS_WALK_INTO_SAME_AREA.cs" />
+    <Compile Include="Heuristic\S_NPCGUILD_LIST.cs" />
     <Compile Include="Heuristic\S_OTHER_USER_APPLY_PARTY.cs" />
+    <Compile Include="Heuristic\S_PARTY_MEMBER_INFO.cs" />
     <Compile Include="Heuristic\S_PARTY_MATCH_LINK.cs" />
     <Compile Include="Heuristic\S_PLAYER_CHANGE_FLIGHT_ENERGY.cs" />
     <Compile Include="Heuristic\S_PREPARE_RETURN_TO_LOBBY.cs" />

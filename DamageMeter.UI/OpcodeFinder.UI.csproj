@@ -146,6 +146,8 @@
     <Compile Include="ObservableDictionary.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="WindowServices.cs" />
+    <Compile Include="Windows\OpcodeFoundToColor.cs" />
+    <Compile Include="Windows\OpcodeToFindVm.cs" />
     <Page Include="Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

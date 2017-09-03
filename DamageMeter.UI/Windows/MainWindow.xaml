@@ -6,6 +6,7 @@
                      xmlns:ui="clr-namespace:DamageMeter.UI"
                      xmlns:tera="clr-namespace:Tera;assembly=Tera.Core"
                      xmlns:messages="clr-namespace:Tera.Game.Messages;assembly=Tera.Core"
+                     xmlns:windows="clr-namespace:DamageMeter.UI.Windows"
                      mc:Ignorable="d"
                      Title="Opcode Searcher"
                      MinHeight="60" MinWidth="219"
@@ -15,6 +16,24 @@
                      Loaded="MainWindow_OnLoaded"
                      Closed="MainWindow_OnClosed" d:DataContext="{d:DesignInstance ui:MainWindow }">
     <Window.Resources>
+        <windows:OpcodeFoundToColor x:Key="FoundToColor"></windows:OpcodeFoundToColor>
+        <DataTemplate x:Key="OpcodesToFindDataTemplate" DataType="windows:OpcodeToFindVm">
+            <Grid Margin="0,-1,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Border Background="{Binding Opcode , Converter={StaticResource FoundToColor}}" Width="50" Padding="5,0,5,0" HorizontalAlignment="Stretch" Grid.Column="0" Opacity=".8">
+                    <TextBlock Text="{Binding Opcode}" Foreground="White" VerticalAlignment="Center" FontWeight="Normal" FontSize="11" Margin="0,1" HorizontalAlignment="Center" FontFamily="/ShinraMeter;component/#Droid Sans Mono"/>
+                </Border>
+                <Grid HorizontalAlignment="Stretch" Grid.Column="1">
+
+                    <Border Background="{Binding Opcode, Converter={StaticResource FoundToColor}}" Opacity=".5"  HorizontalAlignment="Stretch"/>
+                    <TextBlock Text="{Binding OpcodeName}" Foreground="Black" Margin="5,0" VerticalAlignment="Center" FontSize="11" FontFamily="/ShinraMeter;component/#Droid Sans Mono"/>
+                </Grid>
+            </Grid>
+        </DataTemplate>
+
         <Style TargetType="{x:Type ToolTip}">
             <Setter Property="Background" Value="#8F000000" />
             <Setter Property="FontSize" Value="14" />
@@ -136,10 +155,12 @@
                 <TextBlock Text="{Binding Message.OpCode}" Foreground="Black" Background="#1000" Margin="4,0" Padding="1,3" FontWeight="Normal" 
                            Grid.Column="2" TextAlignment="Center"
                            FontFamily="/ShinraMeter;component/#Droid Sans Mono" VerticalAlignment="Center" />
-                <TextBlock Text="{Binding Message.OpCodeName, Converter={StaticResource OpcodeNameConv}}" 
-                           Foreground="Black" Margin="4,0"  Grid.Column="3" VerticalAlignment="Center"
+                <Viewbox  Grid.Column="3" Margin="4,0"  VerticalAlignment="Center" StretchDirection="DownOnly" HorizontalAlignment="Left">
+                    <TextBlock Text="{Binding Message.OpCodeName, Converter={StaticResource OpcodeNameConv}}" 
+                           Foreground="Black" 
                            FontFamily="/ShinraMeter;component/#Droid Sans Mono"
                            />
+                </Viewbox>
                 <TextBlock Text="{Binding Message.Payload.Count}" Foreground="Black" Grid.Column="4" 
                            HorizontalAlignment="Right" Margin="4,0" VerticalAlignment="Center"
                            FontFamily="/ShinraMeter;component/#Droid Sans Mono"/>
@@ -360,216 +381,243 @@
 
             </MenuItem>
         </Menu>
-        <Grid Grid.Column="2" Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <TextBlock>Settings</TextBlock>
-            <Grid Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Border  Style="{StaticResource CardBorder}" Grid.Row="0" Margin="0,0,0,5" Padding="3" VerticalAlignment="Top">
-                    <Grid>
+        <TabControl Grid.Column="2" Grid.Row="1" BorderThickness="1">
+            <TabItem Header="Settings">
+
+                <Grid Grid.Column="2" Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
-                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <!--Card title-->
-                        <Border BorderThickness="0" Background="Crimson" BorderBrush="#fff" Margin="-3,-3,-3,0" Opacity=".7">
-                            <TextBlock Margin="3,2,0,2" Padding="3,0,3,1" Foreground="White">Discard opcodes (dec)</TextBlock>
-                        </Border>
-                        <!--Card content-->
-                        <StackPanel Grid.Row="1" Margin="0,3,0,0">
-                            <ScrollViewer VerticalAlignment="Stretch" Height="80" Margin="0,0,0,3">
-                                <ItemsControl ItemsSource="{Binding BlackListedOpcodes}"
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Border  Style="{StaticResource CardBorder}" Grid.Row="0" Margin="0,0,0,5" Padding="3" VerticalAlignment="Top">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <!--Card title-->
+                                <Border BorderThickness="0" Background="Crimson" BorderBrush="#fff" Margin="-3,-3,-3,0" Opacity=".7">
+                                    <TextBlock Margin="3,2,0,2" Padding="3,0,3,1" Foreground="White">Discard opcodes (dec)</TextBlock>
+                                </Border>
+                                <!--Card content-->
+                                <StackPanel Grid.Row="1" Margin="0,3,0,0">
+                                    <ScrollViewer VerticalAlignment="Stretch" Height="80" Margin="0,0,0,3">
+                                        <ItemsControl ItemsSource="{Binding BlackListedOpcodes}"
                                                   ItemTemplate="{StaticResource BlackListedOpcode}">
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <StackPanel></StackPanel>
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-                                </ItemsControl>
-                            </ScrollViewer>
-                            <Grid Margin="-3,0,-3,-3">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBox HorizontalAlignment="Stretch" Name="OpcodeToBlacklist"></TextBox>
-                                <Button Click="AddBlackListedOpcode" Width="20" Grid.Column="1" BorderThickness="0" Padding="0,-2,0,0">+</Button>
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel></StackPanel>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                    <Grid Margin="-3,0,-3,-3">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox HorizontalAlignment="Stretch" Name="OpcodeToBlacklist"></TextBox>
+                                        <Button Click="AddBlackListedOpcode" Width="20" Grid.Column="1" BorderThickness="0" Padding="0,-2,0,0">+</Button>
+                                    </Grid>
+                                </StackPanel>
                             </Grid>
-                        </StackPanel>
-                    </Grid>
-                </Border>
-                <Border  Style="{StaticResource CardBorder}"  Grid.Row="1" Padding="3" Margin="0,5">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <!--Card title-->
-                        <Border BorderThickness="0" Background="MediumSeaGreen" BorderBrush="#fff" Margin="-3,-3,-3,0" Opacity=".8">
-                            <TextBlock Margin="3,2,0,2" Padding="3,0,3,1" Foreground="White">Show only opcodes (dec)</TextBlock>
                         </Border>
-                        <!--Card content-->
-                        <StackPanel Grid.Row="1" Margin="0,3,0,0">
-                            <ScrollViewer VerticalAlignment="Stretch" Height="80" Margin="0,0,0,3">
-                                <ItemsControl ItemsSource="{Binding WhiteListedOpcodes}"
+                        <Border  Style="{StaticResource CardBorder}"  Grid.Row="1" Padding="3" Margin="0,5">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <!--Card title-->
+                                <Border BorderThickness="0" Background="MediumSeaGreen" BorderBrush="#fff" Margin="-3,-3,-3,0" Opacity=".8">
+                                    <TextBlock Margin="3,2,0,2" Padding="3,0,3,1" Foreground="White">Show only opcodes (dec)</TextBlock>
+                                </Border>
+                                <!--Card content-->
+                                <StackPanel Grid.Row="1" Margin="0,3,0,0">
+                                    <ScrollViewer VerticalAlignment="Stretch" Height="80" Margin="0,0,0,3">
+                                        <ItemsControl ItemsSource="{Binding WhiteListedOpcodes}"
                                                   ItemTemplate="{StaticResource WhiteListedOpcode}">
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <StackPanel></StackPanel>
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-                                </ItemsControl>
-                            </ScrollViewer>
-                            <Grid Margin="-3,0,-3,-3">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBox HorizontalAlignment="Stretch" Name="OpcodeToWhitelist"></TextBox>
-                                <Button Width="20" Grid.Column="1" Click="AddWhiteListedOpcode" BorderThickness="0" Padding="0,-2,0,0" >+</Button>
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel></StackPanel>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                    <Grid Margin="-3,0,-3,-3">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox HorizontalAlignment="Stretch" Name="OpcodeToWhitelist"></TextBox>
+                                        <Button Width="20" Grid.Column="1" Click="AddWhiteListedOpcode" BorderThickness="0" Padding="0,-2,0,0" >+</Button>
+                                    </Grid>
+                                </StackPanel>
                             </Grid>
-                        </StackPanel>
-                    </Grid>
-                </Border>
-                <Border  Style="{StaticResource CardBorder}" Margin="10,0,0,5" Padding="3" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="1">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <!--Card title-->
-                        <Border BorderThickness="0" Background="DodgerBlue" BorderBrush="#fff" Margin="-3,-3,-3,3" Opacity=".7">
-                            <TextBlock Margin="3,2,0,2" Padding="3,0,3,1" Foreground="White">Filters</TextBlock>
                         </Border>
-                        <!--Card content-->
-                        <StackPanel Grid.Row="1" Margin="3,0,3,3">
-                            <CheckBox Content="Server" Name="ServerCb" IsChecked="True"></CheckBox>
-                            <CheckBox Content="Client" Name="ClientCb" IsChecked="True"></CheckBox>
-                            <CheckBox Content="Spam filter" ToolTip="Discards a packet if the previous one has the same opcode." Name="SpamCb" IsChecked="False"></CheckBox>
-                            <Grid Margin="1,2,1,0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0">Size</TextBlock>
-                                <TextBox Grid.Column="1" Margin="3,0,0,0"  CaretBrush="Black" TextChanged="TextBoxBase_OnTextChanged"></TextBox>
-                            </Grid>
-                            <Button Content="Clear all" Width="Auto" HorizontalAlignment="Stretch"  Click="ClearAll" Margin="1,4,1,1" BorderThickness="0"></Button>
-                            <Button Content="Dump known to file" Width="Auto" HorizontalAlignment="Stretch" Click="Dump" Margin="1,1,1,1" BorderThickness="0"></Button>
-                            <!--<Button Content="Load Log"  Width="Auto" HorizontalAlignment="Stretch" Click="Load" Margin="1,1,1,1"></Button>
+                        <Border  Style="{StaticResource CardBorder}" Margin="10,0,0,5" Padding="3" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="1">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <!--Card title-->
+                                <Border BorderThickness="0" Background="DodgerBlue" BorderBrush="#fff" Margin="-3,-3,-3,3" Opacity=".7">
+                                    <TextBlock Margin="3,2,0,2" Padding="3,0,3,1" Foreground="White">Filters</TextBlock>
+                                </Border>
+                                <!--Card content-->
+                                <StackPanel Grid.Row="1" Margin="3,0,3,3">
+                                    <CheckBox Content="Server" Name="ServerCb" IsChecked="True"></CheckBox>
+                                    <CheckBox Content="Client" Name="ClientCb" IsChecked="True"></CheckBox>
+                                    <CheckBox Content="Spam filter" ToolTip="Discards a packet if the previous one has the same opcode." Name="SpamCb" IsChecked="False"></CheckBox>
+                                    <Grid Margin="1,2,1,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0">Size</TextBlock>
+                                        <TextBox Grid.Column="1" Margin="3,0,0,0"  CaretBrush="Black" TextChanged="TextBoxBase_OnTextChanged"></TextBox>
+                                    </Grid>
+                                    <Button Content="Clear all" Width="Auto" HorizontalAlignment="Stretch"  Click="ClearAll" Margin="1,4,1,1" BorderThickness="0"></Button>
+                                    <Button Content="Dump known to file" Width="Auto" HorizontalAlignment="Stretch" Click="Dump" Margin="1,1,1,1" BorderThickness="0"></Button>
+                                    <!--<Button Content="Load Log"  Width="Auto" HorizontalAlignment="Stretch" Click="Load" Margin="1,1,1,1"></Button>
                             <Button Content="Save Log"  Width="Auto" HorizontalAlignment="Stretch" Click="Save" Margin="1,1,1,1"></Button>-->
-                        </StackPanel>
-                    </Grid>
-                </Border>
-                <Border Grid.Row="1" Style="{StaticResource CardBorder}" Margin="10,0,0,5" Padding="3" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="1">
-                    <Grid >
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <!--Card title-->
-                        <Border BorderThickness="0" Background="DarkOrange" BorderBrush="#fff" Margin="-3,-3,-3,3" Opacity=".7">
-                            <TextBlock Margin="3,2,0,2" Padding="3,0,3,1" Foreground="White">Search</TextBlock>
+                                </StackPanel>
+                            </Grid>
                         </Border>
-                        <TextBlock Foreground="White" HorizontalAlignment="Right" Margin="1,-1" Text="{Binding SearchList.Count}"></TextBlock>
-                        <!--Card content-->
-                        <StackPanel Grid.Row="1" Margin="3,0,3,3">
-                            <TextBox BorderThickness="0" Margin="0,4,0,0" TextChanged="SearchBoxChanged"></TextBox>
-                            <UniformGrid Rows="1" Margin="-6,0,-6,0">
-                                <Button BorderThickness="0" Content="&lt;" HorizontalAlignment="Stretch" Padding="0,-1,0,1" Background="#1000" Click="PreviousResult" ></Button>
-                                <Button BorderThickness="0" Content="&gt;" HorizontalAlignment="Stretch" Padding="0,-1,0,1" Background="#1000" Click="NextResult"></Button>
-                            <UniformGrid.RenderTransform>
-                                <TranslateTransform Y="6"></TranslateTransform>
-                            </UniformGrid.RenderTransform>
-                            </UniformGrid>
-                        </StackPanel>
+                        <Border Grid.Row="1" Style="{StaticResource CardBorder}" Margin="10,0,0,5" Padding="3" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="1">
+                            <Grid >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <!--Card title-->
+                                <Border BorderThickness="0" Background="DarkOrange" BorderBrush="#fff" Margin="-3,-3,-3,3" Opacity=".7">
+                                    <TextBlock Margin="3,2,0,2" Padding="3,0,3,1" Foreground="White">Search</TextBlock>
+                                </Border>
+                                <TextBlock Foreground="White" HorizontalAlignment="Right" Margin="1,-1" Text="{Binding SearchList.Count}"></TextBlock>
+                                <!--Card content-->
+                                <StackPanel Grid.Row="1" Margin="3,0,3,3">
+                                    <TextBox BorderThickness="0" Margin="0,4,0,0" TextChanged="SearchBoxChanged"></TextBox>
+                                    <UniformGrid Rows="1" Margin="-6,0,-6,0">
+                                        <Button BorderThickness="0" Content="&lt;" HorizontalAlignment="Stretch" Padding="0,-1,0,1" Background="#1000" Click="PreviousResult" ></Button>
+                                        <Button BorderThickness="0" Content="&gt;" HorizontalAlignment="Stretch" Padding="0,-1,0,1" Background="#1000" Click="NextResult"></Button>
+                                        <UniformGrid.RenderTransform>
+                                            <TranslateTransform Y="6"></TranslateTransform>
+                                        </UniformGrid.RenderTransform>
+                                    </UniformGrid>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
                     </Grid>
-                </Border>
-            </Grid>
-    <!--Known list-->
-        <Grid Grid.Row="2" Grid.ColumnSpan="2">
+                    <!--Known list-->
+                    <Grid Grid.Row="2" Grid.ColumnSpan="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock>Known opcodes</TextBlock>
+                        <ScrollViewer Grid.Row="1" x:Name="KnownSw">
+                            <ItemsControl ItemsSource="{Binding Known}" ItemTemplate="{StaticResource opcdt}"  BorderThickness="1" BorderBrush="#2000" >
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Background="White"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Find">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <ScrollViewer Grid.Row="0">
+                        <ItemsControl ItemsSource="{Binding OpcodesToFind}" ItemTemplate="{StaticResource OpcodesToFindDataTemplate}"  BorderThickness="0" BorderBrush="#2000" >
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Background="White"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
+                    <UniformGrid Rows="1" Grid.Row="1" Margin="-2,0,-2,-2">
+                        <Button BorderThickness="0" Click="LoadList">Load</Button>
+                        <Button BorderThickness="0" Click="SaveList">Save</Button>
+
+                    </UniformGrid>
+                </Grid>
+
+            </TabItem>
+        </TabControl>
+        <!--All list-->
+        <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock>Known opcodes</TextBlock>
-            <ScrollViewer Grid.Row="1" x:Name="KnownSw">
-                <ItemsControl ItemsSource="{Binding Known}" ItemTemplate="{StaticResource opcdt}"  BorderThickness="1" BorderBrush="#2000" >
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Background="White"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
-            </ScrollViewer>
-        </Grid>
-    </Grid>
-    <!--All list-->
-    <Grid Grid.Row="1">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <TextBlock >
+            <TextBlock >
                 <Run Text="All packets  - "></Run>
                 <Run Text="{Binding All.Count, Mode=OneWay}"></Run>
                 <Run>(</Run>
                 <Run Text="{Binding Queued, Mode=OneWay}"></Run>
                 <Run>)</Run>
 
-        </TextBlock>
-        <ScrollViewer Grid.Row="1" x:Name="AllSw">
-            <ItemsControl ItemsSource="{Binding All}" ItemTemplate="{StaticResource msg}"  
+            </TextBlock>
+            <ScrollViewer Grid.Row="1" x:Name="AllSw">
+                <ItemsControl ItemsSource="{Binding All}" ItemTemplate="{StaticResource msg}"  
                               BorderThickness="1" BorderBrush="#2000" 
                               x:Name="AllItemsControl">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel IsVirtualizing="True" VirtualizationMode="Recycling" Background="White"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-        </ScrollViewer>
-        <Border Visibility="{Binding NewMessagesBelow, Converter={StaticResource BoolToVisibleHidden}}" Height="30" Background="MediumSeaGreen" VerticalAlignment="Bottom" Grid.Row="1" Margin="0,0,18,0" Cursor="Hand" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown">
-            <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15" >New messages</TextBlock>
-        </Border>
-    </Grid>
-    <Grid Grid.Column="1" Grid.Row="1" >
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <TextBlock Grid.ColumnSpan="2">Text view</TextBlock>
-        <ScrollViewer Width="260" Grid.Row="1" MinWidth="100"
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel IsVirtualizing="True" VirtualizationMode="Recycling" Background="White"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+            <Border Visibility="{Binding NewMessagesBelow, Converter={StaticResource BoolToVisibleHidden}}" Height="30" Background="MediumSeaGreen" VerticalAlignment="Bottom" Grid.Row="1" Margin="0,0,18,0" Cursor="Hand" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown">
+                <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15" >New messages</TextBlock>
+            </Border>
+        </Grid>
+        <Grid Grid.Column="1" Grid.Row="1" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.ColumnSpan="2">Text view</TextBlock>
+            <ScrollViewer Width="260" Grid.Row="1" MinWidth="100"
                           ScrollChanged="HexSwChanged" x:Name="HexSw" VerticalScrollBarVisibility="Hidden">
-            <ItemsControl ItemsSource="{Binding PacketDetails.Data}"
+                <ItemsControl ItemsSource="{Binding PacketDetails.Data}"
                           ItemTemplate="{StaticResource DataHex}"
                               Background="White" 
                               Name="HexIc"
                           BorderThickness="1" BorderBrush="#ccc">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Columns="4"  VerticalAlignment="Top"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-        </ScrollViewer>
-        <ScrollViewer Width="150" MinWidth="50" Grid.Row="1" Grid.Column="1" x:Name="TextSw" ScrollChanged="HexSwChanged">
-            <ItemsControl ItemsSource="{Binding PacketDetails.Data}"
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="4"  VerticalAlignment="Top"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+            <ScrollViewer Width="150" MinWidth="50" Grid.Row="1" Grid.Column="1" x:Name="TextSw" ScrollChanged="HexSwChanged">
+                <ItemsControl ItemsSource="{Binding PacketDetails.Data}"
                               ItemTemplate="{StaticResource DataText}"
                               Background="White"
                               HorizontalAlignment="Stretch"
@@ -577,17 +625,21 @@
                               BorderThickness="1" 
                               BorderBrush="#ccc"
                               Name="TextIc">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Columns="4"  VerticalAlignment="Top"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-        </ScrollViewer>
-    </Grid>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="4"  VerticalAlignment="Top"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
     </Grid>
 
 </Window>
+
+
+
+
 
 
 
