@@ -18,7 +18,7 @@ namespace DamageMeter.Heuristic
             var dataOffset = Reader.ReadUInt16();
             var dataCount = Reader.ReadUInt16();
             var type = Reader.ReadUInt32();
-            if(type != 4) return;
+            if(type != 4 && type != 35) return; //4 = party invite, 35 = broker nego
             var unk2 = Reader.ReadUInt32();
             var unk3 = Reader.ReadUInt32();
             var unk4 = Reader.ReadUInt32();
