@@ -16,19 +16,21 @@
                      Loaded="MainWindow_OnLoaded"
                      Closed="MainWindow_OnClosed" d:DataContext="{d:DesignInstance ui:MainWindow }">
     <Window.Resources>
-        <windows:OpcodeFoundToColor x:Key="FoundToColor"></windows:OpcodeFoundToColor>
+        <windows:OpcodeToFindToColor x:Key="FoundToColor"></windows:OpcodeToFindToColor>
         <DataTemplate x:Key="OpcodesToFindDataTemplate" DataType="windows:OpcodeToFindVm">
             <Grid Margin="0,-1,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Border Background="{Binding Opcode , Converter={StaticResource FoundToColor}}" Width="50" Padding="5,0,5,0" HorizontalAlignment="Stretch" Grid.Column="0" Opacity=".8">
+                <Border Background="{Binding Status, Converter={StaticResource FoundToColor}}" Width="50" 
+                        Padding="5,0,5,0" HorizontalAlignment="Stretch" Grid.Column="0" Opacity=".8"
+                        ToolTip="{Binding Mismatching}">
                     <TextBlock Text="{Binding Opcode}" Foreground="White" VerticalAlignment="Center" FontWeight="Normal" FontSize="11" Margin="0,1" HorizontalAlignment="Center" FontFamily="/ShinraMeter;component/#Droid Sans Mono"/>
                 </Border>
                 <Grid HorizontalAlignment="Stretch" Grid.Column="1">
 
-                    <Border Background="{Binding Opcode, Converter={StaticResource FoundToColor}}" Opacity=".5"  HorizontalAlignment="Stretch"/>
+                    <Border Background="{Binding Status, Converter={StaticResource FoundToColor}}" Opacity=".5"  HorizontalAlignment="Stretch"/>
                     <TextBlock Text="{Binding OpcodeName}" Foreground="Black" Margin="5,0" VerticalAlignment="Center" FontSize="11" FontFamily="/ShinraMeter;component/#Droid Sans Mono"/>
                 </Grid>
             </Grid>
@@ -643,6 +645,14 @@
     </Grid>
 
 </Window>
+
+
+
+
+
+
+
+
 
 
 

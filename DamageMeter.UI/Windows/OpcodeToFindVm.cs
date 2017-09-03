@@ -1,6 +1,10 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Media;
 using DamageMeter.UI.Annotations;
+using Brush = System.Drawing.Brush;
+using Brushes = System.Drawing.Brushes;
+using Color = System.Drawing.Color;
 
 namespace DamageMeter.UI.Windows
 {
@@ -8,15 +12,45 @@ namespace DamageMeter.UI.Windows
     {
         public string OpcodeName { get; }
 
+        public OpcodeStatus Status => Mismatching != 0 ? OpcodeStatus.Mismatching : Confirmed ? OpcodeStatus.Confirmed : OpcodeStatus.None ;
+
+        private bool _confirmed;
+        public bool Confirmed
+        {
+            get => _confirmed;
+            set
+            {
+                if (_confirmed == value) return;
+                _confirmed = value;
+                OnPropertyChanged(nameof(Confirmed));
+                OnPropertyChanged(nameof(Status));
+            }
+        }
+        private uint _mismatching;
+        public uint Mismatching
+        {
+            get => _mismatching;
+            set
+            {
+                if (_mismatching == value) return;
+                _mismatching = value;
+                OnPropertyChanged(nameof(Mismatching));
+                OnPropertyChanged(nameof(Status));
+
+            }
+        }
+
         private uint _opcode;
         public uint Opcode
         {
-            get { return _opcode; }
+            get => _opcode;
             set
             {
                 if (_opcode == value) return;
                 _opcode = value;
                 OnPropertyChanged(nameof(Opcode));
+                OnPropertyChanged(nameof(Status));
+
             }
         }
 

@@ -25,6 +25,7 @@ using Tera;
 using Tera.Game.Messages;
 using Brushes = System.Drawing.Brushes;
 using Color = System.Windows.Media.Color;
+using MessageBox = System.Windows.MessageBox;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using OpcodeId = System.UInt16;
 
@@ -98,7 +99,22 @@ namespace DamageMeter.UI
                     {
                         Known.Add(opcode.Key, opcode.Value);
                         var opc = OpcodesToFind.FirstOrDefault(x => x.OpcodeName == opcode.Value.ToString());
-                        if (opc != null) opc.Opcode = opcode.Key;
+                        if (opc == null) { return; }
+                        if (opc.Opcode == 0)
+                        {
+                            opc.Opcode = opcode.Key;
+                            opc.Confirmed = true;
+                        }
+                        else
+                        {
+                            if (opc.Opcode == opcode.Key) { opc.Confirmed = true; }
+                            else
+                            {
+                                opc.Mismatching = opcode.Key;
+                                //TODO: this is annoying, will put it somewhere else
+                                MessageBox.Show(this, $"Mismatching opcodes for {opc.OpcodeName}:\nold={opc.Opcode}\nnew={opcode.Key}");
+                            }
+                        }
                     });
 
                     OpcodeNameConv.Instance.Known.Add(opcode.Key, opcode.Value);
