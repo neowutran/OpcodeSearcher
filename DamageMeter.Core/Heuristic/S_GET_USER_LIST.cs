@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tera;
 using Tera.Game;
 using Tera.Game.Messages;
 
@@ -32,7 +33,11 @@ namespace DamageMeter.Heuristic
         {
             base.Process(message);
 
-            if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) { return; }
+            if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode))
+            {
+                if(OpcodeFinder.Instance.GetOpcode(OPCODE) == message.OpCode) { Parse();}
+                return;
+            }
 
             if (OpcodeFinder.Instance.PacketCount >= 10 && OpcodeFinder.Instance.PacketCount <= 15 && message.Payload.Count > 100)
             {
@@ -85,6 +90,16 @@ namespace DamageMeter.Heuristic
                 OpcodeFinder.Instance.KnowledgeDatabase.TryAdd(OpcodeFinder.KnowledgeDatabaseItem.Characters, chars);
             }
 
+        }
+
+        private void Parse()
+        {
+            //not parsing, just checking on sReturnToLobby
+            var msg = OpcodeFinder.Instance.GetMessage(OpcodeFinder.Instance.PacketCount - 1);
+            if (msg.Payload.Count == 0 && msg.Direction == MessageDirection.ServerToClient && msg.OpCode == S_RETURN_TO_LOBBY.PossibleOpcode)
+            {
+                S_RETURN_TO_LOBBY.Confirm();
+            }
         }
     }
 }
