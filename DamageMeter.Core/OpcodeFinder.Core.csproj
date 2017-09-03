@@ -126,6 +126,7 @@
     <Compile Include="Heuristic\S_ABNORMALITY_BEGIN.cs" />
     <Compile Include="Heuristic\S_ABNORMALITY_END.cs" />
     <Compile Include="Heuristic\S_ABNORMALITY_REFRESH.cs" />
+    <Compile Include="Heuristic\S_ACCOMPLISH_ACHIEVEMENT.cs" />
     <Compile Include="Heuristic\S_ACCOUNT_PACKAGE_LIST.cs" />
     <Compile Include="Heuristic\S_ADD_BLOCKED_USER.cs" />
     <Compile Include="Heuristic\S_ANSWER_INTERACTIVE.cs" />
@@ -141,6 +142,7 @@
     <Compile Include="Heuristic\S_CHAT.cs" />
     <Compile Include="Heuristic\S_CHECK_TO_READY_PARTY.cs" />
     <Compile Include="Heuristic\S_CHECK_TO_READY_PARTY_FIN.cs" />
+    <Compile Include="Heuristic\S_CLEAR_ALL_HOLDED_ABNORMALITY.cs" />
     <Compile Include="Heuristic\S_CLEAR_QUEST_INFO.cs" />
     <Compile Include="Heuristic\S_CLEAR_WORLD_QUEST_VILLAGER_INFO.cs" />
     <Compile Include="Heuristic\S_CONFIRM_INVITE_CODE_BUTTON.cs" />
@@ -159,6 +161,7 @@
     <Compile Include="Heuristic\S_NOTIFY_TO_FRIENDS_WALK_INTO_SAME_AREA.cs" />
     <Compile Include="Heuristic\S_NPCGUILD_LIST.cs" />
     <Compile Include="Heuristic\S_OTHER_USER_APPLY_PARTY.cs" />
+    <Compile Include="Heuristic\S_PARTY_MEMBER_BUFF_UPDATE.cs" />
     <Compile Include="Heuristic\S_PARTY_MEMBER_INFO.cs" />
     <Compile Include="Heuristic\S_PARTY_MATCH_LINK.cs" />
     <Compile Include="Heuristic\S_PLAYER_CHANGE_FLIGHT_ENERGY.cs" />
@@ -198,6 +201,7 @@
     <Compile Include="Heuristic\S_REQUEST_SECOND_PASSWORD_AUTH.cs" />
     <Compile Include="Heuristic\S_RESULT_BIDDING_DICE_THROW.cs" />
     <Compile Include="Heuristic\S_RESULT_ITEM_BIDDING.cs" />
+    <Compile Include="Heuristic\S_RETURN_TO_LOBBY.cs" />
     <Compile Include="Heuristic\S_SECOND_PASSWORD_AUTH_RESULT.cs" />
     <Compile Include="Heuristic\S_SELECT_USER.cs" />
     <Compile Include="Heuristic\S_SHOW_NPC_TO_MAP.cs" />
