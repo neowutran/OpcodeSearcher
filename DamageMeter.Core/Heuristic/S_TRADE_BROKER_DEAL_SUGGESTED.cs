@@ -9,10 +9,16 @@ namespace DamageMeter.Heuristic
 {
     class S_TRADE_BROKER_DEAL_SUGGESTED : AbstractPacketHeuristic
     {
+        public static uint LatestListing;
+        public static uint LatestBuyerId;
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
-            if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) return;
+            if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode))
+            {
+                if (OpcodeFinder.Instance.GetOpcode(OPCODE) == message.OpCode) { Parse(); }
+                return;
+            }
 
             if (message.Payload.Count < 2 + 4 + 4 + 4 + 8 + 8 + 8 + 4) return;
 
@@ -35,6 +41,15 @@ namespace DamageMeter.Heuristic
             catch (Exception e){return;}
 
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
+            LatestListing = listing;
+            LatestBuyerId = playerId;
+        }
+
+        private void Parse()
+        {
+            var nameOffset = Reader.ReadUInt16();
+            LatestBuyerId = Reader.ReadUInt32();
+            LatestListing = Reader.ReadUInt32();
         }
     }
 }
