@@ -119,6 +119,7 @@
     <Compile Include="Heuristic\C_SELECT_USER.cs" />
     <Compile Include="Heuristic\C_SET_VISIBLE_RANGE.cs" />
     <Compile Include="Heuristic\C_SHOW_ITEM_TOOLTIP_EX.cs" />
+    <Compile Include="Heuristic\C_CANCEL_SKILL.cs" />
     <Compile Include="Heuristic\C_START_SKILL.cs" />
     <Compile Include="Heuristic\C_TRADE_BROKER_REJECT_SUGGEST.cs" />
     <Compile Include="Heuristic\C_USE_ITEM.cs" />
