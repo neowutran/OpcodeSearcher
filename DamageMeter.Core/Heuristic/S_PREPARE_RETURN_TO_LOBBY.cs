@@ -25,6 +25,7 @@ namespace DamageMeter.Heuristic
                     OpcodeFinder.Instance.SetOpcode(previousPacket.OpCode, OpcodeEnum.C_RETURN_TO_LOBBY);
                     //S_PREPARE_RETURN_TO_LOBBY
                     OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
+                    S_CLEAR_ALL_HOLDED_ABNORMALITY.Wait();
                 }
             }
         }
