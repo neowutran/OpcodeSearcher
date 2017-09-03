@@ -55,13 +55,29 @@ namespace DamageMeter.Heuristic
             var msg = OpcodeFinder.Instance.GetMessage(OpcodeFinder.Instance.PacketCount - 1);
             if (msg.OpCode == S_LOGOUT_PARTY_MEMBER.PossibleOpcode)
             {
-                if (S_LOGOUT_PARTY_MEMBER.LastServerId == serverId && S_LOGOUT_PARTY_MEMBER.LastPlayerId == playerId) S_LOGOUT_PARTY_MEMBER.Confirm();
+                if (S_LOGOUT_PARTY_MEMBER.LastServerId == serverId && S_LOGOUT_PARTY_MEMBER.LastPlayerId == playerId)
+                {
+                    S_LOGOUT_PARTY_MEMBER.Confirm();
+                    return;
+                }
             }
             //try 2nd last message too
             msg = OpcodeFinder.Instance.GetMessage(OpcodeFinder.Instance.PacketCount - 2);
             if (msg.OpCode == S_LOGOUT_PARTY_MEMBER.PossibleOpcode)
             {
-                if (S_LOGOUT_PARTY_MEMBER.LastServerId == serverId && S_LOGOUT_PARTY_MEMBER.LastPlayerId == playerId) S_LOGOUT_PARTY_MEMBER.Confirm();
+                if (S_LOGOUT_PARTY_MEMBER.LastServerId == serverId && S_LOGOUT_PARTY_MEMBER.LastPlayerId == playerId)
+                {
+                    S_LOGOUT_PARTY_MEMBER.Confirm();
+                    return;
+                }
+            }
+            msg = OpcodeFinder.Instance.GetMessage(OpcodeFinder.Instance.PacketCount - 1);
+            if (msg.OpCode == S_PARTY_MEMBER_BUFF_UPDATE.PossibleOpcode)
+            {
+                if (S_PARTY_MEMBER_BUFF_UPDATE.LastServerId == serverId && S_PARTY_MEMBER_BUFF_UPDATE.LastPlayerId == playerId)
+                {
+                    S_PARTY_MEMBER_BUFF_UPDATE.Confirm();
+                }
             }
 
         }
