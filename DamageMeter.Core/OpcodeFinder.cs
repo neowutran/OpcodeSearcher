@@ -200,24 +200,12 @@ namespace DamageMeter
         public long TotalOccurrenceOpcode(OpcodeId opcode) => AllPackets.Where(x => x.Value.OpCode == opcode).Count();
 
         public ParsedMessage GetMessage(long messageNumber) => AllPackets[messageNumber];
-        private static readonly Dictionary<MethodInfo, object> ClientOpcode = new Dictionary<MethodInfo, object>();
-        private static readonly Dictionary<MethodInfo, object> ServerOpcode = new Dictionary<MethodInfo, object>();
+        private readonly Dictionary<MethodInfo, object> ClientOpcode = new Dictionary<MethodInfo, object>();
+        private readonly Dictionary<MethodInfo, object> ServerOpcode = new Dictionary<MethodInfo, object>();
 
         public void Reset()
         {
-            AllPackets.Clear();
-            PacketCount = 0;
-            KnownOpcode = new Dictionary<OpcodeId, OpcodeEnum>()
-            {
-                { 19900, OpcodeEnum.C_CHECK_VERSION },
-                { 19901, OpcodeEnum.S_CHECK_VERSION },
-            };
-            ReverseKnownOpcode = new Dictionary<OpcodeEnum, OpcodeId>()
-            {
-                { OpcodeEnum.C_CHECK_VERSION, 19900 },
-                { OpcodeEnum.S_CHECK_VERSION, 19901 },
-            };
-            KnowledgeDatabase.Clear();
+            _instance = null;
         }
     }
 }
