@@ -68,7 +68,7 @@ namespace DamageMeter.Heuristic
                     Reader.Skip(8 + 1 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 8 + 4 + 4 + 4 + 2 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 2 + 4 + 1 + 4);
 
                     // KR latest change
-                    if (NetworkController.Instance.Version < 319977)
+                    if (NetworkController.Instance.Version == 319977)
                     {
                         Reader.Skip(8);
                     }

@@ -144,7 +144,6 @@
     <Compile Include="Heuristic\S_CHECK_TO_READY_PARTY_FIN.cs" />
     <Compile Include="Heuristic\S_CLEAR_ALL_HOLDED_ABNORMALITY.cs" />
     <Compile Include="Heuristic\S_CLEAR_QUEST_INFO.cs" />
-    <Compile Include="Heuristic\S_CLEAR_WORLD_QUEST_VILLAGER_INFO.cs" />
     <Compile Include="Heuristic\S_CONFIRM_INVITE_CODE_BUTTON.cs" />
     <Compile Include="Heuristic\S_CREATURE_CHANGE_HP.cs" />
     <Compile Include="Heuristic\S_DAILY_QUEST_COMPLETE_COUNT.cs" />
