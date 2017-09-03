@@ -88,6 +88,27 @@ namespace DamageMeter.UI
             }
         }
 
+        private void CheckFindList(ushort opcode, OpcodeEnum opname)
+        {
+            var opc = OpcodesToFind.FirstOrDefault(x => x.OpcodeName == opname.ToString());
+            if (opc == null) { return; }
+            if (opc.Opcode == 0)
+            {
+                opc.Opcode = opcode;
+                opc.Confirmed = true;
+            }
+            else
+            {
+                if (opc.Opcode == opcode) { opc.Confirmed = true; }
+                else
+                {
+                    opc.Mismatching = opcode;
+                    //TODO: this is annoying, will put it somewhere else
+                    //MessageBox.Show(this, $"Mismatching opcodes for {opc.OpcodeName}:\nold={opc.Opcode}\nnew={opcode}");
+                }
+            }
+
+        }
         private void HandleNewMessage(Tuple<List<ParsedMessage>, Dictionary<OpcodeId, OpcodeEnum>, int> update)
         {
             Queued = update.Item3;
@@ -98,23 +119,7 @@ namespace DamageMeter.UI
                     Dispatcher.Invoke(() =>
                     {
                         Known.Add(opcode.Key, opcode.Value);
-                        var opc = OpcodesToFind.FirstOrDefault(x => x.OpcodeName == opcode.Value.ToString());
-                        if (opc == null) { return; }
-                        if (opc.Opcode == 0)
-                        {
-                            opc.Opcode = opcode.Key;
-                            opc.Confirmed = true;
-                        }
-                        else
-                        {
-                            if (opc.Opcode == opcode.Key) { opc.Confirmed = true; }
-                            else
-                            {
-                                opc.Mismatching = opcode.Key;
-                                //TODO: this is annoying, will put it somewhere else
-                                MessageBox.Show(this, $"Mismatching opcodes for {opc.OpcodeName}:\nold={opc.Opcode}\nnew={opcode.Key}");
-                            }
-                        }
+                        CheckFindList(opcode.Key, opcode.Value);
                     });
 
                     OpcodeNameConv.Instance.Known.Add(opcode.Key, opcode.Value);
@@ -596,6 +601,11 @@ namespace DamageMeter.UI
                 OpcodesToFind.Add(new OpcodeToFindVm(opn, opc));
 
             }
+            foreach (KeyValuePair<ushort, OpcodeEnum> o in Known)
+            {
+                CheckFindList(o.Key, o.Value);
+            }
+
         }
 
         private void SaveList(object sender, RoutedEventArgs e)
