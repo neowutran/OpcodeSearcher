@@ -95,6 +95,7 @@ namespace DamageMeter.Heuristic
         private void Parse()
         {
             //not parsing, just checking on sReturnToLobby
+            if(OpcodeFinder.Instance.IsKnown(OpcodeEnum.S_RETURN_TO_LOBBY)) return;
             var msg = OpcodeFinder.Instance.GetMessage(OpcodeFinder.Instance.PacketCount - 1);
             if (msg.Payload.Count == 0 && msg.Direction == MessageDirection.ServerToClient && msg.OpCode == S_RETURN_TO_LOBBY.PossibleOpcode)
             {

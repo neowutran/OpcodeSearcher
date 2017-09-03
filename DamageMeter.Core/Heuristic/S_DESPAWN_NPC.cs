@@ -24,7 +24,9 @@ namespace DamageMeter.Heuristic
             if (message.Payload.Count != 8 + 4 + 4 + 4 + 4 + 4) return;
 
             var cid = Reader.ReadUInt64();
+            if(cid == 0) return;
             var pos = Reader.ReadVector3f();
+            if(pos.X == 0 || pos.Y == 0 || pos.Z == 0) return; 
             var type = Reader.ReadUInt32();
             if (type != 1 && type != 5) return;
             var unk = Reader.ReadUInt32();
