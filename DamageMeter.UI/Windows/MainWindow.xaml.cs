@@ -153,6 +153,7 @@ namespace DamageMeter.UI
                 OnPropertyChanged(nameof(NewMessagesBelow));
             }
         }
+
         private void All_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (_bottom) Dispatcher.Invoke(() => AllSw.ScrollToBottom());
@@ -323,6 +324,17 @@ namespace DamageMeter.UI
                 lines.Add(s);
             }
             File.WriteAllLines($"{Environment.CurrentDirectory}/opcodes {DateTime.Now.ToString().Replace('/', '-').Replace(':', '-')}.txt", lines);
+        }
+
+        private void CopyPacketDetailsHex(object sender, RoutedEventArgs e)
+        {
+          
+            StringBuilder bldr = new StringBuilder();
+            foreach (var a in PacketDetails.Data)
+            {
+                bldr.Append(a.Hex);
+            }
+            System.Windows.Clipboard.SetText(bldr.ToString());
         }
 
         private void Load(object sender, RoutedEventArgs e)
@@ -669,6 +681,20 @@ namespace DamageMeter.UI
         {
             var v = (bool)value;
             return v ? Visibility.Visible : Visibility.Hidden;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class ListNotEmptyToBool : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var v = (int)value;
+            return (v > 0) ? Visibility.Visible : Visibility.Hidden;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

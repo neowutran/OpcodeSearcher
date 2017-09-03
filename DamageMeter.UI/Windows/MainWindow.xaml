@@ -114,6 +114,7 @@
         </Style>
         <ui:DirectionToColor x:Key="DirectionToColor"></ui:DirectionToColor>
         <ui:BoolToVisibleHidden x:Key="BoolToVisibleHidden"></ui:BoolToVisibleHidden>
+        <ui:ListNotEmptyToBool x:Key="ListNotEmptyToBool"></ui:ListNotEmptyToBool>
         <ui:OpcodeNameConv x:Key="OpcodeNameConv"></ui:OpcodeNameConv>
         <DataTemplate x:Key="opcdt" >
             <Grid Margin="0,-1,0,0">
@@ -609,9 +610,15 @@
                               Background="White" 
                               Name="HexIc"
                           BorderThickness="1" BorderBrush="#ccc">
-                    <ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemsPanel> 
                         <ItemsPanelTemplate>
-                            <UniformGrid Columns="4"  VerticalAlignment="Top"/>
+                            <UniformGrid Columns="4"  VerticalAlignment="Top">
+                                <UniformGrid.ContextMenu>
+                                    <ContextMenu Visibility ="{Binding PacketDetails.Count, Converter={StaticResource ListNotEmptyToBool}}">
+                                        <MenuItem Header="Copy all HEX Data to clipboard" Click="CopyPacketDetailsHex"></MenuItem>
+                                    </ContextMenu>
+                                </UniformGrid.ContextMenu>
+                            </UniformGrid>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
@@ -625,7 +632,7 @@
                               BorderThickness="1" 
                               BorderBrush="#ccc"
                               Name="TextIc">
-                    <ItemsControl.ItemsPanel>
+                   <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <UniformGrid Columns="4"  VerticalAlignment="Top"/>
                         </ItemsPanelTemplate>
