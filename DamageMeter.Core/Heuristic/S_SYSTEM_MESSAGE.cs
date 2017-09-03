@@ -44,6 +44,7 @@ namespace DamageMeter.Heuristic
             if (msg.StartsWith("@970") && msg.Contains("ChannelName")) S_JOIN_PRIVATE_CHANNEL.Confirm();
             if (msg.StartsWith("@3459") && msg.Contains("UserName")) C_ADD_FRIEND.Confirm();
             if (msg.StartsWith("@436") && msg.Contains("UserName")) C_DELETE_FRIEND.Confirm();
+            if (msg.StartsWith("@3641") && msg.Contains("userName")) C_INVITE_USER_TO_GUILD.Confirm();
 
         }
     }
