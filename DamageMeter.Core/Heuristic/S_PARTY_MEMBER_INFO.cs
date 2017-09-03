@@ -25,7 +25,7 @@ namespace DamageMeter.Heuristic
             try
             {
                 //var msg = Reader.ReadTeraString();
-                Reader.BaseStream.Position = offset - 4;
+                var unk5 = Reader.ReadUInt16();
 
                 for (int i = 0; i < count; i++)
                 {

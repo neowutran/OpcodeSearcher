@@ -112,7 +112,6 @@
     <Compile Include="Heuristic\C_REMOVE_BLOCKED_USER.cs" />
     <Compile Include="Heuristic\C_REQUEST_CONTRACT.cs" />
     <Compile Include="Heuristic\C_REQUEST_NONDB_ITEM_INFO.cs" />
-    <Compile Include="Heuristic\C_REQUEST_PARTY_INFO.cs" />
     <Compile Include="Heuristic\C_REQUEST_USER_ITEMLEVEL_INFO.cs" />
     <Compile Include="Heuristic\C_REQUEST_USER_PAPERDOLL_INFO.cs" />
     <Compile Include="Heuristic\C_SECOND_PASSWORD_AUTH.cs" />
