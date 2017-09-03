@@ -13,7 +13,11 @@ namespace DamageMeter.Heuristic
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
-            if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) { return; }
+            if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode))
+            {
+                if (OpcodeFinder.Instance.GetOpcode(OPCODE) == message.OpCode) { Parse();}
+                return;
+            }
             if (message.Payload.Count < 268) return;
             var nameOffset = Reader.ReadUInt16();
             Reader.Skip(8);
@@ -50,6 +54,31 @@ namespace DamageMeter.Heuristic
             //TODO
 
 
+        }
+
+        private void Parse()
+        {
+            var nameOffset = Reader.ReadUInt16();
+            Reader.Skip(8);
+            var model = Reader.ReadUInt32();
+            var cid = Reader.ReadUInt64();
+            var serverId = Reader.ReadUInt32();
+            var playerId = Reader.ReadUInt32();
+            Reader.Skip(4 + 1 + 4 + 4 + 4 + 8 + 2);
+            var level = Reader.ReadUInt16();
+            Reader.BaseStream.Position = nameOffset - 4;
+            var name = Reader.ReadTeraString();
+
+            if (OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.Characters, out var chars))
+            {
+                var list = chars as Dictionary<uint, Character>;
+                if (!list.TryGetValue(playerId, out Character c)) { return; }
+                if (model != c.RaceGenderClass.Raw) return;
+                if (c.Name != name) return;
+            }
+            var ch = new LoggedCharacter(cid, model, name, playerId, level);
+            OpcodeFinder.Instance.KnowledgeDatabase.TryRemove(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, out var garbage);
+            OpcodeFinder.Instance.KnowledgeDatabase.TryAdd(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, ch);
         }
 
     }
