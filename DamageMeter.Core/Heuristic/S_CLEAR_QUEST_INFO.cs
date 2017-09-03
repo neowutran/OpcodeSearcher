@@ -16,7 +16,7 @@ namespace DamageMeter.Heuristic
         {
             base.Process(message);
             if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) return;
-
+            if(!OpcodeFinder.Instance.IsKnown(OpcodeEnum.S_LOGIN)) return;
             //---all this to avoid conflict with S_PING (just checking that we don't get C_PONG after 1st 0-length packet)---//
             var previousPacket = OpcodeFinder.Instance.GetMessage(OpcodeFinder.Instance.PacketCount - 1);
             if(previousPacket.OpCode == OpcodeFinder.Instance.GetOpcode(OpcodeEnum.C_PONG)) return;
