@@ -50,8 +50,8 @@ namespace DamageMeter.Heuristic
             //var unk9 = Reader.ReadUInt32(); //not always true apparently
             //if (unk9 != 8000) return;
             Reader.Skip(4);
-            var unk10 = Reader.ReadUInt32();
-            if (unk10 != 3) return;
+            var unk10 = Reader.ReadUInt32(); //same for this
+            //if (unk10 != 3) return;
             var lvl2 = Reader.ReadUInt16();
             if (lvl2 != ch.Level) return;
             Reader.Skip(4);
