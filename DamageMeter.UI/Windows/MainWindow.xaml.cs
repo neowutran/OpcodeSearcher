@@ -103,8 +103,6 @@ namespace DamageMeter.UI
                 else
                 {
                     opc.Mismatching = opcode;
-                    //TODO: this is annoying, will put it somewhere else
-                    //MessageBox.Show(this, $"Mismatching opcodes for {opc.OpcodeName}:\nold={opc.Opcode}\nnew={opcode}");
                 }
             }
 
@@ -537,7 +535,7 @@ namespace DamageMeter.UI
         private int _currentSelectedItemIndex = 0;
         private void PreviousResult(object sender, RoutedEventArgs e)
         {
-            if (SearchList.Count == 0) return;
+            if (SearchList.Count <2) return;
             if (_currentSelectedItemIndex == 0) _currentSelectedItemIndex = SearchList.Count - 1;
             else _currentSelectedItemIndex--;
             var i = All.IndexOf(SearchList[_currentSelectedItemIndex]);
@@ -549,7 +547,7 @@ namespace DamageMeter.UI
         }
         private void NextResult(object sender, RoutedEventArgs e)
         {
-            if (SearchList.Count == 0) return;
+            if (SearchList.Count <2) return;
             if (_currentSelectedItemIndex == SearchList.Count - 1) _currentSelectedItemIndex = 0;
             else _currentSelectedItemIndex++;
             var i = All.IndexOf(SearchList[_currentSelectedItemIndex]);
