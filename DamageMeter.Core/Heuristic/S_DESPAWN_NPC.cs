@@ -25,8 +25,13 @@ namespace DamageMeter.Heuristic
 
             var cid = Reader.ReadUInt64();
             if(cid == 0) return;
-            var pos = Reader.ReadVector3f();
-            if(pos.X == 0 || pos.Y == 0 || pos.Z == 0) return; 
+            //var pos = Reader.ReadVector3f();
+
+            var x = Reader.ReadUInt32(); // these 2 are probably an uint64 for some cId
+            var y = Reader.ReadUInt32(); // (in the other 28B length packet)
+
+            var z = Reader.ReadUInt32();
+            if(z == 2 || z == 0) return;
             var type = Reader.ReadUInt32();
             if (type != 1 && type != 5) return;
             var unk = Reader.ReadUInt32();
