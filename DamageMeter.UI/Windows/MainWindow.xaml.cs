@@ -569,18 +569,32 @@ namespace DamageMeter.UI
         private string _currentFile;
         private void LoadList(object sender, RoutedEventArgs e)
         {
-            var openFileDialog = new Microsoft.Win32.OpenFileDialog { Filter = "Opcode names list (*.txt)|*.txt" };
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog { Filter = "Opcode names list (*.txt, *map)|*.txt;*.map" };
             if (openFileDialog.ShowDialog() == false) return;
             _currentFile = openFileDialog.FileName;
             var f = File.OpenText(_currentFile);
             OpcodesToFind.Clear();
             while (true)
             {
-                uint opc = 0;               
+                uint opc = 0;
                 var l = f.ReadLine();
                 if (string.IsNullOrEmpty(l)) break;
-                var opn = l;
-                var split = l.Split(new string[] {" = "}, StringSplitOptions.RemoveEmptyEntries);
+                string opn = String.Empty;
+                if (l.Contains("#"))
+                {
+                    var symbolIndex = l.IndexOf("#");
+                    if (symbolIndex == 0) continue;
+                    else
+                    {
+                        opn = l.Substring(0, symbolIndex - 1);
+                    }
+                }
+                else
+                {
+                    opn = l;
+                }
+
+                var split = opn.Split(new string[] { " = " }, StringSplitOptions.RemoveEmptyEntries);
                 if (split.Length > 1)
                 {
                     opn = split[0];
