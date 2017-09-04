@@ -22,6 +22,7 @@ namespace DamageMeter.Heuristic
             if(guardId == 0) return;
             if(sectionId == 0) return;
             if (!DbUtils.IsFriend(playerId)) return;
+            //TODO: sometimes mistaken for other packets, add checks on world/guard/section IDs
             OpcodeFinder.Instance.SetOpcode(message.OpCode, OPCODE);
         }
     }

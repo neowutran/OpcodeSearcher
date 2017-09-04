@@ -17,7 +17,8 @@ namespace DamageMeter.Heuristic
             if (message.Payload.Count != 0) return;
 
             if(!OpcodeFinder.Instance.IsKnown(OpcodeEnum.S_CLEAR_WORLD_QUEST_VILLAGER_INFO)) return;
-            if(!OpcodeFinder.Instance.IsKnown(OpcodeEnum.S_CANT_FLY_ANYMORE)) return; //this requires the user to empty flight energy before he can be kicked from party to detect sBanParty, not optimal but avoids confusion
+            if(!OpcodeFinder.Instance.IsKnown(OpcodeEnum.S_CANT_FLY_ANYMORE)) return; //this requires the user to empty flight energy before he can be kicked from party to detect sBanParty, not optimal but avoids confusion 
+            //TODO: remove this requirement^
             if(!DbUtils.IsPartyFormed()) return;
             var msg = OpcodeFinder.Instance.GetMessage(OpcodeFinder.Instance.PacketCount - 1); //make sure it's not sLeaveParty
             if (msg.Payload.Count == 0) return;
