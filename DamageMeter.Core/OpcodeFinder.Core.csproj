@@ -211,6 +211,7 @@
     <Compile Include="Heuristic\S_SPAWN_USER.cs" />
     <Compile Include="Heuristic\S_START_COOLTIME_ITEM.cs" />
     <Compile Include="Heuristic\S_START_COOLTIME_SKILL.cs" />
+    <Compile Include="Heuristic\S_START_USER_PROJECTILE.cs" />
     <Compile Include="Heuristic\S_SYSTEM_MESSAGE.cs" />
     <Compile Include="Heuristic\S_SYSTEM_MESSAGE_LOOT_ITEM.cs" />
     <Compile Include="Heuristic\S_TRADE_BROKER_DEAL_SUGGESTED.cs" />
