@@ -49,6 +49,13 @@ namespace DamageMeter
             return character.Cid;
         }
 
+        public static ulong GetPlayerModel()
+        {
+            if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.LoggedCharacter, out var res)) { return 0; }
+            var character = (LoggedCharacter)res;
+            return character.Model;
+        }
+
         public static bool IsPartyMember(uint playerId)
         {
             if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList, out var res)) { return false; }
