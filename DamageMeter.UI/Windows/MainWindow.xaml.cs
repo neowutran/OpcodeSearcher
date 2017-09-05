@@ -60,7 +60,7 @@ namespace DamageMeter.UI
             NetworkController.Instance.Connected += HandleConnected;
             NetworkController.Instance.GuildIconAction += InstanceOnGuildIconAction;
             Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
-            Title = "Opcode finder V0";
+            Title = "Opcode Searcher V0";
             SystemEvents.SessionEnding += new SessionEndingEventHandler(SystemEvents_SessionEnding);
             NetworkController.Instance.TickUpdated += (msg) => Dispatcher.BeginInvoke(new Action(() => HandleNewMessage(msg)), DispatcherPriority.Background);
             NetworkController.Instance.ResetUi += () => Dispatcher.Invoke(() =>

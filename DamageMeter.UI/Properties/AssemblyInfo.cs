@@ -7,11 +7,11 @@ using System.Windows;
 // l'ensemble d'attributs suivant. Changez les valeurs de ces attributs pour modifier les informations
 // associées à un assembly.
 
-[assembly: AssemblyTitle("ShinraMeter")]
-[assembly: AssemblyDescription("OpenSource Tera DPS Meter")]
+[assembly: AssemblyTitle("OpcodeSearch")]
+[assembly: AssemblyDescription("OpenSource Tera opcode searcher")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ShinraMeter")]
+[assembly: AssemblyProduct("OpcodeSearch")]
 [assembly: AssemblyCopyright("MIT license")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
