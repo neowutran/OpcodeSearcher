@@ -498,7 +498,7 @@
                                 </StackPanel>
                             </Grid>
                         </Border>
-                        <Border Grid.Row="1" Style="{StaticResource CardBorder}" Margin="10,0,0,5" Padding="3" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="1">
+                        <Border Grid.Row="1" Style="{StaticResource CardBorder}" Margin="10,5,0,5" Padding="3" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="1">
                             <Grid >
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
