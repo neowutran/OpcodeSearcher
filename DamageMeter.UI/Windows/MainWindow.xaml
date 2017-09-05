@@ -542,7 +542,7 @@
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Find">
+            <TabItem Header="Compare opcodes">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
