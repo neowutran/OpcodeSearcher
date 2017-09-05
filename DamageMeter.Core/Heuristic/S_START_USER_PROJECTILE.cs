@@ -27,7 +27,9 @@ namespace DamageMeter.Heuristic
             var startAngle = Reader.ReadUInt16();
             var endPos = Reader.ReadVector3f();
             var endAngle = Reader.ReadUInt16();
-            if(source != DbUtils.GetPlayercId()) return;
+            if(model != DbUtils.GetPlayerModel()) return;
+            //TODO: need more checks but atm id = source for player (for gunner at least)
+            if(source != DbUtils.GetPlayercId() && id != source) return;
             if(skill/100 != C_START_SKILL.LatestSkill/100) return;
             //if(startPos.DistanceTo((Vector3f)OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.PlayerLocation]) > 20) return;
             //TODO: kinda weak like this, should be improved
