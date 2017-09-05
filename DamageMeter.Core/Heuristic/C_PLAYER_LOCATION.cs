@@ -47,16 +47,6 @@ namespace DamageMeter.Heuristic
             10 // fall w/ recovery
         };
 
-        public struct PlayerLocation
-        {
-            public Tera.Game.Vector3f Location;
-
-            public PlayerLocation(Tera.Game.Vector3f loc)
-            {
-                Location = loc;
-            }
-        }
-
         private static void UpdateLocationInDictionary(OpcodeFinder.KnowledgeDatabaseItem knowledgeDatabaseKey, Tera.Game.Vector3f destination)
         {
             OpcodeFinder.Instance.KnowledgeDatabase[knowledgeDatabaseKey]= destination;
