@@ -353,14 +353,9 @@ namespace DamageMeter.UI
             {
                 bldr.Append(a.Hex);
             }
-            try
-            {
-                System.Windows.Clipboard.SetText(bldr.ToString());
-            }
-            catch
-            {
-                //TODO: bug or smth? Sometimes access to Win clipboard rejected. Should be investigated later.
-            }
+            System.Windows.Clipboard.Clear();
+            System.Windows.Clipboard.SetDataObject(bldr.ToString(),false);
+          
         }
 
         private void Load(object sender, RoutedEventArgs e)
