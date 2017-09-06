@@ -71,7 +71,6 @@ namespace DamageMeter.UI
                 OpcodeNameConv.Instance.Clear();
             });
             All.CollectionChanged += All_CollectionChanged;
-            AllSw.ScrollChanged += AllSw_ScrollChanged;
             DataContext = this;
             //((ItemsControl)KnownSw.Content).ItemsSource = Known;
 
@@ -153,7 +152,10 @@ namespace DamageMeter.UI
 
         private void AllSw_ScrollChanged(object sender, System.Windows.Controls.ScrollChangedEventArgs e)
         {
-            if (AllSw.VerticalOffset == AllSw.ScrollableHeight)
+            var b = VisualTreeHelper.GetChild(AllItemsControl, 0) as Border;
+            var sw = VisualTreeHelper.GetChild(b, 0) as ScrollViewer;
+
+            if (sw.VerticalOffset == sw.ScrollableHeight)
             {
                 _bottom = true;
                 NewMessagesBelow = false;
@@ -176,7 +178,10 @@ namespace DamageMeter.UI
 
         private void All_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (_bottom) Dispatcher.Invoke(() => AllSw.ScrollToBottom());
+            var b = VisualTreeHelper.GetChild(AllItemsControl, 0) as Border;
+            var sw = VisualTreeHelper.GetChild(b, 0) as ScrollViewer;
+
+            if (_bottom) Dispatcher.Invoke(() => sw.ScrollToBottom());
             else
             {
                 NewMessagesBelow = true;
@@ -426,7 +431,9 @@ namespace DamageMeter.UI
 
         private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            AllSw.ScrollToBottom();
+            var b = VisualTreeHelper.GetChild(AllItemsControl, 0) as Border;
+            var sw = VisualTreeHelper.GetChild(b, 0) as ScrollViewer;
+            sw.ScrollToBottom();
         }
 
         private void LoadOpcode(object sender, RoutedEventArgs e)
@@ -467,6 +474,7 @@ namespace DamageMeter.UI
         private void UpdateSearch(string q, bool bringIntoView)
         {
             SearchList.Clear();
+            OnPropertyChanged(nameof(SearchList));
             foreach (var packetViewModel in All)
             {
                 //packetViewModel.IsSearched = true;
@@ -496,8 +504,9 @@ namespace DamageMeter.UI
                     var i = All.IndexOf(SearchList[0]);
                     if (bringIntoView)
                     {
-                        var container = AllItemsControl.ItemContainerGenerator.ContainerFromItem(All[i]) as FrameworkElement;
-                        container.BringIntoView();
+                        //var container = AllItemsControl.ItemContainerGenerator.ContainerFromItem(All[i]) as FrameworkElement;
+                        //container.BringIntoView();
+                        AllItemsControl.VirtualizedScrollIntoView(All[i]);
                         PacketDetails = All[i];
                     }
                     foreach (var packetViewModel in All) { packetViewModel.IsSelected = packetViewModel == All[i]; }
@@ -526,8 +535,11 @@ namespace DamageMeter.UI
                     var i = All.IndexOf(SearchList[0]);
                     if (bringIntoView)
                     {
-                        var container = AllItemsControl.ItemContainerGenerator.ContainerFromItem(All[i]) as FrameworkElement;
-                        container.BringIntoView();
+
+                        //var container = AllItemsControl.ItemContainerGenerator.ContainerFromItem(All[i]) as FrameworkElement;
+                        //container.BringIntoView();
+                        AllItemsControl.VirtualizedScrollIntoView(All[i]);
+
                         PacketDetails = All[i];
                     }
                     foreach (var packetViewModel in All) { packetViewModel.IsSelected = packetViewModel == All[i]; }
@@ -545,8 +557,10 @@ namespace DamageMeter.UI
             if (_currentSelectedItemIndex == 0) _currentSelectedItemIndex = SearchList.Count - 1;
             else _currentSelectedItemIndex--;
             var i = All.IndexOf(SearchList[_currentSelectedItemIndex]);
-            var container = AllItemsControl.ItemContainerGenerator.ContainerFromItem(All[i]) as FrameworkElement;
-            container.BringIntoView();
+            //var container = AllItemsControl.ItemContainerGenerator.ContainerFromItem(All[i]) as FrameworkElement;
+            //container.BringIntoView();
+            AllItemsControl.VirtualizedScrollIntoView(All[i]);
+
             PacketDetails = All[i];
             foreach (var packetViewModel in All) { packetViewModel.IsSelected = packetViewModel == All[i]; }
 
@@ -557,8 +571,10 @@ namespace DamageMeter.UI
             if (_currentSelectedItemIndex == SearchList.Count - 1) _currentSelectedItemIndex = 0;
             else _currentSelectedItemIndex++;
             var i = All.IndexOf(SearchList[_currentSelectedItemIndex]);
-            var container = AllItemsControl.ItemContainerGenerator.ContainerFromItem(All[i]) as FrameworkElement;
-            container.BringIntoView();
+            //var container = AllItemsControl.ItemContainerGenerator.ContainerFromItem(All[i]) as FrameworkElement;
+            //container.BringIntoView();
+            AllItemsControl.VirtualizedScrollIntoView(All[i]);
+
             PacketDetails = All[i];
             foreach (var packetViewModel in All) { packetViewModel.IsSelected = packetViewModel == All[i]; }
 
@@ -650,6 +666,35 @@ namespace DamageMeter.UI
             b.Visibility = Visibility.Collapsed;
         }
     }
+
+    public static class ItemsControlExtensions
+    {
+        public static void VirtualizedScrollIntoView(this ItemsControl control, object item)
+        {
+            try
+            {
+                // this is basically getting a reference to the ScrollViewer defined in the ItemsControl's style (identified above).
+                // you *could* enumerate over the ItemsControl's children until you hit a scroll viewer, but this is quick and
+                // dirty!
+                // First 0 in the GetChild returns the Border from the ControlTemplate, and the second 0 gets the ScrollViewer from
+                // the Border.
+                ScrollViewer sv = VisualTreeHelper.GetChild(VisualTreeHelper.GetChild((DependencyObject)control, 0), 0) as ScrollViewer;
+                // now get the index of the item your passing in
+                int index = control.Items.IndexOf(item);
+                if (index != -1)
+                {
+                    // since the scroll viewer is using content scrolling not pixel based scrolling we just tell it to scroll to the index of the item
+                    // and viola!  we scroll there!
+                    sv.ScrollToVerticalOffset(index);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("What the..." + ex.Message);
+            }
+        }
+    }
+
     public class DirectionToColor : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
