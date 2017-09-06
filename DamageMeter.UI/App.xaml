@@ -14,7 +14,7 @@
                         <Grid x:Name="Grid">
                             <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto"
                                        Height="Auto" Fill="Transparent" />
-                            <Border x:Name="Rectangle1" CornerRadius="5" HorizontalAlignment="Stretch"
+                            <Border x:Name="Rectangle1" CornerRadius="0" HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch" Width="Auto" Height="Auto"
                                     Background="{TemplateBinding Background}" />
                         </Grid>
@@ -33,17 +33,18 @@
             <Setter Property="HorizontalContentAlignment" Value="Left" />
             <Setter Property="VerticalContentAlignment" Value="Top" />
         </Style>
+        <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">8</sys:Double>
 
         <!--ScrollBars-->
         <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
             <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
-            <Setter Property="Foreground" Value="#8C8C8C" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Width" Value="8" />
+            <Setter Property="Foreground" Value="#508C8C8C" />
+            <Setter Property="Background" Value="#1000" />
+            <Setter Property="Width" Value="Auto" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ScrollBar}">
-                        <Grid x:Name="GridRoot" Width="8" Background="{TemplateBinding Background}">
+                        <Grid x:Name="GridRoot" Width="Auto" Background="{TemplateBinding Background}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="0.00001*" />
                             </Grid.RowDefinitions>
@@ -291,13 +292,13 @@
                                                 BorderThickness="0"
                                                 Padding="0"
                                                 BorderBrush="Transparent"
-                                                CornerRadius="0"
+                                                CornerRadius="3"
                                                 Background="Transparent">
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#2fff" />
+                                <Setter TargetName="border" Property="Background" Value="#3888" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -563,6 +564,9 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
+        <Geometry x:Key="RemoveCircle">M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11H7v-2h10v2z</Geometry>
+        <Geometry x:Key="Next">M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z</Geometry>
+        <Geometry x:Key="Previous">M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z</Geometry>
+        <Geometry x:Key="Search">M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z</Geometry>
     </Application.Resources>
 </Application>

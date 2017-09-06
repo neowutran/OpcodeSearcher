@@ -24,6 +24,7 @@ using Microsoft.Win32;
 using Tera;
 using Tera.Game.Messages;
 using Brushes = System.Drawing.Brushes;
+using Button = System.Windows.Controls.Button;
 using Color = System.Windows.Media.Color;
 using MessageBox = System.Windows.MessageBox;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
@@ -270,18 +271,21 @@ namespace DamageMeter.UI
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void SelectPacketByDrag(object sender, MouseEventArgs mouseEventArgs)
+        private void MessageMouseEnter(object sender, MouseEventArgs mouseEventArgs)
         {
-            if (mouseEventArgs.LeftButton == MouseButtonState.Pressed)
-            {
-                var s = ((Grid)sender);
-                PacketDetails = s.DataContext as PacketViewModel;
-                foreach (var packetViewModel in All) { packetViewModel.IsSelected = packetViewModel.Message == PacketDetails.Message; }
-                OpcodeToWhitelist.Text = PacketDetails.Message.OpCode.ToString();
-                OpcodeToBlacklist.Text = PacketDetails.Message.OpCode.ToString();
-            }
+            //if (mouseEventArgs.LeftButton == MouseButtonState.Pressed)
+            //{
+            //    var s = ((Grid)sender);
+            //    PacketDetails = s.DataContext as PacketViewModel;
+            //    foreach (var packetViewModel in All) { packetViewModel.IsSelected = packetViewModel.Message == PacketDetails.Message; }
+            //    OpcodeToWhitelist.Text = PacketDetails.Message.OpCode.ToString();
+            //    OpcodeToBlacklist.Text = PacketDetails.Message.OpCode.ToString();
+            //}
+            var s = sender as Grid;
+            var b = s.Children[7] as Button;
+            b.Visibility = Visibility.Visible;
         }
-        private void SelectPacketByClick(object sender, MouseButtonEventArgs e)
+        private void MessageClick(object sender, MouseButtonEventArgs e)
         {
             var s = ((Grid)sender);
             PacketDetails = s.DataContext as PacketViewModel;
@@ -632,6 +636,19 @@ namespace DamageMeter.UI
             }
             File.WriteAllLines(_currentFile, lines);
         }
+
+        private void DiscardThis(object sender, RoutedEventArgs e)
+        {
+            var p = ((FrameworkElement) sender).DataContext as PacketViewModel;
+            BlackListedOpcodes.Add(p.Message.OpCode);
+        }
+
+        private void MessageMouseLeave(object sender, MouseEventArgs e)
+        {
+            var s = sender as Grid;
+            var b = s.Children[7] as Button;
+            b.Visibility = Visibility.Collapsed;
+        }
     }
     public class DirectionToColor : IValueConverter
     {
@@ -759,7 +776,7 @@ namespace DamageMeter.UI
             }
         }
 
-        public string Time => $"{Message.Time.ToString("HH:mm:ss.ffff")}";
+        public string Time => $"{Message.Time.ToString("HH:mm:ss.fff")}";
         public List<List<string>> RowsHex => ParseDataHex(Message.Payload);
         public List<List<string>> RowsText => ParseDataText(Message.Payload);
 
