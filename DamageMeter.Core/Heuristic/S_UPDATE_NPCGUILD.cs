@@ -13,7 +13,7 @@ namespace DamageMeter.Heuristic
         {
             base.Process(message);
             if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) return;
-            if (message.Payload.Count < 8+8+4+4+8+4) return;
+            if (message.Payload.Count != 4*8) return;
             var user = Reader.ReadUInt64();
             Reader.Skip(8);
             var type = Reader.ReadInt32();
