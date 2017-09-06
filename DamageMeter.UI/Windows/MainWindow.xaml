@@ -293,8 +293,8 @@
 
         <DataTemplate x:Key="HexChunk">
             <Grid HorizontalAlignment="Left">
-                <TextBlock FontFamily="/ShinraMeter;component/#Droid Sans Mono" Text="{Binding}" Margin="3,0" HorizontalAlignment="Left" 
-                           TextWrapping="NoWrap" Height="Auto"/>
+                <TextBlock FontFamily="{StaticResource DroidSansMono}" Text="{Binding}" Margin="3,0" HorizontalAlignment="Left" 
+                           TextWrapping="NoWrap" Height="Auto" Foreground="#a000"/>
                 <Border BorderBrush="DodgerBlue" BorderThickness="1" CornerRadius="3"
                         Background="#301e90ff" Margin="0" MouseEnter="ChunkMouseEnter">
                     <Border.Style>
@@ -551,13 +551,13 @@
 
             </TabItem>
         </TabControl>
-        <!--All list-->
+        <!--All packets card-->
         <Grid Grid.Row="1" Margin="0,0,5,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
+            <!--Title-->
             <TextBlock Foreground="#9000" FontWeight="DemiBold" Margin="0,3" FontSize="11">
                 <Run Text="All packets  - "></Run>
                 <Run Text="{Binding All.Count, Mode=OneWay}"></Run>
@@ -565,6 +565,7 @@
                 <Run Text="{Binding Queued, Mode=OneWay}"></Run>
                 <Run>)</Run>
             </TextBlock>
+            <!--Content-->
             <Border Style="{StaticResource CardBorder}" VerticalAlignment="Stretch" Grid.Row="1">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -583,7 +584,7 @@
                         </Grid.ColumnDefinitions>
                         <Grid.Resources>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="Foreground" Value="#8000"></Setter>
+                                <Setter Property="Foreground" Value="#9000"></Setter>
                                 <Setter Property="FontWeight" Value="Normal"></Setter>
                                 <Setter Property="FontSize" Value="11"></Setter>
                                 <Setter Property="VerticalAlignment" Value="Center"></Setter>
@@ -621,9 +622,7 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <!--Card title-->
-                        <!--<TextBlock Foreground="White" HorizontalAlignment="Right" Margin="1,-1" Text="{Binding SearchList.Count}"></TextBlock>-->
-                        <!--Card content-->
+
                         <Path Margin="0,0,3,0" Data="{StaticResource Search}" Stretch="Uniform" Fill="#5000" HorizontalAlignment="Left" Height="16"></Path>
 
                         <TextBox Grid.Column="1" BorderThickness="0" Margin="0,0,0,0" Width="Auto" TextChanged="SearchBoxChanged" HorizontalAlignment="Stretch"></TextBox>
@@ -644,52 +643,75 @@
             </Border>
 
         </Grid>
-        <Grid Grid.Column="1" Grid.Row="1" >
+        <Grid Grid.Column="1" Grid.Row="1" Margin="0,0,5,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.ColumnSpan="2">Text view</TextBlock>
-            <ScrollViewer Width="260" Grid.Row="1" MinWidth="100"
+            <!--Title-->
+            <TextBlock Foreground="#a000" FontWeight="DemiBold" Margin="0,3" FontSize="11">
+                Detail view
+            </TextBlock>
+
+            <!--Content-->
+            <Border Style="{StaticResource CardBorder}" Grid.Row="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="24"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                        <Grid.Resources>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Foreground" Value="#8000"></Setter>
+                                <Setter Property="FontWeight" Value="Normal"></Setter>
+                                <Setter Property="FontSize" Value="11"></Setter>
+                                <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                                <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+                            </Style>
+                        </Grid.Resources>
+                    <TextBlock Grid.Column="0" Margin="4,0">Hex</TextBlock>
+                    <TextBlock Grid.Column="1" Margin="4,0">Text</TextBlock>
+
+                    <ScrollViewer Width="260" Grid.Row="1" MinWidth="100"
                           ScrollChanged="HexSwChanged" x:Name="HexSw" VerticalScrollBarVisibility="Hidden">
-                <ItemsControl ItemsSource="{Binding PacketDetails.Data}"
+                        <ItemsControl ItemsSource="{Binding PacketDetails.Data}"
                           ItemTemplate="{StaticResource DataHex}"
-                              Background="White" 
                               Name="HexIc"
-                          BorderThickness="1" BorderBrush="#ccc">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <UniformGrid Columns="4"  VerticalAlignment="Top">
-                                <UniformGrid.ContextMenu>
-                                    <ContextMenu Visibility ="{Binding PacketDetails.Count, Converter={StaticResource ListNotEmptyToBool}}">
-                                        <MenuItem Header="Copy all HEX Data to clipboard" Click="CopyPacketDetailsHex"></MenuItem>
-                                    </ContextMenu>
-                                </UniformGrid.ContextMenu>
-                            </UniformGrid>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
-            </ScrollViewer>
-            <ScrollViewer Width="150" MinWidth="50" Grid.Row="1" Grid.Column="1" x:Name="TextSw" ScrollChanged="HexSwChanged">
-                <ItemsControl ItemsSource="{Binding PacketDetails.Data}"
+                                      Margin="2">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="4"  VerticalAlignment="Top">
+                                        <UniformGrid.ContextMenu>
+                                            <ContextMenu Visibility ="{Binding PacketDetails.Count, Converter={StaticResource ListNotEmptyToBool}}">
+                                                <MenuItem Header="Copy all HEX Data to clipboard" Click="CopyPacketDetailsHex"></MenuItem>
+                                            </ContextMenu>
+                                        </UniformGrid.ContextMenu>
+                                    </UniformGrid>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
+                    <ScrollViewer Width="150" MinWidth="50" Grid.Row="1" Grid.Column="1" x:Name="TextSw" ScrollChanged="HexSwChanged">
+                        <ItemsControl ItemsSource="{Binding PacketDetails.Data}"
                               ItemTemplate="{StaticResource DataText}"
-                              Background="White"
                               HorizontalAlignment="Stretch"
-                              Margin="-1,0,0,0"
-                              BorderThickness="1" 
-                              BorderBrush="#ccc"
+                              Margin="2"
                               Name="TextIc">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <UniformGrid Columns="4"  VerticalAlignment="Top"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
-            </ScrollViewer>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="4"  VerticalAlignment="Top"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
+                    <Border Grid.ColumnSpan="2" Margin="0,0,0,0" Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="#1000"></Border>
+                    <Border Grid.ColumnSpan="1" Margin="0,0,0,0" Grid.Row="1" BorderThickness="0,0,1,0" BorderBrush="#1000"></Border>
+                </Grid>
+            </Border>
         </Grid>
     </Grid>
 

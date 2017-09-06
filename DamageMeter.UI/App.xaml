@@ -265,9 +265,9 @@
         <SolidColorBrush x:Key="ManaText" Color="#26c6da"/>
         <SolidColorBrush x:Key="CastText" Color="#ba68c8"/>
         <SolidColorBrush x:Key="BuffText" Color="#ffd54f"/>
-
-
         <!---->
+        <FontFamily x:Key="DroidSansMono">/ShinraMeter;component/#Droid Sans Mono</FontFamily>
+
 
         <Style x:Key="MainBorder" TargetType="Border">
             <Setter Property="Background" Value="{StaticResource DarkBarColor}" />
