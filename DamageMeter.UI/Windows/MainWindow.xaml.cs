@@ -665,6 +665,23 @@ namespace DamageMeter.UI
             var b = s.Children[7] as Button;
             b.Visibility = Visibility.Collapsed;
         }
+
+        private void AllSwScrolled(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer s = (ScrollViewer)sender;
+            var offset = e.Delta > 0 ? -2 : 2;
+            s.ScrollToVerticalOffset(s.VerticalOffset - offset);
+            e.Handled = true;
+            if (s.VerticalOffset == 0)
+            {
+                _bottom = true;
+            }
+            else
+            {
+
+                _bottom = false;
+            }
+        }
     }
 
     public static class ItemsControlExtensions

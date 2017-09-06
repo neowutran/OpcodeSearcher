@@ -13,129 +13,11 @@
                      MinHeight="60" MinWidth="219"
                      Width="Auto"
         Background="#f5f5f5"
-                    SizeToContent="Width"
+                    SizeToContent="WidthAndHeight"
                      Loaded="MainWindow_OnLoaded"
                      Closed="MainWindow_OnClosed" d:DataContext="{d:DesignInstance ui:MainWindow }">
     <Window.Resources>
-        <windows:OpcodeToFindToColor x:Key="FoundToColor"></windows:OpcodeToFindToColor>
-        <DataTemplate x:Key="OpcodesToFindDataTemplate" DataType="windows:OpcodeToFindVm">
-            <Grid Margin="0,-1,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Border Background="{Binding Status, Converter={StaticResource FoundToColor}}" Width="50" 
-                        Padding="5,0,5,0" HorizontalAlignment="Stretch" Grid.Column="0" Opacity=".8"
-                        ToolTip="{Binding Mismatching}">
-                    <TextBlock Text="{Binding Opcode}" Foreground="White" VerticalAlignment="Center" FontWeight="Normal" FontSize="11" Margin="0,1" HorizontalAlignment="Center" FontFamily="/ShinraMeter;component/#Droid Sans Mono"/>
-                </Border>
-                <Grid HorizontalAlignment="Stretch" Grid.Column="1">
-
-                    <Border Background="{Binding Status, Converter={StaticResource FoundToColor}}" Opacity=".5"  HorizontalAlignment="Stretch"/>
-                    <TextBlock Text="{Binding OpcodeName}" Foreground="Black" Margin="5,0" VerticalAlignment="Center" FontSize="11" FontFamily="/ShinraMeter;component/#Droid Sans Mono"/>
-                </Grid>
-            </Grid>
-        </DataTemplate>
-
-        <Style TargetType="{x:Type ToolTip}">
-            <Setter Property="Background" Value="#8F000000" />
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="ContentTemplate">
-                <Setter.Value>
-                    <DataTemplate>
-                        <TextBlock TextWrapping="Wrap" Text="{Binding}" MaxWidth="600" />
-                    </DataTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="20" />
-                </Grid.ColumnDefinitions>
-                <Border
-                    x:Name="Border"
-                    Grid.ColumnSpan="2"
-                    CornerRadius="2"
-                    Background="Transparent"
-                    BorderBrush="Transparent"
-                    BorderThickness="1" />
-                <Border
-                    Grid.Column="0"
-                    CornerRadius="2,0,0,2"
-                    Margin="1"
-                    Background="Transparent"
-                    BorderBrush="Transparent"
-                    BorderThickness="0,0,1,0" />
-                <Path
-                    x:Name="Arrow"
-                    Grid.Column="1"
-                    Fill="White"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Data="M 0 0 L 4 4 L 8 0 Z" />
-            </Grid>
-            <ControlTemplate.Triggers>
-                <Trigger Property="ToggleButton.IsMouseOver" Value="true" />
-                <Trigger Property="ToggleButton.IsChecked" Value="true" />
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <Style TargetType="Image" x:Key="ImageButton">
-            <Setter Property="Opacity" Value=".7"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Opacity"  Value="1"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <ControlTemplate x:Key="ComboBoxTextBox" TargetType="{x:Type TextBox}">
-            <Border x:Name="PART_ContentHost" Focusable="False" Background="{TemplateBinding Background}" />
-        </ControlTemplate>
-        <Style x:Key="ShinraContext" TargetType="{x:Type ContextMenu}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ContextMenu}">
-                        <Border Background="Black" x:Name="Border"
-                                BorderThickness="0.5">
-                            <Border.BorderBrush>
-                                <SolidColorBrush Color="DarkGray" />
-                            </Border.BorderBrush>
-                            <StackPanel IsItemsHost="True"
-                                        KeyboardNavigation.DirectionalNavigation="Cycle" />
-                        </Border>
-
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="HasDropShadow"
-                                     Value="true" />
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <ui:DirectionToColor x:Key="DirectionToColor"></ui:DirectionToColor>
-        <ui:BoolToVisibleHidden x:Key="BoolToVisibleHidden"></ui:BoolToVisibleHidden>
-        <ui:ListNotEmptyToBool x:Key="ListNotEmptyToBool"></ui:ListNotEmptyToBool>
-        <ui:OpcodeNameConv x:Key="OpcodeNameConv"></ui:OpcodeNameConv>
-        <DataTemplate x:Key="opcdt" >
-            <Grid Margin="0,-1,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Border Background="MediumSeaGreen" Width="50" Padding="5,0,5,0" HorizontalAlignment="Stretch" Grid.Column="0" Opacity=".9">
-                    <TextBlock Text="{Binding Key}" Foreground="White" VerticalAlignment="Center" FontWeight="Normal" FontSize="11" Margin="0,1" HorizontalAlignment="Center" FontFamily="/ShinraMeter;component/#Droid Sans Mono"/>
-                </Border>
-                <Grid HorizontalAlignment="Stretch" Grid.Column="1">
-
-                    <Border Background="MediumSeaGreen" Opacity=".5"  HorizontalAlignment="Stretch"/>
-                    <TextBlock Text="{Binding Value}" Foreground="Black" Margin="5,0" VerticalAlignment="Center" FontSize="11" FontFamily="/ShinraMeter;component/#Droid Sans Mono"/>
-                </Grid>
-            </Grid>
-        </DataTemplate>
-        <DataTemplate x:Key="msg" DataType="ui:PacketViewModel">
+        <DataTemplate x:Key="MessageDataTemplate" DataType="ui:PacketViewModel">
             <Grid MouseLeftButtonDown="MessageClick" Margin="0,0,0,-1"
                   Height="20">
                 <Grid.ColumnDefinitions>
@@ -143,7 +25,7 @@
                     <ColumnDefinition Width="70"/>
                     <ColumnDefinition Width="48"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="0"/>
                     <ColumnDefinition Width="40"/>
                 </Grid.ColumnDefinitions>
                 <Border Background="{Binding Message.Direction, Converter={StaticResource DirectionToColor}}" 
@@ -169,128 +51,11 @@
                            FontFamily="/ShinraMeter;component/#Droid Sans Mono"
                            />
                 </Viewbox>
-                <!--<Button Style="{StaticResource ButtonMainStyle}" ToolTip="Add to discarded opcodes"
-                        Grid.Column="4" Click="DiscardThis" x:Name="DiscardButton" Visibility="Collapsed" Margin="0,2,0,0">
-                    <Path Data="{StaticResource RemoveCircle}" Fill="#5000" Stretch="Uniform"></Path>
-                </Button>-->
                 <TextBlock Text="{Binding Message.Payload.Count}" Foreground="Black" Grid.Column="5" 
                            HorizontalAlignment="Right" Margin="4,0" VerticalAlignment="Center"
                            FontFamily="/ShinraMeter;component/#Droid Sans Mono"/>
             </Grid>
         </DataTemplate>
-        <Style TargetType="{x:Type ComboBox}">
-            <Setter Property="SnapsToDevicePixels" Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
-            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
-            <Setter Property="ScrollViewer.CanContentScroll" Value="true" />
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="MinWidth" Value="120" />
-            <Setter Property="MinHeight" Value="20" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ComboBox}">
-                        <Grid>
-                            <ToggleButton
-                                Name="ToggleButton"
-                                Template="{StaticResource ComboBoxToggleButton}"
-                                Focusable="false"
-                                IsChecked="{Binding Path=IsDropDownOpen,RelativeSource={RelativeSource TemplatedParent}}"
-                                ClickMode="Press" />
-                            <ContentPresenter
-                                Name="ContentSite"
-                                IsHitTestVisible="False"
-                                Content="{TemplateBinding SelectionBoxItem}"
-                                ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                Margin="3,3,23,3"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Left" />
-                            <TextBox x:Name="PART_EditableTextBox"
-                                     Style="{x:Null}"
-                                     Template="{StaticResource ComboBoxTextBox}"
-                                     HorizontalAlignment="Left"
-                                     VerticalAlignment="Center"
-                                     Margin="3,3,23,3"
-                                     Focusable="True"
-                                     Background="Transparent"
-                                     Visibility="Hidden"
-                                     IsReadOnly="{TemplateBinding IsReadOnly}" />
-                            <Popup
-                                Name="Popup"
-
-                                Placement="Bottom"
-                                IsOpen="{TemplateBinding IsDropDownOpen}"
-                                AllowsTransparency="True"
-
-                                Focusable="False"
-                                PopupAnimation="Slide">
-                                <Grid
-                                    Name="DropDown"
-                                    SnapsToDevicePixels="True"
-                                    MinWidth="{TemplateBinding ActualWidth}"
-                                    MaxHeight="{TemplateBinding MaxDropDownHeight}">
-                                    <Border
-                                        x:Name="DropDownBorder"
-                                        Background="Black"
-                                        BorderThickness="1"
-                                        BorderBrush="Transparent" />
-                                    <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
-                                        <StackPanel IsItemsHost="True"
-                                                    KeyboardNavigation.DirectionalNavigation="Contained" />
-                                    </ScrollViewer>
-                                </Grid>
-                            </Popup>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="HasItems" Value="false">
-                                <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95" />
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Foreground" Value="White" />
-                            </Trigger>
-                            <Trigger Property="IsGrouping" Value="true">
-                                <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
-                            </Trigger>
-                            <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="true">
-                                <Setter TargetName="DropDownBorder" Property="CornerRadius" Value="4" />
-                                <Setter TargetName="DropDownBorder" Property="Margin" Value="0,2,0,0" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <!-- SimpleStyles: ComboBoxItem -->
-        <Style TargetType="{x:Type ComboBoxItem}">
-            <Setter Property="SnapsToDevicePixels" Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="Foreground" Value="White" />
-
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ComboBoxItem}">
-                        <Border
-                            Name="Border"
-                            Padding="2"
-                            SnapsToDevicePixels="true">
-                            <ContentPresenter />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsHighlighted" Value="true">
-                                <Setter TargetName="Border" Property="Background" Value="Black" />
-                                <Setter Property="BorderBrush" Value="White" />
-                                <Setter Property="BorderThickness" Value="1" />
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Foreground" Value="White" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
         <DataTemplate x:Key="HexChunk">
             <Grid HorizontalAlignment="Left">
                 <TextBlock FontFamily="{StaticResource DroidSansMono}" Text="{Binding}" Margin="3,0" HorizontalAlignment="Left" 
@@ -311,25 +76,17 @@
 
             </Grid>
         </DataTemplate>
-        <DataTemplate x:Key="HexRow">
-            <ItemsControl ItemsSource="{Binding}"
-                          ItemTemplate="{StaticResource HexChunk}"
-                          HorizontalAlignment="Stretch">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Rows="1"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-        </DataTemplate>
         <DataTemplate x:Key="BlackListedOpcode">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Click="RemoveBlacklistedOpcode" Width="20" BorderThickness="0" Padding="0,-2,0,0">x</Button>
-                <TextBlock Text="{Binding}" Grid.Column="1" VerticalAlignment="Center" Margin="3,0"></TextBlock>
+                <Button Grid.Column="0" Style="{StaticResource ImageButtonStyle}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                        Click="RemoveBlacklistedOpcode" Width="14" Margin="0,1" BorderThickness="0" Padding="0,0,0,0" Background="Transparent">
+                    <Path Data="{StaticResource RemoveCircle}" Stretch="Uniform" Height="14" Fill="#7000" Margin="0,2,0,0"></Path>
+                </Button>
+                <TextBlock Text="{Binding}" Grid.Column="1" VerticalAlignment="Center" Margin="2,0"></TextBlock>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="WhiteListedOpcode">
@@ -342,21 +99,6 @@
                 <Button Grid.Column="0" Click="RemoveWhitelistedOpcode" Width="20" Padding="0,-2,0,0" BorderThickness="0">x</Button>
             </Grid>
         </DataTemplate>
-        <DropShadowEffect x:Key="CardShadow" ShadowDepth="1" BlurRadius="5" Opacity=".3"></DropShadowEffect>
-        <Style x:Key="CardBorder" TargetType="Border">
-            <Setter Property="Background" Value="White"></Setter>
-            <Setter Property="Effect" Value="{StaticResource CardShadow}"></Setter>
-        </Style>
-        <Style x:Key="CardTitle" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#9000"></Setter>
-            <Setter Property="FontWeight" Value="DemiBold"></Setter>
-            <Setter Property="FontSize" Value="11"></Setter>
-        </Style>
-        <Style TargetType="{x:Type TextBox}">
-            <Setter Property="BorderThickness" Value="0"></Setter>
-            <Setter Property="Background" Value="#1000"></Setter>
-            <Setter Property="CaretBrush" Value="#000"></Setter>
-        </Style>
         <DataTemplate x:Key="DataHex" DataType="ui:ByteViewModel">
             <Grid MouseEnter="UIElement_OnMouseEnter" MouseLeave="UIElement_OnMouseLeave"  VerticalAlignment="Top" Height="14">
                 <TextBlock FontFamily="/ShinraMeter;component/#Droid Sans Mono" Text="{Binding Hex}" 
@@ -417,7 +159,9 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="589"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid Height="24" VerticalAlignment="Stretch" Margin="0,0,8,0">
@@ -444,8 +188,8 @@
                         <TextBlock Grid.Column="3">Name</TextBlock>
                         <TextBlock Grid.Column="5" HorizontalAlignment="Right">Size</TextBlock>
                     </Grid>
-                    <ItemsControl Grid.Row="1" ItemsSource="{Binding All}" ItemTemplate="{StaticResource msg}" 
-                              x:Name="AllItemsControl" ScrollViewer.CanContentScroll="True">
+                    <ItemsControl Grid.Row="1" ItemsSource="{Binding All}" ItemTemplate="{StaticResource MessageDataTemplate}" 
+                              x:Name="AllItemsControl" ScrollViewer.CanContentScroll="True" UseLayoutRounding="True">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <VirtualizingStackPanel/>
@@ -459,7 +203,7 @@
                                     BorderBrush="{TemplateBinding Border.BorderBrush}"
                                     Background="{TemplateBinding Panel.Background}"
                                     SnapsToDevicePixels="True">
-                                    <ScrollViewer
+                                    <ScrollViewer 
                                         Padding="{TemplateBinding Control.Padding}"
                                         Focusable="False" ScrollChanged="AllSw_ScrollChanged">
                                         <ItemsPresenter
@@ -473,36 +217,79 @@
                         <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15" >New messages</TextBlock>
                     </Border>
                     <Border Grid.ColumnSpan="1" Margin="0,0,0,0" Grid.Row="1" BorderThickness="0,1,0,1" BorderBrush="#1000"></Border>
-                    <Grid Grid.Row="2" Margin="4,4,4,4">
+                    <UniformGrid Grid.Row="2"  Margin="4,4,4,0">
+                        <!--Filters-->
+                        <CheckBox Content="Server" 
+                                      Name="ServerCb" 
+                                      IsChecked="True"
+                                      BorderBrush="DodgerBlue" 
+                                      VerticalContentAlignment="Center"
+                                      Foreground="#a000"/>
+                        <CheckBox Content="Client" 
+                                      Name="ClientCb" 
+                                      IsChecked="True" 
+                                      Grid.Row="1" 
+                                      BorderBrush="DarkOrange" 
+                                      VerticalContentAlignment="Center"
+                                      Foreground="#a000"/>
+                        <!--Search bar-->
+                        <CheckBox Content="Spam filter" 
+                                      Grid.Row="2" 
+                                      ToolTip="Discards a packet if the previous one has the same opcode." 
+                                      Name="SpamCb" 
+                                      IsChecked="False" 
+                                      VerticalContentAlignment="Center"
+                                      Foreground="#a000"/>
+                        <Grid Grid.Column="1" Grid.Row="1"  Margin="4,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" VerticalAlignment="Center" Foreground="#a000">Filter by size:</TextBlock>
+                            <TextBox Grid.Column="1" Margin="3,0,0,0"  CaretBrush="Black" TextChanged="TextBoxBase_OnTextChanged" VerticalAlignment="Center"></TextBox>
+                        </Grid>
+                    </UniformGrid>
+                    <Button Width="Auto"
+                            VerticalAlignment="Center"
+                            Grid.Row="4"
+                            HorizontalAlignment="Stretch"  
+                            HorizontalContentAlignment="Stretch"
+                            Click="ClearAll" 
+                                
+                            Style="{StaticResource ImageButtonStyle}">
+                        <Grid Background="Crimson" HorizontalAlignment="Stretch" Width="Auto">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Clear list" Foreground="White" VerticalAlignment="Center" FontWeight="DemiBold" Margin="0" Grid.Column="1" HorizontalAlignment="Center"></TextBlock>
+                        </Grid>
+                    </Button>
+
+                    <Grid Margin="4,2" Grid.Row="3">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-
-                        <Path Margin="0,0,3,0" Data="{StaticResource Search}" Stretch="Uniform" Fill="#5000" HorizontalAlignment="Left" Height="16"></Path>
-
-                        <TextBox Grid.Column="1" BorderThickness="0" Margin="0,0,0,0" Width="Auto" TextChanged="SearchBoxChanged" HorizontalAlignment="Stretch" Name="SearchBox" VerticalAlignment="Center"></TextBox>
+                        <Path Margin="2,2,4,2" Data="{StaticResource Search}" Stretch="Uniform" Fill="#5000" 
+                              HorizontalAlignment="Left" Height="14" />
+                        <TextBox Grid.Column="1" Margin="0,0,0,0" Width="Auto" TextChanged="SearchBoxChanged" HorizontalAlignment="Stretch" Name="SearchBox" VerticalAlignment="Center"/>
                         <TextBlock Margin="5,2" MinWidth="50" Text="Search by opcode or opcode name..." Grid.Column="1" VerticalAlignment="Center" IsHitTestVisible="False"
                                    Background="Transparent" Foreground="#7000" Visibility="{Binding ElementName=SearchBox, Path=Text.IsEmpty, Converter={StaticResource BoolToVisibleHidden}}" />
-                        <TextBlock Foreground="#5000" HorizontalAlignment="Right" TextAlignment="Right" Margin="5,0,2,0" Width="Auto" Grid.Column="2" Text="{Binding SearchList.Count}"></TextBlock>
-
+                        <TextBlock Foreground="#9000" HorizontalAlignment="Right" TextAlignment="Right" Margin="5,0,2,0" Width="Auto" Grid.Column="2" Text="{Binding SearchList.Count}"
+                                   VerticalAlignment="Center"/>
                         <UniformGrid Rows="1" Margin="4,0,0,0" Grid.Column="3" Width="40">
-                            <Button BorderThickness="0" Style="{StaticResource ButtonMainStyle}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Background="#1000" Click="PreviousResult" 
-                                HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
-                                <Path Data="{StaticResource Previous}" Fill="#5000" Stretch="Uniform" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></Path>
+                            <Button BorderThickness="0" Style="{StaticResource ImageButtonStyle}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Background="#0000" Click="PreviousResult" >
+                                <Path Data="{StaticResource Previous}" Fill="#9000" Stretch="Uniform" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="6"/>
                             </Button>
-                            <Button BorderThickness="0" Style="{StaticResource ButtonMainStyle}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#1000" Click="NextResult"
-                            HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
-                                <Path Data="{StaticResource Next}" Fill="#5000" Stretch="Uniform" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></Path>
+                            <Button BorderThickness="0" Style="{StaticResource ImageButtonStyle}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#0000" Click="NextResult">
+                                <Path Data="{StaticResource Next}" Fill="#9000" Stretch="Uniform" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="6"/>
                             </Button>
                         </UniformGrid>
                     </Grid>
+
                 </Grid>
             </Border>
 
@@ -581,8 +368,8 @@
         <!--3rd card-->
         <Grid Grid.Column="2" Grid.Row="1" >
             <Grid.RowDefinitions>
-                <RowDefinition  Height="Auto"/>
-                <RowDefinition  Height="*"/>
+                <RowDefinition  Height="5*"/>
+                <RowDefinition  Height="4*"/>
             </Grid.RowDefinitions>
             <Grid  Grid.Row="0">
                 <Grid.RowDefinitions>
@@ -641,7 +428,9 @@
                                                             <ColumnDefinition Width="Auto"/>
                                                         </Grid.ColumnDefinitions>
                                                         <TextBox HorizontalAlignment="Stretch" Name="OpcodeToBlacklist"></TextBox>
-                                                        <Button Click="AddBlackListedOpcode" Width="17" Grid.Column="1" BorderThickness="0" Padding="0,-2,0,0">+</Button>
+                                                        <Button Click="AddBlackListedOpcode" Style="{StaticResource ImageButtonStyle}" Width="16" Grid.Column="1" BorderThickness="0" Padding="0,-2,0,0" Background="#2000">
+                                                            <Path Data="{StaticResource Plus}" Stretch="Uniform" Fill="#9000" Width="10"></Path>
+                                                        </Button>
                                                     </Grid>
                                                 </StackPanel>
                                             </Grid>
@@ -674,7 +463,9 @@
                                                             <ColumnDefinition Width="Auto"/>
                                                         </Grid.ColumnDefinitions>
                                                         <TextBox HorizontalAlignment="Stretch" Name="OpcodeToWhitelist"></TextBox>
-                                                        <Button Width="17" Grid.Column="1" Click="AddWhiteListedOpcode" BorderThickness="0" Padding="0,-2,0,0" >+</Button>
+                                                        <Button Width="17" Grid.Column="1" Style="{StaticResource ImageButtonStyle}" Background="#2000" Click="AddWhiteListedOpcode" BorderThickness="0" Padding="0,-2,0,0" >
+                                                            <Path Data="{StaticResource Plus}" Stretch="Uniform" Fill="#9000" Width="10"></Path>
+                                                        </Button>
                                                     </Grid>
                                                 </StackPanel>
                                             </Grid>
@@ -691,21 +482,7 @@
                                                 </Border>
                                                 <!--Card content-->
                                                 <StackPanel Grid.Row="1" Margin="3,0,3,3">
-                                                    <CheckBox Content="Server" Name="ServerCb" IsChecked="True"></CheckBox>
-                                                    <CheckBox Content="Client" Name="ClientCb" IsChecked="True"></CheckBox>
-                                                    <CheckBox Content="Spam filter" ToolTip="Discards a packet if the previous one has the same opcode." Name="SpamCb" IsChecked="False"></CheckBox>
-                                                    <Grid Margin="1,2,1,0">
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="Auto"/>
-                                                            <ColumnDefinition Width="*"/>
-                                                        </Grid.ColumnDefinitions>
-                                                        <TextBlock Grid.Column="0">Size</TextBlock>
-                                                        <TextBox Grid.Column="1" Margin="3,0,0,0"  CaretBrush="Black" TextChanged="TextBoxBase_OnTextChanged"></TextBox>
-                                                    </Grid>
-                                                    <Button Content="Clear all" Width="Auto" HorizontalAlignment="Stretch"  Click="ClearAll" Margin="1,4,1,1" BorderThickness="0"></Button>
                                                     <Button Content="Dump known to file" Width="Auto" HorizontalAlignment="Stretch" Click="Dump" Margin="1,1,1,1" BorderThickness="0"></Button>
-                                                    <!--<Button Content="Load Log"  Width="Auto" HorizontalAlignment="Stretch" Click="Load" Margin="1,1,1,1"></Button>
-                            <Button Content="Save Log"  Width="Auto" HorizontalAlignment="Stretch" Click="Save" Margin="1,1,1,1"></Button>-->
                                                 </StackPanel>
                                             </Grid>
                                         </Border>
@@ -714,13 +491,13 @@
                                 </Grid>
                             </TabItem>
                             <TabItem Header="Compare opcodes">
-                                <Grid>
+                                <Grid Margin="-2,0">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
-                                    <ScrollViewer Grid.Row="0">
-                                        <ItemsControl ItemsSource="{Binding OpcodesToFind}" ItemTemplate="{StaticResource OpcodesToFindDataTemplate}"  BorderThickness="0" BorderBrush="#2000" >
+                                    <ScrollViewer Grid.Row="0" >
+                                        <ItemsControl ItemsSource="{Binding OpcodesToFind}" ItemTemplate="{StaticResource OpcodesToFindDataTemplate}" >
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
                                                     <StackPanel />
@@ -750,7 +527,7 @@
                 <Border Grid.Row="1" Style="{StaticResource CardBorder}" >
                     <ScrollViewer x:Name="KnownSw" >
                         <ItemsControl ItemsSource="{Binding Known}" 
-                                  ItemTemplate="{StaticResource opcdt}" >
+                                  ItemTemplate="{StaticResource KnownOpcodeDataTemplate}" >
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel />
