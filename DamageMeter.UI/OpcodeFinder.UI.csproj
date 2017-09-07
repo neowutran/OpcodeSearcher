@@ -148,6 +148,9 @@
     <Compile Include="ObservableDictionary.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="WindowServices.cs" />
+    <Compile Include="Windows\OpcodesMapAnalyze.xaml.cs">
+      <DependentUpon>OpcodesMapAnalyze.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\OpcodeToFindToColor.cs" />
     <Compile Include="Windows\OpcodeToFindVm.cs" />
     <Page Include="Windows\MainWindow.xaml">
@@ -162,6 +165,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Windows\OpcodesMapAnalyze.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
