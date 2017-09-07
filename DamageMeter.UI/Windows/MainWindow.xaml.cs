@@ -688,6 +688,16 @@ namespace DamageMeter.UI
         {
             FilteredOpcodes.Clear();
         }
+
+        private void HideLeftSlide(object sender, MouseButtonEventArgs e)
+        {
+            LeftSlide.RenderTransform.BeginAnimation(TranslateTransform.XProperty, new DoubleAnimation(-230,TimeSpan.FromMilliseconds(150)) {EasingFunction = new QuadraticEase()});
+        }
+
+        private void OpenLeftSlide(object sender, RoutedEventArgs e)
+        {
+            LeftSlide.RenderTransform.BeginAnimation(TranslateTransform.XProperty, new DoubleAnimation(0, TimeSpan.FromMilliseconds(150)) { EasingFunction = new QuadraticEase() });
+        }
     }
     public class ModeToColor : IValueConverter
     {

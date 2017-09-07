@@ -220,6 +220,10 @@
         <sys:Double x:Key="ShadowDirection">-100</sys:Double>
         <sys:Double x:Key="ShadowOpacity">.3</sys:Double>
         <!--HUD-->
+        <DropShadowEffect x:Key="SlideShadow-8dp" 
+                          BlurRadius="10" 
+                          ShadowDepth="8" 
+                          Opacity="{StaticResource ShadowOpacity}" />
         <DropShadowEffect x:Key="MenuShadow-8dp" 
                           BlurRadius="10" 
                           ShadowDepth="8" 
@@ -744,9 +748,12 @@
         <Geometry x:Key="Previous">M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z</Geometry>
         <Geometry x:Key="Search">M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z</Geometry>
         <Geometry x:Key="Plus">M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z</Geometry>
+        <Geometry x:Key="Menu">M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z</Geometry>
+        <Geometry x:Key="FileDocument">M13,9H18.5L13,3.5V9M6,2H14L20,8V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V4C4,2.89 4.89,2 6,2M15,18V16H6V18H15M18,14V12H6V14H18Z</Geometry>
         <Geometry x:Key="Open">M19,20H4C2.89,20 2,19.1 2,18V6C2,4.89 2.89,4 4,4H10L12,6H19A2,2 0 0,1 21,8H21L4,8V18L6.14,10H23.21L20.93,18.5C20.7,19.37 19.92,20 19,20Z</Geometry>
         <Geometry x:Key="Close">M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z</Geometry>
         <Geometry x:Key="Save">M15,9H5V5H15M12,19A3,3 0 0,1 9,16A3,3 0 0,1 12,13A3,3 0 0,1 15,16A3,3 0 0,1 12,19M17,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V7L17,3Z</Geometry>
+        <Geometry x:Key="FileCheck">M13,9H18.5L13,3.5V9M6,2H14L20,8V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V4C4,2.89 4.89,2 6,2M10.45,18.46L15.2,13.71L14.03,12.3L10.45,15.88L8.86,14.3L7.7,15.46L10.45,18.46Z</Geometry>
         <!--Opcode finder - Other resources-->
         <DropShadowEffect x:Key="CardShadow" ShadowDepth="1" BlurRadius="5" Opacity=".3"/>
 
