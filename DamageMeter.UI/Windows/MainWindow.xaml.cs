@@ -15,6 +15,7 @@ using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using DamageMeter.Sniffing;
 using DamageMeter.UI.Annotations;
@@ -29,6 +30,7 @@ using Color = System.Windows.Media.Color;
 using MessageBox = System.Windows.MessageBox;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using OpcodeId = System.UInt16;
+using Point = System.Windows.Point;
 
 namespace DamageMeter.UI
 {
@@ -134,8 +136,8 @@ namespace DamageMeter.UI
                 _count++;
                 if (msg.Direction == MessageDirection.ServerToClient && ServerCb.IsChecked == false) return;
                 if (msg.Direction == MessageDirection.ClientToServer && ClientCb.IsChecked == false) return;
-                if (WhiteListedOpcodes.Count > 0 && !WhiteListedOpcodes.Contains(msg.OpCode)) return;
-                if (BlackListedOpcodes.Contains(msg.OpCode)) return;
+                if (FilteredOpcodes.Count(x => x.Mode == FilterMode.ShowOnly) > 0 && FilteredOpcodes.Where(x => x.Mode == FilterMode.ShowOnly).All(x => x.Opcode != msg.OpCode)) return;
+                if (FilteredOpcodes.Any(x => x.Opcode == msg.OpCode && x.Mode == FilterMode.Exclude)) return;
                 if (SpamCb.IsChecked == true && All.Count > 0 && All.Last().Message.OpCode == msg.OpCode) return;
                 if (_sizeFilter != -1)
                 {
@@ -189,10 +191,8 @@ namespace DamageMeter.UI
         }
         public ObservableDictionary<ushort, OpcodeEnum> Known { get; set; } = new ObservableDictionary<ushort, OpcodeEnum>();
         public ObservableCollection<PacketViewModel> All { get; set; } = new ObservableCollection<PacketViewModel>();
-        public ObservableCollection<ushort> BlackListedOpcodes { get; set; } = new ObservableCollection<ushort>();
-        public ObservableCollection<ushort> WhiteListedOpcodes { get; set; } = new ObservableCollection<ushort>();
         public ObservableCollection<OpcodeToFindVm> OpcodesToFind { get; set; } = new ObservableCollection<OpcodeToFindVm>();
-
+        public ObservableCollection<FilteredOpcodeVm> FilteredOpcodes { get; set; } = new ObservableCollection<FilteredOpcodeVm>();
         private void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
         {
             Exit();
@@ -295,8 +295,7 @@ namespace DamageMeter.UI
             var s = ((Grid)sender);
             PacketDetails = s.DataContext as PacketViewModel;
             foreach (var packetViewModel in All) { packetViewModel.IsSelected = packetViewModel.Message == PacketDetails.Message; }
-            OpcodeToWhitelist.Text = PacketDetails.Message.OpCode.ToString();
-            OpcodeToBlacklist.Text = PacketDetails.Message.OpCode.ToString();
+            OpcodeToFilter.Text = PacketDetails.Message.OpCode.ToString();
 
         }
         private string FormatData(ArraySegment<byte> selectedPacketPayload)
@@ -374,35 +373,29 @@ namespace DamageMeter.UI
             NetworkController.Instance.LoadFileName = openFileDialog.FileName;
         }
 
-        private void RemoveBlacklistedOpcode(object sender, RoutedEventArgs e)
+        private void RemoveFilteredOpcode(object sender, RoutedEventArgs e)
         {
             var s = (System.Windows.Controls.Button)sender;
-            BlackListedOpcodes.Remove((ushort)s.DataContext);
-        }
-
-        private void RemoveWhitelistedOpcode(object sender, RoutedEventArgs e)
-        {
-            var s = (System.Windows.Controls.Button)sender;
-            WhiteListedOpcodes.Remove((ushort)s.DataContext);
+            FilteredOpcodes.Remove((FilteredOpcodeVm)s.DataContext);
         }
 
         private void AddBlackListedOpcode(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(OpcodeToBlacklist.Text)) return;
-            if (!ushort.TryParse(OpcodeToBlacklist.Text, out ushort result)) return;
-            if (BlackListedOpcodes.Contains(result)) return;
-            BlackListedOpcodes.Add(result);
-            OpcodeToBlacklist.Text = "";
+            if (string.IsNullOrEmpty(OpcodeToFilter.Text)) return;
+            if (!ushort.TryParse(OpcodeToFilter.Text, out ushort result)) return;
+            if (FilteredOpcodes.FirstOrDefault(x => x.Opcode == result) != null) return;
+            FilteredOpcodes.Add(new FilteredOpcodeVm(result, FilterMode.Exclude));
+            OpcodeToFilter.Text = "";
 
         }
 
         private void AddWhiteListedOpcode(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(OpcodeToWhitelist.Text)) return;
-            if (!ushort.TryParse(OpcodeToWhitelist.Text, out ushort result)) return;
-            if (WhiteListedOpcodes.Contains(result)) return;
-            WhiteListedOpcodes.Add(result);
-            OpcodeToWhitelist.Text = "";
+            if (string.IsNullOrEmpty(OpcodeToFilter.Text)) return;
+            if (!ushort.TryParse(OpcodeToFilter.Text, out ushort result)) return;
+            if (FilteredOpcodes.FirstOrDefault(x => x.Opcode == result) != null) return;
+            FilteredOpcodes.Add(new FilteredOpcodeVm(result, FilterMode.ShowOnly));
+            OpcodeToFilter.Text = "";
         }
 
         private void Save(object sender, RoutedEventArgs e)
@@ -653,12 +646,6 @@ namespace DamageMeter.UI
             File.WriteAllLines(_currentFile, lines);
         }
 
-        private void DiscardThis(object sender, RoutedEventArgs e)
-        {
-            var p = ((FrameworkElement) sender).DataContext as PacketViewModel;
-            BlackListedOpcodes.Add(p.Message.OpCode);
-        }
-
         private void MessageMouseLeave(object sender, MouseEventArgs e)
         {
             var s = sender as Grid;
@@ -682,8 +669,73 @@ namespace DamageMeter.UI
                 _bottom = false;
             }
         }
-    }
 
+        private void TabClicked(object sender, MouseButtonEventArgs e)
+        {
+            var s = sender as FrameworkElement;
+            var w = s.ActualWidth;
+            var tp = s.TemplatedParent as FrameworkElement;
+            var p = tp.Parent as UIElement;
+            var r = s.TranslatePoint(new Point(0, 0), p);
+            var sizeAn = new DoubleAnimation(w, TimeSpan.FromMilliseconds(250)) { EasingFunction = new QuadraticEase() };
+            var posAn = new DoubleAnimation(r.X, TimeSpan.FromMilliseconds(250)) { EasingFunction = new QuadraticEase() };
+
+            TabSelectionRect.BeginAnimation(WidthProperty, sizeAn);
+            TabSelectionRect.RenderTransform.BeginAnimation(TranslateTransform.XProperty, posAn);
+        }
+
+        private void ClearAllFilters(object sender, RoutedEventArgs e)
+        {
+            FilteredOpcodes.Clear();
+        }
+    }
+    public class ModeToColor : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var m = (FilterMode) value;
+            switch (m)
+            {
+                case FilterMode.Exclude: return new SolidColorBrush(Colors.Crimson);
+                case FilterMode.ShowOnly: return  new SolidColorBrush(Colors.MediumSeaGreen);
+                default: throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class ModeToString : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var m = (FilterMode)value;
+            switch (m)
+            {
+                case FilterMode.Exclude: return "HIDE";
+                case FilterMode.ShowOnly: return "SHOW";
+                default: throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class FilteredOpcodeVm 
+    {
+        public ushort Opcode { get; }
+        public FilterMode Mode { get; }
+
+        public FilteredOpcodeVm(ushort opc, FilterMode f)
+        {
+            Opcode = opc;
+            Mode = f;
+        }
+    }
     public static class ItemsControlExtensions
     {
         public static void VirtualizedScrollIntoView(this ItemsControl control, object item)
@@ -736,16 +788,22 @@ namespace DamageMeter.UI
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var opn = (string)value;
-            if (opn.Length == 4 && opn[1] != '_')
+            try
             {
-                if (Instance.Known.TryGetValue(System.Convert.ToUInt16(opn, 16), out OpcodeEnum opc))
+                //it's hex string
+                var opn = (string) value;
+                if (opn.Length == 4 && opn[1] != '_')
                 {
-                    return opc.ToString();
+                    if (Instance.Known.TryGetValue(System.Convert.ToUInt16(opn, 16), out OpcodeEnum opc)) { return opc.ToString(); }
                 }
-                return opn;
             }
-            return opn;
+            catch
+            {
+                //it's ushort
+                var opn = (ushort) value; 
+                if (Instance.Known.TryGetValue(opn, out OpcodeEnum opc)) { return opc.ToString(); }
+            }
+            return "-";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -999,5 +1057,11 @@ namespace DamageMeter.UI
         {
             OnPropertyChanged(nameof(IsHovered));
         }
+    }
+
+    public enum FilterMode
+    {
+        Exclude = 0,
+        ShowOnly = 1
     }
 }
