@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using DamageMeter.Sniffing;
+using DamageMeter.UI.ViewModels;
 using DamageMeter.UI.Windows;
 using Tera.Game;
 using Microsoft.Win32;
@@ -44,7 +45,7 @@ namespace DamageMeter.UI
         private int _sizeFilter = -1;
         private int _currentSelectedItemIndex = 0;
         private string _currentFile;
-
+        private DispatcherTimer _dbUpdateTimer;
         public int Queued
         {
             get => _queued;
@@ -79,7 +80,7 @@ namespace DamageMeter.UI
         public ObservableCollection<OpcodeToFindVm> OpcodesToFind { get; set; } = new ObservableCollection<OpcodeToFindVm>();
         public ObservableCollection<FilteredOpcodeVm> FilteredOpcodes { get; set; } = new ObservableCollection<FilteredOpcodeVm>();
         public List<PacketViewModel> SearchList { get; set; } = new List<PacketViewModel>();
-
+        public DatabaseVm Database { get; } = new DatabaseVm();
         public MainWindow()
         {
             InitializeComponent();
@@ -101,6 +102,13 @@ namespace DamageMeter.UI
             All.CollectionChanged += All_CollectionChanged;
             DataContext = this;
             //((ItemsControl)KnownSw.Content).ItemsSource = Known;
+            _dbUpdateTimer = new DispatcherTimer();
+            _dbUpdateTimer.Interval = TimeSpan.FromSeconds(1);
+            _dbUpdateTimer.Tick += (sender, args) => Dispatcher.Invoke(()=>
+            {
+                Database.RefreshDatabase();
+                OnPropertyChanged(nameof(Database));
+            });
 
         }
 
@@ -164,6 +172,11 @@ namespace DamageMeter.UI
                     if (SearchList[0].Message.OpCode == msg.OpCode) UpdateSearch(msg.OpCode.ToString(), false); //could be performance intensive
                 }
             }
+            //Dispatcher.Invoke(() =>
+            //{
+            //    Database.RefreshDatabase();
+            //    OnPropertyChanged(nameof(Database));
+            //});
         }
 
         private void AllSw_ScrollChanged(object sender, System.Windows.Controls.ScrollChangedEventArgs e)
@@ -205,6 +218,14 @@ namespace DamageMeter.UI
             Dispatcher.Invoke((NetworkController.GuildIconEvent)ChangeUi, icon);
         }
 
+        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            Top = 0;
+            Left = 0;
+            _dbUpdateTimer.Stop();
+            _dbUpdateTimer.Start();
+
+        }
         private void MainWindow_OnClosed(object sender, EventArgs e)
         {
             Exit();
@@ -243,12 +264,6 @@ namespace DamageMeter.UI
                 window.Topmost = false;
                 window.Topmost = true;
             }
-        }
-
-        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            Top = 0;
-            Left = 0;
         }
 
         private delegate void ChangeTitle(string servername);

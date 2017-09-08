@@ -8,6 +8,9 @@
                      xmlns:messages="clr-namespace:Tera.Game.Messages;assembly=Tera.Core"
                      xmlns:windows="clr-namespace:DamageMeter.UI.Windows"
                      xmlns:system="clr-namespace:System;assembly=mscorlib"
+                     xmlns:viewModels="clr-namespace:DamageMeter.UI.ViewModels"
+                     xmlns:heuristic="clr-namespace:DamageMeter.Heuristic;assembly=DamageMeter"
+                     xmlns:damageMeter="clr-namespace:DamageMeter;assembly=DamageMeter"
                      mc:Ignorable="d"
                      Title="Opcode Searcher"
                      MinHeight="300" MinWidth="219"
@@ -69,7 +72,7 @@
                     <Path Data="{StaticResource Close}" Stretch="Uniform" Height="10" Fill="#7000" Margin="0,0,0,0"></Path>
                 </Button>
                 <TextBlock Text="{Binding Opcode}" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10,0" TextAlignment="Left" FontFamily="{StaticResource DroidSansMono}" Foreground="#a000"/>
-                <TextBlock Text="{Binding Opcode, Converter={StaticResource OpcodeNameConv}}" Grid.Column="1" VerticalAlignment="Center" Margin="5,0" 
+                <TextBlock Text="{Binding Opcode, Converter={StaticResource OpcodeNameConv}}" Grid.Column="1" VerticalAlignment="Center" Margin="5,0"  FontWeight="Normal"
                            TextTrimming="CharacterEllipsis" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" FontFamily="{StaticResource DroidSansMono}" Foreground="#a000"/>
                 <Border Grid.Column="2" Background="{Binding Mode, Converter={StaticResource ModeToColor}}" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="2,0,2,1" CornerRadius="3" Opacity=".8">
 
@@ -526,14 +529,124 @@
 
                                     </TabItem>
                                     <TabItem Header="Database">
-                                            <TabItem.Resources>
-                                                <DataTemplate x:Key="DatabaseEntry">
-                                                    <Grid>
-                                                        
-                                                    </Grid>
-                                                </DataTemplate>
-                                            </TabItem.Resources>
-                                        <Grid>
+                                        <TabItem.Resources>
+                                            <DataTemplate x:Key="PlayerCidDataTemplate" DataType="viewModels:DatabaseVm">
+                                                <Grid Margin="6,0" Height="22">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition/>
+                                                        <ColumnDefinition/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="Current player Id" Foreground="#d000" FontWeight="Normal" VerticalAlignment="Center"></TextBlock>
+                                                    <TextBlock Text="{Binding CurrentPlayerCid}" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0" FontWeight="Normal"></TextBlock>
+                                                </Grid>
+                                            </DataTemplate>
+                                            <DataTemplate x:Key="SpawnedNpcListDataTemplate" DataType="viewModels:DatabaseVm">
+                                                <Grid >
+                                                    <Grid.Resources>
+                                                        <DataTemplate x:Key="NpcDataTemplate" DataType="heuristic:Npc">
+                                                            <Grid>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                    <ColumnDefinition Width="60"/>
+                                                                    <ColumnDefinition Width="100"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <TextBlock Text="{Binding Cid}" FontWeight="Normal" FontFamily="{StaticResource DroidSansMono}"></TextBlock>
+                                                                <TextBlock Text="{Binding ZoneId}" FontWeight="Normal" FontFamily="{StaticResource DroidSansMono}" Grid.Column="1"></TextBlock>
+                                                                <TextBlock Text="{Binding TemplateId}" FontWeight="Normal" FontFamily="{StaticResource DroidSansMono}" Grid.Column="2"></TextBlock>
+                                                            </Grid>
+                                                        </DataTemplate>
+                                                    </Grid.Resources>
+                                                    <Border BorderBrush="#2000" BorderThickness="0,1"></Border>
+                                                    <Expander Foreground="#a000" HorizontalContentAlignment="Stretch" ExpandDirection="Down" HorizontalAlignment="Stretch">
+                                                        <Expander.Header>
+                                                            <Grid HorizontalAlignment="Stretch" Height="22">
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="Auto"/>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <TextBlock Foreground="#d000" FontWeight="Normal" VerticalAlignment="Center">Spawned NPCs</TextBlock>
+                                                                <TextBlock VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Right" Text="{Binding SpawnedNpcs.Count}" Margin="5,0" FontWeight="Normal"/>
+                                                            </Grid>
+                                                        </Expander.Header>
+                                                        <Grid Margin="10,0,0,0">
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition/>
+                                                                <RowDefinition/>
+                                                            </Grid.RowDefinitions>
+                                                            <Grid Margin="0,4">
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                    <ColumnDefinition Width="60"/>
+                                                                    <ColumnDefinition Width="100"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <TextBlock Text="Cid" FontWeight="Normal" FontFamily="{StaticResource DroidSansMono}"></TextBlock>
+                                                                <TextBlock Text="ZoneId" FontWeight="Normal" FontFamily="{StaticResource DroidSansMono}" Grid.Column="1"></TextBlock>
+                                                                <TextBlock Text="TemplateId" FontWeight="Normal" FontFamily="{StaticResource DroidSansMono}" Grid.Column="2"></TextBlock>
+
+                                                            </Grid>
+                                                            <Border BorderBrush="#2000" BorderThickness="0,0,0,1" Margin="-0,0,0,0" />
+                                                            <ItemsControl Grid.Row="1" Margin="0,4" ItemsSource="{Binding SpawnedNpcs}" ItemTemplate="{StaticResource NpcDataTemplate}">
+                                                                <ItemsControl.ItemsPanel>
+                                                                    <ItemsPanelTemplate>
+                                                                        <StackPanel/>
+                                                                    </ItemsPanelTemplate>
+                                                                </ItemsControl.ItemsPanel>
+                                                            </ItemsControl>
+                                                        </Grid>
+                                                    </Expander>
+                                                </Grid>
+                                            </DataTemplate>
+                                            <DataTemplate x:Key="SpawnedUsersListDataTemplate" DataType="viewModels:DatabaseVm">
+                                                <Grid >
+                                                    <Grid.Resources>
+                                                        <DataTemplate x:Key="UserDataTemplate">
+                                                            <Grid>
+                                                                <TextBlock Text="{Binding}" FontWeight="Normal" FontFamily="{StaticResource DroidSansMono}"></TextBlock>
+                                                            </Grid>
+                                                        </DataTemplate>
+                                                    </Grid.Resources>
+                                                    <Border BorderBrush="#2000" BorderThickness="0,0,0,1"></Border>
+                                                    <Expander Foreground="#a000" HorizontalContentAlignment="Stretch" ExpandDirection="Down" HorizontalAlignment="Stretch">
+                                                        <Expander.Header>
+                                                            <Grid HorizontalAlignment="Stretch" Height="22">
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="Auto"/>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <TextBlock Foreground="#d000" FontWeight="Normal" VerticalAlignment="Center">Spawned users</TextBlock>
+                                                                <TextBlock VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Right" Text="{Binding SpawnedUsers.Count}" Margin="5,0" FontWeight="Normal"/>
+                                                            </Grid>
+                                                        </Expander.Header>
+                                                        <Grid Margin="10,0,0,0">
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition/>
+                                                                <RowDefinition/>
+                                                            </Grid.RowDefinitions>
+                                                            <Grid Margin="0,4">
+                                                                <TextBlock Text="Cid" FontWeight="Normal" FontFamily="{StaticResource DroidSansMono}"></TextBlock>
+                                                            </Grid>
+                                                            <Border BorderBrush="#2000" BorderThickness="0,0,0,1" Margin="-0,0,0,0" />
+                                                            <ItemsControl Grid.Row="1" Margin="0,4"  ItemsSource="{Binding SpawnedUsers}" ItemTemplate="{StaticResource UserDataTemplate}">
+                                                                <ItemsControl.ItemsPanel>
+                                                                    <ItemsPanelTemplate>
+                                                                        <StackPanel/>
+                                                                    </ItemsPanelTemplate>
+                                                                </ItemsControl.ItemsPanel>
+                                                            </ItemsControl>
+                                                        </Grid>
+                                                    </Expander>
+                                                </Grid>
+
+                                            </DataTemplate>
+                                        </TabItem.Resources>
+                                        <Grid Margin="0">
+                                            <ScrollViewer>
+                                                <StackPanel>
+                                                    <ContentControl ContentTemplate="{StaticResource PlayerCidDataTemplate}" Content="{Binding Database}"/>
+                                                    <ContentControl ContentTemplate="{StaticResource SpawnedNpcListDataTemplate}" Content="{Binding Database}"/>
+                                                    <ContentControl ContentTemplate="{StaticResource SpawnedUsersListDataTemplate}" Content="{Binding Database}"/>
+                                                </StackPanel>
+                                            </ScrollViewer>
                                         </Grid>
                                     </TabItem>
                                 </TabControl>

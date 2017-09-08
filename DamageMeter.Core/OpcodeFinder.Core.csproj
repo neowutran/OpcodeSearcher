@@ -128,6 +128,8 @@
     <Compile Include="Heuristic\S_ABNORMALITY_REFRESH.cs" />
     <Compile Include="Heuristic\S_ACCOMPLISH_ACHIEVEMENT.cs" />
     <Compile Include="Heuristic\S_ACCOUNT_PACKAGE_LIST.cs" />
+    <Compile Include="Heuristic\S_ACTION_END.cs" />
+    <Compile Include="Heuristic\S_ACTION_STAGE.cs" />
     <Compile Include="Heuristic\S_ADD_BLOCKED_USER.cs" />
     <Compile Include="Heuristic\S_ANSWER_INTERACTIVE.cs" />
     <Compile Include="Heuristic\S_ASK_BIDDING_RARE_ITEM.cs" />

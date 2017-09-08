@@ -75,6 +75,27 @@ namespace DamageMeter
             return list.Any(x => x.PlayerId == playerId && x.ServerId == serverId);
         }
 
+        public static List<Npc> GetNpcList()
+        {
+            if (!OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(OpcodeFinder.KnowledgeDatabaseItem.SpawnedNpcs)) { return new List<Npc>(); }
+            var res = OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.SpawnedNpcs];
+            return (List<Npc>)res;
+
+        }
+        public static List<ulong> GetUserList()
+        {
+            if (!OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(OpcodeFinder.KnowledgeDatabaseItem.SpawnedUsers)) { return new List<ulong>(); }
+            var res = OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.SpawnedUsers];
+            return (List<ulong>)res;
+
+        }
+        public static List<PartyMember> GetPartyMembersList()
+        {
+            if (!OpcodeFinder.Instance.KnowledgeDatabase.ContainsKey(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList)) { return new List<PartyMember>(); }
+            var res = OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList];
+            return (List<PartyMember>)res;
+
+        }
         public static void AddPartyMemberAbnormal(uint playerId, uint serverId, uint abnormId)
         {
             if (!OpcodeFinder.Instance.KnowledgeDatabase.TryGetValue(OpcodeFinder.KnowledgeDatabaseItem.PartyMemberList, out var res)) { return; }

@@ -72,9 +72,9 @@ namespace DamageMeter.Heuristic
 
     public struct Npc
     {
-        public ulong Cid;
-        public uint ZoneId;
-        public uint TemplateId;
+        public ulong Cid { get; }
+        public uint ZoneId { get; }
+        public uint TemplateId { get; }
 
         public Npc(ulong cid, uint zoneId, uint templId)
         {
