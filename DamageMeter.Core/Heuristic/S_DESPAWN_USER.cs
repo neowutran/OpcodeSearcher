@@ -44,6 +44,8 @@ namespace DamageMeter.Heuristic
         {
             var list = (List<ulong>)OpcodeFinder.Instance.KnowledgeDatabase.Where(x => x.Key == OpcodeFinder.KnowledgeDatabaseItem.SpawnedUsers).First().Value;
             if (list.Contains(id)) list.Remove(id);
+            OpcodeFinder.Instance.KnowledgeDatabase[OpcodeFinder.KnowledgeDatabaseItem.SpawnedUsers] = list;
+
         }
 
     }
