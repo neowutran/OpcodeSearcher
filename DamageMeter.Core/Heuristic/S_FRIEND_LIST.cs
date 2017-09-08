@@ -17,7 +17,11 @@ namespace DamageMeter.Heuristic
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
-            if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode)) return;
+            if (IsKnown || OpcodeFinder.Instance.IsKnown(message.OpCode))
+            {
+                if(OpcodeFinder.Instance.GetOpcode(OPCODE) == message.OpCode) Parse();
+                return;
+            }
             if (message.Payload.Count < 2+2+2+4+ elementLength) return;
             var count = Reader.ReadUInt16();
             if (message.Payload.Count < 2 + 2 + 2 + 4 + elementLength*count) return;
