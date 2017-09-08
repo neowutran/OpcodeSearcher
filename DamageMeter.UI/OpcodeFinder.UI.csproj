@@ -147,12 +147,26 @@
     <Compile Include="IconUtils.cs" />
     <Compile Include="ObservableDictionary.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="ViewModels\DatabaseVm.cs" />
     <Compile Include="WindowServices.cs" />
+    <Compile Include="Converters\BoolToVisibleHidden.cs" />
+    <Compile Include="ViewModels\ByteViewModel.cs" />
+    <Compile Include="Converters\DirectionToColor.cs" />
+    <Compile Include="ViewModels\FilteredOpcodeVm.cs" />
+    <Compile Include="Windows\FilterMode.cs" />
+    <Compile Include="Converters\HexPayloadConverter.cs" />
+    <Compile Include="Windows\ItemsControlExtensions.cs" />
+    <Compile Include="Converters\ListNotEmptyToBool.cs" />
+    <Compile Include="Converters\ModeToColor.cs" />
+    <Compile Include="Converters\ModeToString.cs" />
+    <Compile Include="Converters\OpcodeNameConv.cs" />
     <Compile Include="Windows\OpcodesMapAnalyze.xaml.cs">
       <DependentUpon>OpcodesMapAnalyze.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\OpcodeToFindToColor.cs" />
-    <Compile Include="Windows\OpcodeToFindVm.cs" />
+    <Compile Include="Converters\OpcodeToFindToColor.cs" />
+    <Compile Include="ViewModels\OpcodeToFindVm.cs" />
+    <Compile Include="ViewModels\PacketViewModel.cs" />
+    <Compile Include="Converters\TextPayloadConverter.cs" />
     <Page Include="Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

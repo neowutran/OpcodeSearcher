@@ -56,26 +56,6 @@
                            FontFamily="/ShinraMeter;component/#Droid Sans Mono"/>
             </Grid>
         </DataTemplate>
-        <DataTemplate x:Key="HexChunk">
-            <Grid HorizontalAlignment="Left">
-                <TextBlock FontFamily="{StaticResource DroidSansMono}" Text="{Binding}" Margin="3,0" HorizontalAlignment="Left" 
-                           TextWrapping="NoWrap" Height="Auto" Foreground="#a000"/>
-                <Border BorderBrush="DodgerBlue" BorderThickness="1" CornerRadius="3"
-                        Background="#301e90ff" Margin="0" MouseEnter="ChunkMouseEnter">
-                    <Border.Style>
-                        <Style>
-                            <Setter Property="Border.Opacity" Value="0"></Setter>
-                            <Style.Triggers>
-                                <Trigger Property="Border.IsMouseOver" Value="True">
-                                    <Setter Property="Border.Opacity" Value="1"></Setter>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Border.Style>
-                </Border>
-
-            </Grid>
-        </DataTemplate>
         <DataTemplate x:Key="FilteredOpcode" DataType="ui:FilteredOpcodeVm">
             <Grid Margin="0,2,0,0">
                 <Grid.ColumnDefinitions>
@@ -99,7 +79,7 @@
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="DataHex" DataType="ui:ByteViewModel">
-            <Grid MouseEnter="UIElement_OnMouseEnter" MouseLeave="UIElement_OnMouseLeave"  VerticalAlignment="Top" Height="14">
+            <Grid MouseEnter="DataChunkMouseEnter" MouseLeave="DataChunkMouseLeave"  VerticalAlignment="Top" Height="14">
                 <TextBlock FontFamily="/ShinraMeter;component/#Droid Sans Mono" Text="{Binding Hex}" 
                            Margin="3,1,0,0" HorizontalAlignment="Left" Width="60"
                            TextWrapping="NoWrap" Height="Auto" VerticalAlignment="Top" TextAlignment="Left"/>
@@ -109,7 +89,7 @@
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="DataText" DataType="ui:ByteViewModel">
-            <Grid MouseEnter="UIElement_OnMouseEnter" MouseLeave="UIElement_OnMouseLeave"  VerticalAlignment="Top">
+            <Grid MouseEnter="DataChunkMouseEnter" MouseLeave="DataChunkMouseLeave"  VerticalAlignment="Top">
                 <TextBlock FontFamily="/ShinraMeter;component/#Droid Sans Mono" Text="{Binding Text}" Margin="0,0" HorizontalAlignment="Center" 
                            TextWrapping="NoWrap" Height="Auto" VerticalAlignment="Top" TextAlignment="Left"/>
                 <Border BorderBrush="DodgerBlue" BorderThickness="1" CornerRadius="3"
@@ -119,7 +99,6 @@
         </DataTemplate>
     </Window.Resources>
     <Grid >
-
         <Grid Margin="10" UseLayoutRounding="True" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="470"/>
@@ -211,7 +190,7 @@
                             </ItemsControl.Template>
                         </ItemsControl>
                         <Border Visibility="{Binding NewMessagesBelow, Converter={StaticResource BoolToVisibleHidden}}" Height="30" Background="MediumSeaGreen" VerticalAlignment="Bottom" 
-                            Grid.Row="1" Margin="0,0,0,0" Cursor="Hand" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown">
+                            Grid.Row="1" Margin="0,0,0,0" Cursor="Hand" MouseLeftButtonDown="NewMessagesButtonClick">
                             <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15" >New messages</TextBlock>
                         </Border>
                         <Border Grid.ColumnSpan="1" Margin="0,0,0,0" Grid.Row="1" BorderThickness="0,1,0,1" BorderBrush="#1000"></Border>
@@ -246,7 +225,7 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" VerticalAlignment="Center" Foreground="#a000" ToolTip="Show only packets having the specified length">Filter by size:</TextBlock>
-                                <TextBox Grid.Column="1" Margin="3,0,0,0"  CaretBrush="Black" TextChanged="TextBoxBase_OnTextChanged" VerticalAlignment="Center"></TextBox>
+                                <TextBox Grid.Column="1" Margin="3,0,0,0"  CaretBrush="Black" TextChanged="SizeFilterTextChanged" VerticalAlignment="Center"></TextBox>
                             </Grid>
                         </UniformGrid>
                         <Button Width="Auto"
@@ -546,6 +525,17 @@
                                         </Grid>
 
                                     </TabItem>
+                                    <TabItem Header="Database">
+                                            <TabItem.Resources>
+                                                <DataTemplate x:Key="DatabaseEntry">
+                                                    <Grid>
+                                                        
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </TabItem.Resources>
+                                        <Grid>
+                                        </Grid>
+                                    </TabItem>
                                 </TabControl>
                                 <Rectangle x:Name="TabSelectionRect" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,23,0,0" Height="3" Opacity=".6" Fill="DodgerBlue" Width="47" IsHitTestVisible="False">
                                     <Rectangle.RenderTransform>
@@ -614,7 +604,7 @@
                 <Border Background="#2000">
                     <TextBlock Text="Logs" Foreground="#9000" Margin="5" FontWeight="DemiBold"></TextBlock>
                 </Border>
-                <Button Style="{StaticResource ButtonMainStyle}" Click="Load">
+                <Button Style="{StaticResource ButtonMainStyle}" Click="LoadLog">
                     <Grid Margin="10,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="18"/>
@@ -624,7 +614,7 @@
                         <TextBlock Text="Load log..." Foreground="#9000" Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center"></TextBlock>
                     </Grid>
                 </Button>
-                <Button Style="{StaticResource ButtonMainStyle}" Click="Save">
+                <Button Style="{StaticResource ButtonMainStyle}" Click="SaveLog">
                     <Grid Margin="10,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="18"/>
