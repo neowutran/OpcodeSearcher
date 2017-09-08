@@ -12,7 +12,7 @@ namespace DamageMeter.Heuristic
     class S_LOAD_TOPO : AbstractPacketHeuristic
     {
         private static Dictionary<ushort, Vector3f> PossibleMessages = new Dictionary<ushort, Vector3f>();
-
+        //TODO: add parsing and clear spawn lists
         public new void Process(ParsedMessage message)
         {
             base.Process(message);

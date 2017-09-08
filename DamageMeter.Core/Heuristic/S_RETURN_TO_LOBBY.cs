@@ -11,6 +11,8 @@ namespace DamageMeter.Heuristic
     {
         private static bool waiting;
         public static ushort PossibleOpcode;
+        //TODO: add parsing and clear spawn lists
+
         public new void Process(ParsedMessage message)
         {
             base.Process(message);
