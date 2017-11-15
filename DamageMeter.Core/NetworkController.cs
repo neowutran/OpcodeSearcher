@@ -173,7 +173,7 @@ namespace DamageMeter
                 }
 
                 var message = MessageFactory.Create(obj);
-                message.PrintRaw();
+                //message.PrintRaw();
 
                 if(message is C_CHECK_VERSION)
                 {
