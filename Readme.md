@@ -1,6 +1,8 @@
 Opcode Searcher
 ==============
 
+MERGED INTO SHINRA METER REPO
+
 Visual studio 2017
 
 ```
